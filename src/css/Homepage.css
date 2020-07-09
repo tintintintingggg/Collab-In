@@ -1,0 +1,284 @@
+*{box-sizing: border-box;}
+img{width: 100%;}
+input:focus{outline: none;}
+
+/* background */
+.background{
+    width: 100%;
+    background-color: transparent;
+}
+.background-imgs{
+    display: flex;
+    /* position: relative; */
+    /* height: 700px; */
+    z-index: -1;
+}
+.background-imgs>div{
+    flex: 1;
+    position: fixed;
+    z-index: -1;
+    overflow: hidden;
+    transition-duration: 1.5s;
+}
+#img-left{
+    width: 700px;
+    bottom: -100px;
+    left: -150px;
+    
+}
+#img-right{
+    width: 300px;
+    bottom: 300px;
+    right: -100px;
+}
+/* header */
+.homepage header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+}
+.homepage .member{
+    width: 45px;
+    height: 45px;
+}
+.homepage .member>img{
+    width: 100%;
+}
+.homepage .logo{
+    font-size: 28px;
+    font-weight: bold;
+    padding-right: 20px;
+}
+
+/* introduction */
+.homepage .introduction{
+    width: 100%;
+}
+.homepage .intro-text{
+    margin: 120px auto;
+    width: 700px;
+    text-align: center;
+}
+.homepage .intro-text .title{
+    font-size: 42px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.homepage .intro-text .intro-lines{
+    font-size: 20px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* introduction btns */
+.homepage .btns{
+    margin: 50px auto;
+    width: 500px;
+    margin-bottom: 60px;
+}
+#create-doc-btn{
+    cursor: pointer;
+    width: 190px;
+    margin: 0 auto;
+    line-height: 2.4;
+    font-size: 18px;
+    border: 3px solid #F54F29;
+    border-radius: 10px;
+    color: #F54F29;
+    background-color: #ffffff;
+    transition-duration: .3s;
+}
+#member-btn{
+    cursor: pointer;
+    width: 190px;
+    margin: 0 auto;
+    line-height: 2.4;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    background-color: #F54F29;
+    border: 3px solid #F54F29;
+    transition-duration: .3s;
+}
+#create-doc-btn:hover,
+#member-btn:hover{
+    background-color: #FFD393;
+    border: 3px solid #FFD393;
+    color: #F54F29;
+}
+
+
+/* Auth */
+.memberBlock{
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top:0;left:0;
+    width: 100%;
+    padding: 100px 20px;
+}
+.signUpBlock,
+.signInBlock{
+    background-color: #ffffff;
+    width: 500px;
+    margin: 0 auto;
+    padding: 60px 0;
+    position: relative;
+}
+.close-btn{
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 2;
+    width: 35px;
+}
+
+.memberBlock .signInBlock .google-signin,
+.memberBlock .signInBlock .facebook-signin{
+    width: 500px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
+}
+.memberBlock .signInBlock .facebook-signin{
+    background-color: #3b5998;
+    color: #ffffff;
+}
+.memberBlock .signInBlock .google-signin{
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+}
+/* .memberBlock .signInBlock .google-signin:hover,
+.memberBlock .signInBlock .facebook-signin:hover{
+    margin-bottom: 40px;
+} */
+.memberBlock .signInBlock .facebook-signin>div{
+    width: 50px;
+    height: 50px;
+}
+.memberBlock .signInBlock .google-signin>div,
+.memberBlock .signInBlock .facebook-signin>div{
+    width: 45px;
+    height: 45px;
+    margin: 0 10px;
+}
+.memberBlock .signInBlock .seperator{
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
+}
+.memberBlock .signInBlock .seperator .seperator-line{
+    height: 2px;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0 20px;
+}
+.memberBlock .signInBlock .email-signin>div,
+.memberBlock .signUpBlock .email-signup>div{
+    margin: 20px auto;
+    width: 300px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+.memberBlock .signInBlock .email-signin>div>input,
+.memberBlock .signUpBlock .email-signup>div>input{
+    width: 280px;
+    border: none;
+    line-height: 2;
+    font-size: 14px;
+}
+.memberBlock .signInBlock .email-signin>button,
+.memberBlock .signUpBlock .email-signup>button{
+    background-color: #FFD393;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 300px;
+    border: none;
+    padding: 15px 0;
+    margin-top: 10px;
+    font-size: 16px;
+    box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
+}
+.reminder{
+    color: rgba(0, 0, 0, 0.6);
+    margin: 10px 0;
+}
+.reminder>span{
+    cursor: pointer;
+}
+
+/* member nav */
+.member{
+    position: relative;
+    width: fit-content;
+}
+
+.memberNav{
+    position: absolute;
+    top: 46px;right: 0;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px 15px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+    display: none;
+    border: 4px solid #ffffff;
+}
+.member:hover > .memberNav{
+    display: block;
+}
+.memberNav>div{
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.8);
+    margin: 5px 0;
+    padding: 8px;
+    border-bottom: 1.8px solid rgba(0, 0, 0, 0.2);
+    transition-duration: .4s;
+}
+.memberNav>div:hover{
+    margin-left: 18px;
+}
+
+/* Create New Doc */
+
+.createDoc .doc-name-div{
+    width: 100%;
+    border-bottom: 3px solid #9C9B7A;
+    /* background-color: #9C9B7A; */
+    margin: 20px 0;
+}
+.createDoc #doc-name{
+    text-align: center;
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    line-height: 2;
+    font-size: 22px;
+    border-radius: 5px;
+}
+.createDoc #doc-name:focus{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.createDoc #submit-doc-name-btn{
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+}
