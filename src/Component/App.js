@@ -3,10 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import {Homepage} from './Homepage';
-
-
-
-
+import { Redirect } from 'react-router-dom';
 
 
 class App extends React.Component{
@@ -20,6 +17,10 @@ class App extends React.Component{
         }
     }
     render(){
+        if(this.state.currentUser){
+            console.log('hqhqhqh')
+            
+        }
         return <div className="app">
             <Homepage 
                 db={this.props.db}
@@ -44,8 +45,6 @@ class App extends React.Component{
                     currentUserName: user.displayName
                 })
                 let userCredential = this.state.userCredential;
-                // console.log(user, user.uid, userCredential);
-                // this.onlineCheck.call(this, user.uid)
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
                         user.updateProfile({displayName: this.state.currentUserName})

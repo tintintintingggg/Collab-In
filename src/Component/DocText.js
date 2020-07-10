@@ -9,35 +9,13 @@ class DocText extends React.Component{
         this.state = {
             docName: null,
             docText: null,
-            record: [],
-            step: 0,
-            cooldown: false        
+            cooldown: false,
+            time: 0        
         }
     }
     remainSelection(e){
         e.preventDefault();
     }
-
-    // addCurrentText(e){
-    //     // setTimeout(this.setState((preState) => ({
-    //     //     step: preState.step+1,
-    //     //     record: preState.record.concat([document.getElementById('selectable-area').innerHTML])
-    //     // })), 10000)
-    //     //     // console.log('change')
-    //     //     // console.log(e.persist())
-    //     setTimeout(() => {this.setState((preState) => ({
-    //         step: preState.step+1,
-    //         record: preState.record.concat([document.getElementById('selectable-area').innerHTML])
-    //     }))}, 1000)
-    // }
-
-    updateRecord(){
-        this.setState((preState) => ({
-            step: preState.step-2,
-            record: preState.record.splice(0, preState.record.length-2)
-        }))
-    }
-
 
     update(text, name){
         console.log('update currentText');
@@ -50,15 +28,14 @@ class DocText extends React.Component{
     
     render(){
         // console.log(this.state.step,this.state.record);
-        return <div className="text" onLoad={console.log('is rendering')}>
-            <DocUndoRedo step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)}/>
+        return <div className="text">
+            {/* <DocUndoRedo step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)}/> */}
             <div  
                 contentEditable="true" 
                 suppressContentEditableWarning='true'
                 id="selectable-area"  
                 db={this.props.db}
                 ref={this.myRef}
-                // onInput={this.addCurrentText.bind(this)} 
             >
                 {/* {this.state.docText} */}
             </div>
@@ -73,55 +50,57 @@ class DocText extends React.Component{
         let docData = db.collection("documents").doc(docId);
         let text; let name;
         let textContainer = this.myRef.current;
+        let currentVersion=0;
+        let starttime = null;
+        
+
+
         docData.get().then(function(doc){
+            // 第一次載入文件
             if(doc.exists){
                 name = doc.data().name;
-                console.log(name)
-                if(doc.data().text){
-                    text = doc.data().text;
-                }else{
-                    text = '';
-                    console.log(text)
-                }
-                console.log('state', this.state.docText)
+                text = doc.data().text;
                 if(text !== this.state.docText){
                     this.update(text, name);
                     textContainer.innerHTML = text;
-                    console.log('container', textContainer.innerHTML)
                 }
-
-              
+                console.log('show!')
+                // this.setState((preState) => ({
+                //     step: preState.step+1,
+                //     record: [text]
+                // }))
+                this.props.recordText(text)
+            // 監聽 local 文件
                 
                 let mutationObserver = new MutationObserver((mutations) => {
-                    console.log('detect')
-                    let currentHTML = this.myRef.current.innerHTML;
-                    console.log(currentHTML, text)
-                    if(currentHTML !== text){
-                        docData.update({
-                            text: currentHTML
-                        })
-                        .then(function() {
-                            console.log("text is update to DB");
-                        })
-                        .catch(function(error) {
-                            console.error("Error writing document: ", error);
-                        });  
+                    if(starttime === null){
+                        console.log('start', Date.now())
+                        this.props.detectUpload(false);
+                        starttime = Date.now();
+                        setTimeout(()=>{
+                            starttime=null;
+                            let currentHTML = this.myRef.current.innerHTML;
+                            if(currentHTML !== text){
+                                docData.get()
+                                .then((doc) => {
+                                    currentVersion = doc.data().version;
+                                    docData.update({
+                                        text: currentHTML,
+                                        version: currentVersion+1
+                                    })
+                                    .then(function() {
+                                        console.log("text is update to DB");                                        
+                                    })
+                                    .catch(function(error) {
+                                        console.error("Error writing document: ", error);
+                                    });  
+                                }).catch((error) => {console.log("error getting data",error)})
+                                
+                            }
+                            this.props.recordText(currentHTML);
+                            this.props.detectUpload(true);
+                        }, 3000)
                     }
-                    setTimeout(() => {
-                        if(this.state.record === null){
-                            this.setState((preState) => ({
-                                step: preState.step+1,
-                                record: [currentHTML]
-                            }))
-                        }
-                        if(this.state.record[this.state.record.length-1] !== currentHTML){
-                            this.setState((preState) => ({
-                                step: preState.step+1,
-                                record: preState.record.concat([currentHTML])
-                            }))
-                        }
-                    },0) //延遲會影響回到上一步 再看看！
-                    
                 });
                 mutationObserver.observe(this.myRef.current, {
                     attributes: true,
@@ -137,16 +116,24 @@ class DocText extends React.Component{
             console.log('error', error)
         })
 
-        docData.onSnapshot(function(doc) {
-            console.log("Snapshot", doc.data().text)
-            if(doc.data().text !== textContainer.innerHTML){
-                console.log("Current data: ", doc.data().text);
-                textContainer.innerHTML = doc.data().text;
+        docData.onSnapshot((doc) => {
+            console.log("is local?",doc.metadata.hasPendingWrites);
+            if(!doc.metadata.hasPendingWrites){
+                if(doc.data().text !== textContainer.innerHTML){
+                    console.log("Current data: ", doc.data().text);
+                    textContainer.innerHTML = doc.data().text;
+                    text = doc.data().text
+                    this.setState({
+                        docText: doc.data().text
+                    })
+                }
+            }else{
+                text = textContainer.innerHTML
                 this.setState({
-                    docText: doc.data().text
+                    docText: textContainer.innerHTML
                 })
             }
-        }.bind(this));
+        });
         
     }
 

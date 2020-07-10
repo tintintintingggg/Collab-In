@@ -1,8 +1,8 @@
 import React from 'react';
 import {DocApp} from './DocApp';
 import {Auth} from './Auth';
-import { BrowserRouter, Route, Link } from "react-router-dom";
-import firebase from "firebase/app";
+import {ChatApp} from './ChatApp';
+import { BrowserRouter, Route, Link ,Redirect} from "react-router-dom";
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -18,7 +18,8 @@ class Homepage extends React.Component{
             docId: null,
             showMemberBlock: false,
             showCreateDoc: false,
-            username: null
+            username: null,
+            currentUser: null
         }
     }
 
@@ -29,7 +30,10 @@ class Homepage extends React.Component{
             console.log(newDoc.id)
             newDoc.set({
                 name: this.state.docName,
-                owner: this.props.currentUser.uid
+                owner: this.props.currentUser.uid,
+                text: '',
+                version: 0,
+                editorsList: []
             })
             .then(this.setState({docId: newDoc.id}))
             .catch(console.log('data set fail!'))
@@ -67,9 +71,6 @@ class Homepage extends React.Component{
         }
         
     }
-
-    
-
 
     render(){
         let link;
@@ -130,15 +131,6 @@ class Homepage extends React.Component{
             </div>
         }
 
-        
-        // console.log(this.props.currentUserId)
-        // let db = this.props.db;
-        // db.collection('users').doc(this.props.currentUserId).get()
-        // .then(
-        //     (doc) => {this.setState({username: doc.name})}
-        // ).catch(
-        //     (err) => {console.log('err',err)}
-        // );
         let helloMessage;
         if(!this.props.currentUserName){
             helloMessage = 'Welcome!';
@@ -187,11 +179,14 @@ class Homepage extends React.Component{
                     </div>
                 </Route>
                 <Route path={path} >
-                    <DocApp 
-                        db={this.props.db}
-                        docId={docId}
-                        currentUser={this.props.currentUser}
-                     />
+                    <div className="document-layout">
+                        <DocApp 
+                            db={this.props.db}
+                            docId={docId}
+                            currentUser={this.props.currentUser}
+                         />
+                        <ChatApp />
+                    </div>
                 </Route>
         </BrowserRouter>
     }

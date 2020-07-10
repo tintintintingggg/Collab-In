@@ -81,7 +81,8 @@ input:focus{outline: none;}
 #create-doc-btn{
     cursor: pointer;
     width: 190px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    margin: 0 30px;
     line-height: 2.4;
     font-size: 18px;
     border: 3px solid #F54F29;
@@ -93,7 +94,7 @@ input:focus{outline: none;}
 #member-btn{
     cursor: pointer;
     width: 190px;
-    margin: 0 auto;
+    margin: 0 30px;
     line-height: 2.4;
     font-size: 18px;
     border: none;
@@ -281,4 +282,15 @@ input:focus{outline: none;}
     border: none;
     background-color: transparent;
     font-size: 16px;
+}
+
+/* document-layout */
+.document-layout{
+    display: flex;
+}
+.document-layout .chat-app{
+    flex: 1;
+}
+.document-layout .container{
+    flex: 2;
 }

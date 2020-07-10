@@ -6,7 +6,6 @@ import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
 import firebase, { firestore } from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-// import "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAwHewumFHBjhO0QX22yEMTzN-2aJfq4uU",

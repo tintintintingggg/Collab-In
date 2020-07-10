@@ -6,7 +6,7 @@ class UndoBtn extends React.Component{
     }
     undo(){
         if(document.getElementById('selectable-area')){
-            if(this.props.step>0){
+            if(this.props.step>1){
                 document.getElementById('selectable-area').innerHTML = this.props.record[this.props.step-2];
                 console.log('undo');
                 this.props.updateRecord();
@@ -21,16 +21,7 @@ class UndoBtn extends React.Component{
         </button>
     }
 }
-class RedoBtn extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        return <button>
-            取消
-        </button>
-    }
-}
+
 
 class DocUndoRedo extends React.Component{
     constructor(props){
@@ -39,7 +30,6 @@ class DocUndoRedo extends React.Component{
     render(){
         return <div>
             <UndoBtn step={this.props.step} record={this.props.record} updateRecord={this.props.updateRecord}/>
-            <RedoBtn />
         </div>
     }
 }

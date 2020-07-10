@@ -2,6 +2,28 @@ import React from 'react';
 import {DocText} from './DocText';
 import '../css/DocBtn.css';
 
+class UndoBtn extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    undo(){
+        if(document.getElementById('selectable-area')){
+            if(this.props.step>1){
+                document.getElementById('selectable-area').innerHTML = this.props.record[this.props.step-2];
+                console.log('undo');
+                this.props.updateRecord();
+            }else{
+                alert('沒有上一步');
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.undo.bind(this)}>
+            <img src="/images/return.png" alt="return" />
+        </button>
+    }
+}
+
 class ClearFormatBtn extends React.Component{
     constructor(props){
         super(props);
@@ -16,7 +38,7 @@ class ClearFormatBtn extends React.Component{
     }
     render(){
         return <button onClick={this.changeFormat.bind(this)}>
-            Clear
+            <img src="/images/clear.png" />
         </button>
     }
 }
@@ -34,7 +56,7 @@ class BoldBtn extends React.Component{
     }
     render(){
         return <button onClick={this.changeBold.bind(this)}>
-            粗體
+            <img src="/images/bold.png" />
         </button>
     }
 }
@@ -51,7 +73,7 @@ class UnBoldBtn extends React.Component{
     }
     render(){
         return <button onClick={this.changeUnBold.bind(this)}>
-            不粗
+            <s><strong>B</strong></s>
         </button>
     }
 }
@@ -68,7 +90,7 @@ class ItalicBtn extends React.Component{
     }
     render(){
         return <button onClick={this.changeItalic.bind(this)}>
-            斜體
+            <img src="/images/italic.png" />
         </button>
     }
 }
@@ -86,7 +108,25 @@ class UnItalicBtn extends React.Component{
     
     render(){
         return <button onClick={this.changeUnItalic.bind(this)}>
-            不斜
+            <s><em>I</em></s>
+        </button>
+    }
+}
+class UnderlineBtn extends React.Component{
+    constructor(props){
+        super(props);
+        this.myRef = React.createRef();
+    }
+    changeBold(e){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'underline', null)
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.changeBold.bind(this)}>
+            <img src="/images/underline.png" />
         </button>
     }
 }
@@ -100,11 +140,11 @@ class ColorBtn extends React.Component{
                 this.props.surroundSelection('span', 'color', 'color: '+e.target.value)
             }
         }
-            
-        
     }
     render(){
-        return <input type="color" onChange={this.changeColor.bind(this)}/>
+        return <div className="colorbtn"><input id="color-input" type="color" 
+            onChange={this.changeColor.bind(this)}
+         /></div>
     }
 }
 class FontSizeBtn extends React.Component{
@@ -148,18 +188,9 @@ class FontSizeBtn extends React.Component{
         }
     }
     render(){
-        let fontNumber = '▼'
-        if(this.state.value){
-            fontNumber = 'Font ▼';
-        }
         return <div className="font-size-btn">
-            <div className="font-size-btn-input" >
-                {/* <input type="text" onKeyDown={this.changeFontSize.bind(this)} onChange={this.getValue.bind(this)} onMouseDown={this.props.changeFocus}
-                    // defaultValue={this.state.value} 
-                /> */}
-            </div>
             <div className="font-size-btn-arrow">
-                <button onClick={this.showList.bind(this)}>{fontNumber}</button>
+                <button onClick={this.showList.bind(this)}><img src="/images/fontsize.png" /></button>
             </div>
             <div className="font-size-btn-list" style={{display: this.state.listDisplay}} onClick={this.changeFontSize.bind(this)}>
             <button>8</button><button>10</button><button>12</button><button>14</button><button>16</button><button>18</button><button>20</button><button>24</button><button>30</button><button>36</button><button>48</button><button>60</button><button>72</button><button>96</button>
@@ -175,23 +206,30 @@ class DocBtn extends React.Component{
         super(props);
         this.state = {
             selection: null,
-            fontSizeIsFocus: false
+            fontSizeIsFocus: false,
+            record: [],
+            step: 0,
         }
     }
     render(){
-        return <div>
+        console.log(this.state.record ,this.state.step)
+        return <div className="doc-btn">
             <div className="btns">
+                <UndoBtn step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)} />
                 <ClearFormatBtn surroundSelection={this.surroundSelection.bind(this)}/>
                 <BoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
+                {/* <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/> */}
                 <ItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                <UnItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
+                {/* <UnItalicBtn surroundSelection={this.surroundSelection.bind(this)}/> */}
+                <UnderlineBtn surroundSelection={this.surroundSelection.bind(this)} />
                 <ColorBtn surroundSelection={this.surroundSelection.bind(this)}/>
                 <FontSizeBtn surroundSelection={this.surroundSelection.bind(this)} remainSelection={this.remainSelection.bind(this)} changeFocus={this.changeFocus.bind(this)}/>
             </div>
             <DocText 
                 db={this.props.db}
                 docId={this.props.docId}
+                recordText={this.recordText.bind(this)}
+                detectUpload={this.props.detectUpload}
                 // docId={id}
                 // getSelection={this.getSelection.bind(this)}
                 // fontSizeIsFocus={this.state.fontSizeIsFocus}
@@ -200,7 +238,20 @@ class DocBtn extends React.Component{
         </div>
     }
 
-    
+    recordText(currentHTML){
+        if(this.state.record[this.state.record.length-1] !== currentHTML){
+            this.setState((preState) => ({
+                step: preState.step+1,
+                record: preState.record.concat([currentHTML])
+            }))
+        }
+    }
+    updateRecord(){
+        this.setState((preState) => ({
+            step: preState.step-2,
+            record: preState.record.splice(0, preState.record.length-2)
+        }))
+    }
 
     changeFocus(e){
         this.setState({
@@ -212,15 +263,6 @@ class DocBtn extends React.Component{
         e.preventDefault();
     }
 
-    // getSelection(){
-    //     let selection = window.getSelection();
-    //     if(!selection.getRangeAt(0).collapsed){
-    //         console.log(selection.getRangeAt(0));
-    //         this.setState({
-    //             selection: selection
-    //         })
-    //     }
-    // }
 
 
     surroundSelection(elementType, className, style) {
