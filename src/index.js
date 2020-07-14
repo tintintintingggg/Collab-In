@@ -6,6 +6,9 @@ import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
 import firebase, { firestore } from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import 'firebase/database';
+import "firebase/functions";
+// import * as admin from 'firebase-admin';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAwHewumFHBjhO0QX22yEMTzN-2aJfq4uU",
@@ -18,44 +21,15 @@ const firebaseConfig = {
     measurementId: "G-K0FS0GX00K"
 };
 firebase.initializeApp(firebaseConfig);
+// admin.initializeApp(
+//     // {credential: admin.credential.applicationDefault(),
+//     // databaseURL: "https://collabin-21f76.firebaseio.com"}
+//     functions.config().firebase
+// );
 let db = firebase.firestore();
-// let onlinedb = firestore.database();
-
-// firebase.auth().onAuthStateChanged(user => {
-//     if (user) {
-//         // userData.id = user.uid
-//         console.log(user.uid);
-//         // helloMeassage.innerText = (`Hello! ${user.email}`);
-//         if(userCredential !== null){
-//             if(userCredential.additionalUserInfo.isNewUser){
-//                 db.collection('members').doc(user.uid).set(member)
-//                 .then(function(){
-//                     console.log('User created successfully');
-//                 })
-//                 .catch(function(e){
-//                     console.log("error", e);
-//                 });
-//             }
-//         }
-//     } else{
-//       helloMeassage.innerText = ('Log In to Comment Below!');
-//     }
-// });
+let realtimeDb = firebase.database();
 
 
-
-// test
-// db.collection("cities").doc("LA").set({
-//     name: "Los Angeles",
-//     state: "CA",
-//     country: "USA"
-// })
-// .then(function() {
-//     console.log("Document successfully written!");
-// })
-// .catch(function(error) {
-//     console.error("Error writing document: ", error);
-// });
 
 
 // class Main extends React.Component{
@@ -145,7 +119,7 @@ let db = firebase.firestore();
 
 window.addEventListener("load", () => {
     ReactDOM.render(
-        <App db={db}/> 
+        <App db={db} realtimeDb={realtimeDb}/> 
         , document.getElementById('root')); // 塞入元素
 })
 

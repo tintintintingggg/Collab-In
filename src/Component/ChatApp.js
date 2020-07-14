@@ -7,7 +7,7 @@ class ChatApp extends React.Component{
     }
     
     render(){
-        return <div className='chat-app'>hi</div>
+        return <div className='chat-app'></div>
     }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {DocUndoRedo} from './DocUndoRedo';
+// import {DocUndoRedo} from './DocUndoRedo';
 
 
 class DocText extends React.Component{
@@ -64,17 +64,13 @@ class DocText extends React.Component{
                     this.update(text, name);
                     textContainer.innerHTML = text;
                 }
-                console.log('show!')
-                // this.setState((preState) => ({
-                //     step: preState.step+1,
-                //     record: [text]
-                // }))
+                // console.log('show!')
                 this.props.recordText(text)
             // 監聽 local 文件
                 
                 let mutationObserver = new MutationObserver((mutations) => {
                     if(starttime === null){
-                        console.log('start', Date.now())
+                        // console.log('start', Date.now())
                         this.props.detectUpload(false);
                         starttime = Date.now();
                         setTimeout(()=>{
@@ -99,7 +95,7 @@ class DocText extends React.Component{
                             }
                             this.props.recordText(currentHTML);
                             this.props.detectUpload(true);
-                        }, 3000)
+                        }, 2000)
                     }
                 });
                 mutationObserver.observe(this.myRef.current, {

@@ -184,6 +184,12 @@ class Homepage extends React.Component{
                             db={this.props.db}
                             docId={docId}
                             currentUser={this.props.currentUser}
+
+                            signUp={this.props.signUp}
+                            signIn={this.props.signIn}
+                            googleSignIn={this.props.googleSignIn}
+                            facebookSignIn={this.props.facebookSignIn}
+                            handleMemberBlock={this.handleMemberBlock.bind(this)}
                          />
                         <ChatApp />
                     </div>
@@ -194,8 +200,8 @@ class Homepage extends React.Component{
     componentDidMount(){
         if(document.getElementById('img-left') && document.getElementById('img-right')){
             setTimeout(() => {
-                document.getElementById('img-left').style.bottom = '100px';
-                document.getElementById('img-right').style.bottom = '100px';
+                document.getElementById('img-left').style.bottom = '10px';
+                document.getElementById('img-right').style.bottom = '200px';
             }, 1000)
         }
     }

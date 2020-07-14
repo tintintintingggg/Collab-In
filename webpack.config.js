@@ -31,5 +31,13 @@ module.exports = {
       index: 'index.html'
     }
 
+  },
+  node: {
+    child_process: 'empty',
+    fs: 'empty',
+    crypto: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    http2: 'empty'
   }
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -47,7 +46,6 @@ class Auth extends React.Component{
     }
 
     handleSigninOrup(){
-        console.log('hi')
         if(this.state.blockState === 'signin'){
             this.myRef.current.childNodes[0].setAttribute('style', 'display: none');
             this.myRef.current.childNodes[1].setAttribute('style', 'display: block');
@@ -89,8 +87,9 @@ class Auth extends React.Component{
                     <div className="reminder">Already have an account? <span onClick={this.handleSigninOrup.bind(this)}>Sign in!</span></div>
                 </div>
             </div>
-        }else{
-            return <div></div>
+        }
+        else{
+            return true
         }
     }
 

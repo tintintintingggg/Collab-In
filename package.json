@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "firebase": "^7.15.5",
+    "firebase-admin": "^8.13.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-mutation-observer": "^1.1.0",

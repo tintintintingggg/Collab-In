@@ -17,10 +17,7 @@ class App extends React.Component{
         }
     }
     render(){
-        if(this.state.currentUser){
-            console.log('hqhqhqh')
-            
-        }
+        
         return <div className="app">
             <Homepage 
                 db={this.props.db}
@@ -39,36 +36,36 @@ class App extends React.Component{
         let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                this.setState({
-                    currentUser: user,
-                    currentUserId: user.uid,
-                    currentUserName: user.displayName
-                })
+                this.onlineCheck(user.uid);   
+                // this.setState({
+                //     currentUser: user,
+                //     currentUserId: user.uid,
+                //     currentUserName: user.displayName
+                // })
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
                         user.updateProfile({displayName: this.state.currentUserName})
-                        .then(() => {
-                            db.collection('users').doc(user.uid).set({
-                                email: user.email,
-                                uid: user.uid,
-                                name: user.displayName
-                            })
-                            .then(function(){
-                                console.log('User created successfully');
-                                this.setState({
-                                    currentUser: user,
-                                    currentUserId: user.uid,
-                                    currentUserName: user.displayName
+                            .then(() => {
+                                db.collection('users').doc(user.uid).set({
+                                    email: user.email,
+                                    uid: user.uid,
+                                    name: user.displayName
                                 })
+                                .then(function(){
+                                    this.setState({
+                                        currentUser: user,
+                                        currentUserId: user.uid,
+                                        currentUserName: user.displayName
+                                    })
+                                })
+                                .catch(function(error){
+                                    alert('alret1',error.message);
+                                });
                             })
-                            .catch(function(error){
-                                alert(error.message);
+                            .catch((error) => {
+                                alert('alret2',error.message);
                             });
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
                     }
                 }else if(user.photoURL !== null){
                     db.collection('users').doc(user.uid).get()
@@ -81,27 +78,33 @@ class App extends React.Component{
                                 uid: user.uid
                             })
                             .then(function(){
-                                console.log('User created successfully');
+                                // console.log('User created successfully');
                             })
                             .catch(function(error){
-                                alert(error.message);
+                                alert('alret3',error.message);
                             });
                         }else{
-                            console.log('data is already built')
+                            // console.log('data is already built')
                         }
                     }).catch(function(error){
-                        alert(error.message);
+                        alert('alret4',error.message);
                     });
                 }else{
-                    console.log('else')
+                    this.setState({
+                        currentUser: user,
+                        currentUserId: user.uid,
+                        currentUserName: user.displayName
+                    })
                 }
             }else{
-              console.log('Log In to Comment Below!');
                 this.setState({
-                    currentUser: null
+                    currentUser: null,
+                    currentUserId: null,
+                    currentUserName: null
                 })
             }
-        });     
+        });  
+        
     }
     
     signUp(email, password, name){
@@ -115,13 +118,13 @@ class App extends React.Component{
             console.log('hi');
             firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((cred) => {
-                console.log(cred);
+                // console.log(cred);
                 this.setState({
                     userCredential: cred,
                     currentUserName: name
                 });
             }).catch(error => {
-                alert(error.message);
+                alert('alret5',error.message);
               });
         }   
     }
@@ -133,8 +136,8 @@ class App extends React.Component{
         }else{
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then((cred) => {
-                console.log(cred);
-                console.log(firebase.auth().currentUser)
+                // console.log(cred);
+                // console.log(firebase.auth().currentUser)
                 this.setState({
                     userCredential: cred
                 })
@@ -180,7 +183,6 @@ class App extends React.Component{
           var token = result.credential.accessToken;
           alert('You are logged in!');
         }).catch(function(error) {
-          var errorCode = error.code;
           var errorMessage = error.message;
           var email = error.email;
           var credential = error.credential;
@@ -192,7 +194,87 @@ class App extends React.Component{
         });
     }
     onlineCheck(uid){
-        let db = this.props.db;
+        let url = location.href.toString();
+        let docId = url.split('document/')[1];
+        // let uid = this.state.currentUserId;
+        console.log('uid',uid)
+        if(docId !== undefined){
+            let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
+            let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
+            let isOfflineForDatabase = {
+                state: 'offline',
+                last_changed: firebase.database.ServerValue.TIMESTAMP,
+            };
+            let isOnlineForDatabase = {
+                state: 'online',
+                last_changed: firebase.database.ServerValue.TIMESTAMP,
+            };
+            this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+                if (snapshot.val() == false) {
+                    return;
+                };
+                userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+                    userStatusDatabaseRef.set(isOnlineForDatabase);
+                });
+            });
+
+
+            //////
+            if(uid !== null){
+                let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
+                let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
+                let isOfflineForFirestore = {
+                    state: 'offline',
+                    // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+                };
+                
+                let isOnlineForFirestore = {
+                    state: 'online',
+                    // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+                };
+                
+                this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+                    if (snapshot.val() == false) {
+                        userStatusFirestoreRef.set(isOfflineForFirestore);
+                        return;
+                    };
+                
+                    userStatusDatabaseRef.onDisconnect()
+                        .set(isOfflineForDatabase)
+                        .then(function() {
+                            docStatusDatabaseRef.once("value")
+                            .then(function(doc){
+                                console.log(doc.val())
+                                let data = doc.val();
+                                let arr = []
+                                for(let prop in data){
+                                    let obj = {}
+                                    if(data[prop]["state"] === 'online'){
+                                        // console.log(data.prop)
+                                        // console.log(Object.keys(data))
+                                        obj[prop] = data[prop]["state"]
+                                        arr.push(obj)
+                                        // arr.push(data.keys)
+                                    }
+                                }
+                                console.log(arr)
+                                docStatusFirestoreRef.set({
+                                    total: arr
+                                })
+                                userStatusDatabaseRef.set(isOnlineForDatabase);
+                            })
+                            
+                            
+                        });
+                });
+
+                // userStatusFirestoreRef.onSnapshot(function(doc) {
+                //     let isOnline = doc.data().state == 'online';
+                //     console.log('see')
+                // });
+            }
+            
+        }
         
     }
 }
