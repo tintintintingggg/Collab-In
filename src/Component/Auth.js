@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import '../css/Homepage.css';
+import { Redirect } from 'react-router-dom';
 
 
 class Auth extends React.Component{
@@ -62,10 +63,12 @@ class Auth extends React.Component{
     }
 
     render(){
-        if(this.props.showMemberBlock){
+        if(this.props.currentUser){
+            return <Redirect to={this.props.landingPage} />
+        }else{
             return <div className="memberBlock" ref={this.myRef} >
                 <div className="signInBlock" style={{display: 'block'}}>
-                    <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div>
+                    {/* <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div> */}
                     <div className="google-signin" onClick={this.props.googleSignIn}><div><img src="/images/google.png" /></div>Sign in with Google</div>
                     <div className="facebook-signin" onClick={this.props.facebookSignIn}><div><img src="/images/fb.svg" /></div>Sign in with Facebook</div>
                     <div className="seperator"><div className="seperator-line"></div><div>Or</div><div className="seperator-line"></div></div>
@@ -77,7 +80,7 @@ class Auth extends React.Component{
                     <div className="reminder">No account? <span onClick={this.handleSigninOrup.bind(this)}>Create one!</span></div>
                 </div>
                 <div className="signUpBlock" style={{display: 'none'}}>
-                    <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div>
+                    {/* <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div> */}
                     <div className="email-signup">
                         <div><input onChange={this.getSignUpName.bind(this)} placeholder="Your Name"  /></div>
                         <div><input onChange={this.getSignUpEmail.bind(this)} placeholder="Email"  /></div>
@@ -87,10 +90,7 @@ class Auth extends React.Component{
                     <div className="reminder">Already have an account? <span onClick={this.handleSigninOrup.bind(this)}>Sign in!</span></div>
                 </div>
             </div>
-        }
-        else{
-            return true
-        }
+        }        
     }
 
 }

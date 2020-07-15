@@ -5,43 +5,45 @@ import "firebase/firestore";
 import {Homepage} from './Homepage';
 import { Redirect } from 'react-router-dom';
 
+import "../css/App.css"
+
 
 class App extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             userCredential: null,
-            currentUser: null,
-            currentUserName: null,
-            currentUserId: null
+            currentUser: undefined,
+            currentUserName: undefined,
+            currentUserId: undefined
         }
     }
     render(){
-        
-        return <div className="app">
-            <Homepage 
-                db={this.props.db}
-                signUp={this.signUp.bind(this)}
-                signIn={this.signIn.bind(this)}
-                googleSignIn={this.googleSignIn.bind(this)}
-                facebookSignIn={this.facebookSignIn.bind(this)}
-                currentUser={this.state.currentUser}
-                currentUserId={this.state.currentUserId}
-                currentUserName={this.state.currentUserName}
-                signOut={this.signOut.bind(this)}
-             />
-        </div>
+        if(this.state.currentUser !== undefined){
+            return <div className="app">
+                <Homepage 
+                    db={this.props.db}
+                    signUp={this.signUp.bind(this)}
+                    signIn={this.signIn.bind(this)}
+                    googleSignIn={this.googleSignIn.bind(this)}
+                    facebookSignIn={this.facebookSignIn.bind(this)}
+                    currentUser={this.state.currentUser}
+                    currentUserId={this.state.currentUserId}
+                    currentUserName={this.state.currentUserName}
+                    signOut={this.signOut.bind(this)}
+                 />
+            </div>
+        }else{
+            return <div className="loading-page">
+                <div>loading...</div>
+            </div>
+        }
     }
     componentDidMount(){
         let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                this.onlineCheck(user.uid);   
-                // this.setState({
-                //     currentUser: user,
-                //     currentUserId: user.uid,
-                //     currentUserName: user.displayName
-                // })
+                this.onlineCheck(user.uid);
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
@@ -52,24 +54,30 @@ class App extends React.Component{
                                     uid: user.uid,
                                     name: user.displayName
                                 })
-                                .then(function(){
+                                .then(
                                     this.setState({
                                         currentUser: user,
                                         currentUserId: user.uid,
                                         currentUserName: user.displayName
                                     })
-                                })
-                                .catch(function(error){
-                                    alert('alret1',error.message);
+                                )
+                                .catch((error) => {
+                                    alert(error.message);
                                 });
                             })
                             .catch((error) => {
-                                alert('alret2',error.message);
+                                alert(error.message);
                             });
+                    }else{
+                        this.setState({
+                            currentUser: user,
+                            currentUserId: user.uid,
+                            currentUserName: user.displayName
+                        })
                     }
                 }else if(user.photoURL !== null){
                     db.collection('users').doc(user.uid).get()
-                    .then(function(doc){
+                    .then((doc)=>{
                         if(!doc.exists){
                             db.collection('users').doc(user.uid).set({
                                 email: user.email,
@@ -77,17 +85,21 @@ class App extends React.Component{
                                 photoURL: user.photoURL,
                                 uid: user.uid
                             })
-                            .then(function(){
-                                // console.log('User created successfully');
+                            .then(()=>{
+                                console.log('User created successfully');
                             })
-                            .catch(function(error){
-                                alert('alret3',error.message);
+                            .catch((error)=>{
+                                alert(error.message);
                             });
                         }else{
-                            // console.log('data is already built')
+                            this.setState({
+                                currentUser: user,
+                                currentUserId: user.uid,
+                                currentUserName: user.displayName
+                            })
                         }
-                    }).catch(function(error){
-                        alert('alret4',error.message);
+                    }).catch((error)=>{
+                        alert(error.message);
                     });
                 }else{
                     this.setState({
@@ -115,16 +127,15 @@ class App extends React.Component{
         }else if(!name){
             alert('You forget to enter your Name!')
         }else{
-            console.log('hi');
             firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((cred) => {
-                // console.log(cred);
                 this.setState({
                     userCredential: cred,
                     currentUserName: name
                 });
+                alert('You are logged in!');
             }).catch(error => {
-                alert('alret5',error.message);
+                alert(error.message);
               });
         }   
     }
@@ -136,8 +147,6 @@ class App extends React.Component{
         }else{
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then((cred) => {
-                // console.log(cred);
-                // console.log(firebase.auth().currentUser)
                 this.setState({
                     userCredential: cred
                 })
@@ -196,7 +205,6 @@ class App extends React.Component{
     onlineCheck(uid){
         let url = location.href.toString();
         let docId = url.split('document/')[1];
-        // let uid = this.state.currentUserId;
         console.log('uid',uid)
         if(docId !== undefined){
             let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
@@ -248,16 +256,13 @@ class App extends React.Component{
                                 let data = doc.val();
                                 let arr = []
                                 for(let prop in data){
-                                    let obj = {}
+                                    // let obj = {}
                                     if(data[prop]["state"] === 'online'){
-                                        // console.log(data.prop)
-                                        // console.log(Object.keys(data))
-                                        obj[prop] = data[prop]["state"]
-                                        arr.push(obj)
-                                        // arr.push(data.keys)
+                                        // obj[prop] = data[prop]["state"]
+                                        arr.push(prop)
                                     }
                                 }
-                                console.log(arr)
+                                // console.log(arr)
                                 docStatusFirestoreRef.set({
                                     total: arr
                                 })
@@ -267,11 +272,6 @@ class App extends React.Component{
                             
                         });
                 });
-
-                // userStatusFirestoreRef.onSnapshot(function(doc) {
-                //     let isOnline = doc.data().state == 'online';
-                //     console.log('see')
-                // });
             }
             
         }

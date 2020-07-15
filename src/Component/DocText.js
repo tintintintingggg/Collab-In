@@ -1,5 +1,4 @@
 import React from 'react';
-// import {DocUndoRedo} from './DocUndoRedo';
 
 
 class DocText extends React.Component{
@@ -29,7 +28,6 @@ class DocText extends React.Component{
     render(){
         // console.log(this.state.step,this.state.record);
         return <div className="text">
-            {/* <DocUndoRedo step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)}/> */}
             <div  
                 contentEditable="true" 
                 suppressContentEditableWarning='true'
@@ -37,9 +35,7 @@ class DocText extends React.Component{
                 db={this.props.db}
                 ref={this.myRef}
             >
-                {/* {this.state.docText} */}
             </div>
-            {/* {content} */}
         </div>
     }
 
@@ -64,13 +60,11 @@ class DocText extends React.Component{
                     this.update(text, name);
                     textContainer.innerHTML = text;
                 }
-                // console.log('show!')
                 this.props.recordText(text)
-            // 監聽 local 文件
                 
+            // 監聽 local 文件
                 let mutationObserver = new MutationObserver((mutations) => {
                     if(starttime === null){
-                        // console.log('start', Date.now())
                         this.props.detectUpload(false);
                         starttime = Date.now();
                         setTimeout(()=>{

@@ -1,7 +1,12 @@
 *{box-sizing: border-box;}
 img{width: 100%;}
 input:focus{outline: none;}
+a{text-decoration: none; color: rgba(0, 0, 0, 0.8); line-height: 1;}
 
+body{
+    margin: 0;
+    padding: 0;
+}
 /* background */
 .background{
     width: 100%;
@@ -185,6 +190,12 @@ input:focus{outline: none;}
     background-color: rgba(0, 0, 0, 0.2);
     margin: 0 20px;
 }
+.memberBlock .signInBlock .email-signin,
+.memberBlock .signUpBlock .email-signup{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
 .memberBlock .signInBlock .email-signin>div,
 .memberBlock .signUpBlock .email-signup>div{
     margin: 20px auto;
@@ -208,16 +219,21 @@ input:focus{outline: none;}
     width: 300px;
     border: none;
     padding: 15px 0;
+    margin: 0 auto;
     margin-top: 10px;
     font-size: 16px;
     box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
 }
 .reminder{
     color: rgba(0, 0, 0, 0.6);
-    margin: 10px 0;
+    margin: 20px 0 10px;
+    text-align: center;
 }
 .reminder>span{
     cursor: pointer;
+}
+.reminder>span:hover{
+    color: #F54F29;
 }
 
 /* member nav */
@@ -244,7 +260,8 @@ input:focus{outline: none;}
 .member:hover > .memberNav{
     display: block;
 }
-.memberNav>div{
+.memberNav>div,
+.memberNav>a{
     cursor: pointer;
     color: rgba(0, 0, 0, 0.8);
     margin: 5px 0;

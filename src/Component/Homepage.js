@@ -19,7 +19,8 @@ class Homepage extends React.Component{
             showMemberBlock: false,
             showCreateDoc: false,
             username: null,
-            currentUser: null
+            currentUser: null,
+            landingPage: '/'
         }
     }
 
@@ -28,9 +29,11 @@ class Homepage extends React.Component{
         if(this.state.docName !== null){
             let newDoc = db.collection("documents").doc();
             console.log(newDoc.id)
+            // 建立文件基本資料
             newDoc.set({
                 name: this.state.docName,
                 owner: this.props.currentUser.uid,
+                time: Date.now(),
                 text: '',
                 version: 0,
                 editorsList: []
@@ -38,10 +41,26 @@ class Homepage extends React.Component{
             .then(this.setState({docId: newDoc.id}))
             .catch(console.log('data set fail!'))
             let userDoc = db.collection('users').doc(this.props.currentUser.uid)
-            userDoc.collection("userdocs").doc(newDoc.id)
-            .set({name: this.state.docName})
+            // 建立user擁有的文件
+            userDoc.collection("userdocs").doc(newDoc.id).set({
+                time: Date.now()
+            })
             .then(console.log('userdoc is set'))
             .catch(console.log('userdoc is fail'))
+            let chatroomMembers = db.collection('chatrooms').doc(newDoc.id)
+            .collection('members').doc(this.props.currentUser.uid)
+            // 建立chatroom成員（擁有者本人）
+            chatroomMembers.set({
+                time: Date.now()
+            })
+            .then(console.log('chatroom member is set'))
+            .catch((error)=>{error.message})
+            // 建立status空array
+            db.collection('status').doc(newDoc.id).collection('online').doc("total").set({
+                total: []
+            })
+            .then(console.log('status total is set'))
+            .catch((error)=>{error.message})
         }else{
             alert('Please Enter Your Document Name')
         }
@@ -71,7 +90,6 @@ class Homepage extends React.Component{
         }
         
     }
-
     render(){
         let link;
         let path;
@@ -80,13 +98,12 @@ class Homepage extends React.Component{
         let id = url.split('document/')[1];
         if(id){
             if(this.props.db.collection('documents').doc(id)){
-                console.log(id)
+                console.log('doc',id)
                 docId = id;
                 path = '/document/'+id;
                 link = <Link to={'/document/'+id} key={'/document/'+id} >點我去文件</Link>; 
-            }
+            }   
         }else if(id === undefined || null){
-            console.log('no current id')
             docId = this.state.docId;
             path = '/document/'+this.state.docId;
             if(this.state.docId){
@@ -119,24 +136,31 @@ class Homepage extends React.Component{
         }
 
         let memberNav;
+        let memberBtn;
         if(this.props.currentUser){
             memberNav = <div className="memberNav" >
                 <div>My Account</div>
                 <div onClick={this.props.signOut}>Sign Out</div>
             </div>
+            memberBtn = <button id="member-btn">
+                See My Documents</button>
         }else{
             memberNav = <div className="memberNav" >
                 <div>My Account</div>
-                <div onClick={this.handleMemberBlock.bind(this)}>Sign In / Up</div>
+                <div><Link to="/authentication">Sign In / Up</Link></div>
             </div>
+            memberBtn = <Link to="/authentication">
+                <button id="member-btn">Sign In / Up Now</button>
+            </Link>
         }
 
-        let helloMessage;
+        let helloMessage = '';
         if(!this.props.currentUserName){
-            helloMessage = 'Welcome!';
+            helloMessage = '';
         }else{
             helloMessage = 'Hi! '+this.props.currentUserName;
         }
+
         
         return <BrowserRouter>
                 <Route exact path='/' >
@@ -144,7 +168,6 @@ class Homepage extends React.Component{
                         <div className="background-imgs">
                             <div id="img-left"><img src="/images/2929004.jpg" /></div>
                             <div id="img-right"><img src="/images/pen.png" /></div>
-                            {/* <img src="/images/3173494.jpg" /> */}
                         </div>
                         <div className="homepage">
                             <header>
@@ -160,16 +183,8 @@ class Homepage extends React.Component{
                                     <div className="intro-lines">Let's start to create a new document, Let's start to create a new document, Let's start to create a new document, Let's start to create</div>
                                     <div className="btns">
                                         <button id="create-doc-btn" onClick={this.handleCreateDocBlock.bind(this)}>Create a New Doc</button>
-                                        <button id="member-btn" onClick={this.handleMemberBlock.bind(this)}>Sign In / Up Now</button>
+                                        {memberBtn}
                                     </div>
-                                    <Auth 
-                                        showMemberBlock={this.state.showMemberBlock}
-                                        signUp={this.props.signUp}
-                                        signIn={this.props.signIn}
-                                        googleSignIn={this.props.googleSignIn}
-                                        facebookSignIn={this.props.facebookSignIn}
-                                        handleMemberBlock={this.handleMemberBlock.bind(this)}
-                                     />
                                     {createDoc}
                                 </div>
 
@@ -177,6 +192,18 @@ class Homepage extends React.Component{
                             <main className="features"></main>
                         </div>
                     </div>
+                </Route>
+                <Route path="/authentication">
+                    <Auth 
+                        showMemberBlock={this.state.showMemberBlock}
+                        currentUser={this.props.currentUser}
+                        signUp={this.props.signUp}
+                        signIn={this.props.signIn}
+                        googleSignIn={this.props.googleSignIn}
+                        facebookSignIn={this.props.facebookSignIn}
+                        handleMemberBlock={this.handleMemberBlock.bind(this)}
+                        landingPage={this.state.landingPage}
+                     />
                 </Route>
                 <Route path={path} >
                     <div className="document-layout">
@@ -191,7 +218,11 @@ class Homepage extends React.Component{
                             facebookSignIn={this.props.facebookSignIn}
                             handleMemberBlock={this.handleMemberBlock.bind(this)}
                          />
-                        <ChatApp />
+                        <ChatApp 
+                            db={this.props.db}
+                            docId={docId}
+                            currentUser={this.props.currentUser}
+                         />
                     </div>
                 </Route>
         </BrowserRouter>
