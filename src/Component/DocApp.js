@@ -1,79 +1,17 @@
 import React from 'react';
 import {DocBtn} from './DocBtn';
-import {Auth} from './Auth';
 import '../css/DocApp.css';
 import { Redirect } from 'react-router-dom';
 
 class DocPrevStep extends React.Component{
     constructor(props){
         super(props);
-        // this.state = {
-        //     identity: 'none',
-        //     guestName: '' 
-        // }
     }
-    // handleIdentity(identity){
-    //     this.setState({
-    //         identity: identity,
-    //         showMemberBlock: true
-    //     })
-    // }
-    // handleIdentity(identity){
-    //     this.setState({
-    //         identity: identity
-    //     })
-    // }
-    // getName(e){
-    //     this.setState({
-    //         guestName: e.target.value
-    //     })
-    // }
-    // handleMemberBlock(){
-    //     this.setState({
-    //         showMemberBlock: false,
-    //         identity: 'none'
-    //     })
-    // }
     render(){
-        // let content;
-        // if(this.state.identity === 'none'){
-        //    content = <div className="container">
-        //         {/* <button onClick={this.props.handleEditor}>以訪客登入</button>
-        //             <div></div>
-        //         <button onClick={this.props.handleMemberEditor}>以用戶登入</button> */}
-        //         {/* <button onClick={()=>{this.handleIdentity('guest')}}>以訪客登入</button>
-        //             <div></div>
-        //         <button onClick={()=>{this.handleIdentity('user')}}>以用戶登入</button> */}
-        //         <button onClick={()=>{this.handleIdentity('user')}}>Add To Group</button>
-        //     </div>
-        // }else if(this.state.identity === 'guest'){
-        //     content = <div className="container">
-        //         <label>create a guest name: </label>
-        //         <input type="text" onChange={this.getName.bind(this)}  />
-        //         <button onClick={()=>{this.props.handleEditor(this.state.guestName)}}>Submit</button>
-        //     </div>
-        // }else if(this.state.identity === 'user'){
-        //     if(!this.props.currentUser){
-        //         content = <Auth 
-        //         showMemberBlock={this.state.showMemberBlock}
-        //         signUp={this.props.signUp}
-        //         signIn={this.props.signIn}
-        //         googleSignIn={this.props.googleSignIn}
-        //         facebookSignIn={this.props.facebookSignIn}
-        //         handleMemberBlock={this.handleMemberBlock.bind(this)}
-        //      />
-        //     }
-        // }
-        
         return <div className='docPrevStep'>
             <div className="container">
                 <button onClick={()=>{this.props.handleEditor(this.props.currentUser)}}>Add To Group</button>
             </div>
-            {/* <div>
-                <button onClick={this.props.handleEditor}>以訪客登入</button>
-                <div></div>
-                <button onClick={this.props.handleMemberEditor}>以用戶登入</button>
-            </div> */}
         </div>
     }
 }
@@ -102,9 +40,7 @@ class DocHeader extends React.Component{
         link.href = document.getElementById('selectable-area');
         link.download = 'file.pdf';
         link.dispatchEvent(new MouseEvent('click'));
-    }
-    
-    
+    }    
     render(){
         let save; let icon;
         if(!this.props.saved){
@@ -116,11 +52,24 @@ class DocHeader extends React.Component{
         }
         // let colors = ['red','green','blue','yellow','cyan','black']
         let onlineUserName = [];
+
+        let online = '';
         if(this.state.onlineUser){
             for(let i =0; i<this.state.onlineUser.length; i++){
-                let item = <div className="online-user" key={i}>{this.state.onlineUser[i].substring(1,3)}</div>
-                onlineUserName.push(item);
+                if(this.state.onlineUser[i] !== null){
+                    let item = <div key={i}><div></div>{this.state.onlineUser[i].substring(1,3)}</div>
+                    onlineUserName.push(item);
+                }
             }
+            online = <div className="online-state">
+                <div className="online-total">
+                    <div><img src="/images/online.png" /></div>
+                    {this.state.onlineUser.length+" ONLINE"}
+                </div>
+                <div className="online-list">
+                    {onlineUserName}
+                </div>
+            </div>
         }
         return <div className='docHeader'>
             <div className="headerleft">
@@ -133,10 +82,16 @@ class DocHeader extends React.Component{
                     <div id="upload-icon" className="upload-icon"><img src={icon} /></div>
                     <div id="upload-text">{save}</div>
                 </div>
+                
             </div>
             <div className="headerright">
-                {/* <div className="download" ><img src="/images/return.png" onClick={this.download.bind(this)} /></div> */}
-                <div className="online-state">{onlineUserName}</div>
+                <div className="download" ><img src="/images/download.png" onClick={this.download.bind(this)} /></div>
+                <div className="share">
+                    <a href={"mailto:?subject=I wanted you to see this site&body="+window.location.href} title="Share by Email" >
+                        <img src="/images/mail.png" alt="Share by Email" />
+                    </a>
+                </div>
+                {online}
             </div>
         </div>
     }
@@ -158,14 +113,11 @@ class DocHeader extends React.Component{
 
         db.collection('status').doc(this.props.docId).collection('online').doc("total")
         .onSnapshot((doc)=>{
-            // console.log(doc.data().total)
             let userContainer = [];
             for(let i =0; i<doc.data().total.length; i++){
                 db.collection('users').doc(doc.data().total[i]).get()
                 .then((data)=>{
-                    // console.log(data.data().name)
                     userContainer.push(data.data().name)
-                    // console.log(userContainer)
                     this.setState({
                         onlineUser: userContainer
                     })
@@ -176,6 +128,7 @@ class DocHeader extends React.Component{
         })        
     }
 }
+
 class DocApp extends React.Component{
     constructor(props){
         super(props);
@@ -184,7 +137,8 @@ class DocApp extends React.Component{
             isWaitingEditor: false,
             isEditor: false,
             saved: true,
-            landingPage: '/document/'+this.props.docId
+            isUser: null
+            // landingPage: '/document/'+this.props.docId
         }
     }
     handleEditor(currentUser){
@@ -225,8 +179,10 @@ class DocApp extends React.Component{
     }
 
     render(){
-        console.log(this.state.landingPage)
         let doc;
+        // if(this.state.isUser===false){
+        //     return <Redirect to="/authentication" />
+        // }
         if(!this.props.currentUser){
             return <Redirect to="/authentication" />
         }
@@ -242,6 +198,7 @@ class DocApp extends React.Component{
                 <DocBtn 
                     db={this.props.db} 
                     docId={this.props.docId}
+                    storage={this.props.storage}
                     currentUser={this.props.currentUser}
                     detectUpload={this.detectUpload.bind(this)}
                   />
@@ -251,7 +208,6 @@ class DocApp extends React.Component{
                 <DocPrevStep 
                     handleEditor={this.handleEditor.bind(this)}
                     currentUser={this.props.currentUser}
-
                     // signUp={this.props.signUp}
                     // signIn={this.props.signIn}
                     // googleSignIn={this.props.googleSignIn}
@@ -265,6 +221,7 @@ class DocApp extends React.Component{
                 <DocBtn 
                     db={this.props.db} 
                     docId={this.props.docId}
+                    storage={this.props.storage}
                     currentUser={this.props.currentUser}
                     detectUpload={this.detectUpload.bind(this)}
                   />
@@ -272,12 +229,18 @@ class DocApp extends React.Component{
         }
         return <div className='container'>
             {doc}
+            {/* <div className='loading-page'></div> */}
         </div>
     }
 
     componentDidMount(){
         let db = this.props.db;
         let noname = true;
+        // if(!this.props.currentUser){
+        //     this.setState({
+        //         isUser: false
+        //     })
+        // }
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             if(this.props.currentUser){
@@ -306,6 +269,7 @@ class DocApp extends React.Component{
         })
         .catch((error)=>{
             alert("Your URL is Wrong! Go Check Again")
+            console.log(error.message)
         })
     }
 }

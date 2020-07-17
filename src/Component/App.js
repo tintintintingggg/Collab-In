@@ -23,6 +23,7 @@ class App extends React.Component{
             return <div className="app">
                 <Homepage 
                     db={this.props.db}
+                    storage={this.props.storage}
                     signUp={this.signUp.bind(this)}
                     signIn={this.signIn.bind(this)}
                     googleSignIn={this.googleSignIn.bind(this)}
@@ -43,6 +44,7 @@ class App extends React.Component{
         let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
+                // console.log(user)
                 this.onlineCheck(user.uid);
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){

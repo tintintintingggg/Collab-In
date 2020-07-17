@@ -60,7 +60,6 @@ class ChatContent extends React.Component{
                     </div>
                 }
                 content.push(item)
-                
             })
         }
         return <div className="chat-content">
@@ -127,16 +126,41 @@ class ChatInput extends React.Component{
             <div className="flex-left"></div>
             <div className="flex-right">
                 <div>+</div>
+                {/* <form> */}
                 <textarea 
                     type="text" 
                     placeholder="Type something..." 
                     onChange={this.getInput.bind(this)}
                     ref={this.input}
                  />
+                
                 <div onClick={this.sendInput.bind(this)}>send</div>
             </div> 
         </div>
     }
+}
+
+class ChatHeader extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        let members = '1'
+        return <div className="chat-header">
+            <div className="flex-left"></div>
+            <div className="flex-right">
+                {/* <div className="shrink-btn"><img src="/images/collapse.png" /></div> */}
+                <div className="group-members">Members ({members})</div>
+            </div>
+        </div>
+    }
+    // componentDidMount(){
+    //     let db = this.props.db;
+    //     db.collection('chatrooms').doc(this.props.docId).collection('members')
+    //     .then((doc)=>{
+    //         console.log(doc.data())
+    //     }).catch((error)=>{console.log(error.message)})
+    // }
 }
 
 class ChatApp extends React.Component{
@@ -145,13 +169,11 @@ class ChatApp extends React.Component{
     }
     render(){
         return <div className='chat-app'>
-            <div className="chat-header">
-                <div className="flex-left"></div>
-                <div className="flex-right">
-                    <div className="shrink-btn"><img /></div>
-                    <div className="group-members"><img /></div>
-                </div>
-            </div>
+            <ChatHeader
+                db={this.props.db}
+                docId={this.props.docId}
+                currentUser={this.props.currentUser}
+             />
             <div className="chat-main">
                 <ChatContent
                     db={this.props.db}

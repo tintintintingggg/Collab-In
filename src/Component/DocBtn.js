@@ -73,7 +73,7 @@ class UnBoldBtn extends React.Component{
     }
     render(){
         return <button onClick={this.changeUnBold.bind(this)}>
-            <s><strong>B</strong></s>
+            <img src="/images/bold.png" />
         </button>
     }
 }
@@ -108,7 +108,7 @@ class UnItalicBtn extends React.Component{
     
     render(){
         return <button onClick={this.changeUnItalic.bind(this)}>
-            <s><em>I</em></s>
+            <img src="/images/italic.png" />
         </button>
     }
 }
@@ -130,6 +130,23 @@ class UnderlineBtn extends React.Component{
         </button>
     }
 }
+class LineThroughBtn extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    changeStyle(e){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'linethrough', null)
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.changeStyle.bind(this)}>
+            <img src="/images/underline.png" />
+        </button>
+    }
+}
 class ColorBtn extends React.Component{
     constructor(props){
         super(props);
@@ -145,6 +162,40 @@ class ColorBtn extends React.Component{
         return <div className="colorbtn"><input id="color-input" type="color" 
             onChange={this.changeColor.bind(this)}
          /></div>
+    }
+}
+class BackgroundColorBtn extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    changeColor(e){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'background-color', 'background-color: '+e.target.value)
+            }
+        }
+    }
+    render(){
+        return <div className="background-colorbtn"><input id="background-color-input" type="color" 
+            onChange={this.changeColor.bind(this)}
+         /></div>
+    }
+}
+class ClearBackgroundColorBtn extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    clearColor(){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'clear-color', 'background-color: #ffffff')
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.clearColor.bind(this)}>
+            <img src="/images/underline.png" />
+        </button>
     }
 }
 class FontSizeBtn extends React.Component{
@@ -199,16 +250,97 @@ class FontSizeBtn extends React.Component{
     }
 }
 
+class ImgBtn extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            file: null
+        }
+    }
+    handleChange(e){
+        console.log(e.target.files[0])
+        if(e.target.files[0]){
+            this.setState({
+                file: e.target.files[0]
+            })
+        }
+    }
+    handleUpload(){
+        let docId = this.props.docId;
+        let file = this.state.file;
+        let storageRef = this.props.storage.ref(docId+'/'+file.name); 
+        // upload file
+        storageRef.put(file)
+        .then(()=>{
+            console.log('image is upload');
+            storageRef.getDownloadURL()
+            .then((url)=>{
+                console.log(url)
+                this.props.getImgurl(url)
+            })
+            .catch((error)=>{alert(error.message)})
+        })
+        .catch((error)=>{alert(error.message)})
+    }
+    render(){
+        return <div className="img-btn">
+            <input 
+                type="file" id="img-uploader" name="img" accept="image/*"
+                onChange={this.handleChange.bind(this)}
+             />
+            <button
+                onClick={this.handleUpload.bind(this)}
+            >Upload</button>
+        </div>
+    }
+}
+class AlignCenter extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    changeStyle(){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'align-center', null)
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.changeStyle.bind(this)}>
+            <img src="/images/underline.png" />
+        </button>
+    }
+}
+class AlignLeft extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    changeStyle(){
+        if(document.getElementById('selectable-area').innerHTML !== ''){
+            if(!window.getSelection().getRangeAt(0).collapsed){
+                this.props.surroundSelection('span', 'align-left', null)
+            }
+        }
+    }
+    render(){
+        return <button onClick={this.changeStyle.bind(this)}>
+            <img src="/images/underline.png" />
+        </button>
+    }
+}
 
 
 class DocBtn extends React.Component{
     constructor(props){
         super(props);
+        this.editArea = React.createRef();
         this.state = {
             selection: null,
             fontSizeIsFocus: false,
             record: [],
             step: 0,
+            position: null,
+            imgurl: null
         }
     }
     render(){
@@ -216,28 +348,49 @@ class DocBtn extends React.Component{
         return <div className="doc-btn">
             <div className="btns">
                 <UndoBtn step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)} />
-                <ClearFormatBtn surroundSelection={this.surroundSelection.bind(this)}/>
+                {/* <ClearFormatBtn surroundSelection={this.surroundSelection.bind(this)}/> */}
                 <BoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                {/* <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/> */}
+                <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
                 <ItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                {/* <UnItalicBtn surroundSelection={this.surroundSelection.bind(this)}/> */}
-                <UnderlineBtn surroundSelection={this.surroundSelection.bind(this)} />
+                <UnItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
+                {/* <UnderlineBtn surroundSelection={this.surroundSelection.bind(this)} /> */}
+                {/* <LineThroughBtn surroundSelection={this.surroundSelection.bind(this)} /> */}
                 <ColorBtn surroundSelection={this.surroundSelection.bind(this)}/>
+                <BackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
+                <ClearBackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
                 <FontSizeBtn surroundSelection={this.surroundSelection.bind(this)} remainSelection={this.remainSelection.bind(this)} changeFocus={this.changeFocus.bind(this)}/>
+                <ImgBtn storage={this.props.storage} docId={this.props.docId} position={this.state.position} getImgurl={this.getImgurl.bind(this)} />
+                {/* <AlignCenter surroundSelection={this.surroundSelection.bind(this)} />
+                <AlignLeft surroundSelection={this.surroundSelection.bind(this)} /> */}
             </div>
             <DocText 
+                ref={this.editArea}
                 db={this.props.db}
                 docId={this.props.docId}
                 recordText={this.recordText.bind(this)}
                 detectUpload={this.props.detectUpload}
-                // docId={id}
-                // getSelection={this.getSelection.bind(this)}
-                // fontSizeIsFocus={this.state.fontSizeIsFocus}
-                // updateCurrentText={this.updateCurrentText.bind(this)}
+                recordPosition={this.recordPosition.bind(this)}
+                imgurl={this.state.imgurl}
             />
         </div>
     }
 
+    recordPosition(e){
+        console.log(e.pageX, e.pageY)
+        this.setState({
+            position: {x: e.pageX, y:e.pageY}
+        })
+    }
+    getImgurl(url){
+        this.setState({
+            imgurl: url
+        }, this.clearImgurl)
+    }
+    clearImgurl(){
+        this.setState({
+            imgurl: null
+        })
+    }
     recordText(currentHTML){
         if(this.state.record[this.state.record.length-1] !== currentHTML){
             this.setState((preState) => ({

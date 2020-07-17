@@ -1,11 +1,4 @@
 img{width: 100%;}
-/* text area */
-#selectable-area{
-    height: 100vh;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #dddddd;
-}
 /* btns */
 .doc-btn .btns{
     display: flex;
@@ -13,9 +6,11 @@ img{width: 100%;}
     border-bottom: 1px solid #979797;
     padding: 5px;
 }
+/* little btns */
 .doc-btn .btns>button,
 .doc-btn .btns .font-size-btn-arrow>button,
-.doc-btn .btns .colorbtn{
+.doc-btn .btns .colorbtn,
+.doc-btn .btns .background-colorbtn{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,7 +23,8 @@ img{width: 100%;}
     border-radius: 5px;
     border: 1px solid transparent;
 }
-#color-input{
+#color-input,
+#background-color-input{
     width: 100%;
     background-color: transparent;
     background-image: url('/images/color.png');
@@ -39,9 +35,13 @@ img{width: 100%;}
 	border: none;
     padding: 18px 0 1px;
 }
+#background-color-input{
+    background-image: url('/images/color.png');
+}
 .doc-btn .btns>button:hover,
 .doc-btn .btns .font-size-btn-arrow>button:hover,
-.doc-btn .btns .colorbtn:hover{
+.doc-btn .btns .colorbtn:hover,
+.doc-btn .btns .background-colorbtn:hover{
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid #dddddd;
 }
@@ -101,17 +101,16 @@ img{width: 100%;}
 .font-size-btn-list>button:hover{
     background-color: #eeeeee;
 }
-
+/* functions */
 .clear{
+    background-color: #ffffff;
     font-weight: normal;
     color: black;
-    font-size: 16px;
     font-style: none;
     font-family: Arial, Helvetica, sans-serif;
     text-align: start;
-    text-decoration: none;
     line-height: 1;
-    background-color: transparent;
+    text-decoration: none;
 }
 .bold{
     font-weight: bold;
@@ -125,6 +124,30 @@ img{width: 100%;}
 .un-italic{
     font-style: normal;
 }
-.underline{
+/* .underline{
     text-decoration: underline;
+}
+.linethrough{
+    text-decoration: line-through;
+    text-decoration: none;
+} */
+.align-center{
+    text-align: center;
+}
+.align-left{
+    text-align: left;
+}
+
+/* drag img */
+#selectable-area img{
+    width: 100%;
+
+}
+.gragging{
+    opacity: .25;
+}
+#selectable-area img:hover{
+    /* box-sizing: content-box; */
+    outline: 2px dashed #979797;
+    border: 4px solid #ffffff;
 }

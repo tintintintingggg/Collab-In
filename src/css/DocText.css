@@ -1,0 +1,25 @@
+/* text area */
+.text{
+    padding: 20px 50px;
+    display: flex;
+    justify-content: center;
+    background-color: #F8F9FA;
+}
+.text>div{
+    background-color: #FFFFFF;
+    width: 756px;
+    min-height: 1086px;
+    margin: 10px 0;
+    border: 1px solid #dddddd;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+#selectable-area{
+    width: 100%;
+}
+#selectable-area:focus{
+    outline: 0px solid transparent;
+}

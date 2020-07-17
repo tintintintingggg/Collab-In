@@ -1,4 +1,5 @@
 import React from 'react';
+import '../css/DocText.css';
 
 
 class DocText extends React.Component{
@@ -9,11 +10,10 @@ class DocText extends React.Component{
             docName: null,
             docText: null,
             cooldown: false,
-            time: 0        
+            time: 0,
+            position: null   
+
         }
-    }
-    remainSelection(e){
-        e.preventDefault();
     }
 
     update(text, name){
@@ -23,18 +23,78 @@ class DocText extends React.Component{
             docName: name
         })
     }
-
+    // recordPosition(e){
+    //     console.log(e.pageX, e.pageY)
+    //     this.setState({
+    //         position: {x: e.pageX, y:e.pageY}
+    //     })
+    // }
+    // getPosition() {
+    //     if (window.getSelection) {
+    //         let sel = window.getSelection();
+    //         let range = new Range();
+    //         console.log(range)
+    //         if (sel.getRangeAt) {
+    //             console.log(sel.getRangeAt(0).startOffset, sel.getRangeAt(0).startContainer);
+    //             this.setState({
+    //                 position: range
+    //             })
+    //         }
+    //     }
+    //     return null;
+    // }
+    handleSize(e){
+        console.log(e.target)
+    }
     
     render(){
-        // console.log(this.state.step,this.state.record);
+        if(this.props.imgurl){
+            this.myRef.current.innerHTML =
+            `<img 
+                draggable="true"
+                class="draggable-img"
+                src=${this.props.imgurl}
+                onclick=${()=>{this.handleSize}}
+             />
+            ${this.myRef.current.innerHTML}`
+            // `<div 
+            //     draggable="true"
+            //     class="draggable-img"
+            //     style="background-image: url(${this.props.imgurl}); 
+            //             background-repeat: no-repeat; 
+            //             background-position: center; 
+            //             background-size: contain;
+            //             width: 0;
+            //             height: 0;
+            //             padding-left:50%
+            //             padding-top: 66.64%"
+            //     ></div>
+            // ${this.myRef.current.innerHTML}`
+
+            // this.props.clearImgurl();
+            // if(this.state.position){
+            //     this.props.img.setAttribute('position', 'fixed');
+            //     this.props.img.setAttribute('top', '0px');
+            //     this.props.img.setAttribute('left', '0px');
+                // this.state.position.insertNode(this.props.img);
+                // img = this.props.img
+                // img = <img src={this.props.imgurl} />
+                
+            // }
+        }
         return <div className="text">
-            <div  
-                contentEditable="true" 
-                suppressContentEditableWarning='true'
-                id="selectable-area"  
-                db={this.props.db}
-                ref={this.myRef}
-            >
+            <div>
+                <div  
+                    contentEditable="true" 
+                    suppressContentEditableWarning='true'
+                    id="selectable-area"  
+                    db={this.props.db}
+                    ref={this.myRef}
+                    // onClick={this.props.recordPosition}
+                    // onClick={this.recordPosition.bind(this)}
+                    // onClick={this.getPosition.bind(this)}
+                >
+                </div>
             </div>
         </div>
     }
@@ -48,9 +108,6 @@ class DocText extends React.Component{
         let textContainer = this.myRef.current;
         let currentVersion=0;
         let starttime = null;
-        
-
-
         docData.get().then(function(doc){
             // 第一次載入文件
             if(doc.exists){
