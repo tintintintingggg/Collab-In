@@ -44,43 +44,26 @@ class DocText extends React.Component{
     //     return null;
     // }
     handleSize(e){
-        console.log(e.target)
+        console.log(e.target);
+        // e.target.style.width = '50%'
     }
     
     render(){
         if(this.props.imgurl){
-            this.myRef.current.innerHTML =
-            `<img 
-                draggable="true"
-                class="draggable-img"
-                src=${this.props.imgurl}
-                onclick=${()=>{this.handleSize}}
-             />
-            ${this.myRef.current.innerHTML}`
-            // `<div 
+            let img = document.createElement('img');
+            img.setAttribute('draggable', true);
+            img.setAttribute('src', this.props.imgurl);
+            img.setAttribute('class', "draggable-img");
+            img.onclick=this.handleSize.bind(this);
+            this.myRef.current.appendChild(img);
+            // this.myRef.current.innerHTML =
+            // `<img 
             //     draggable="true"
             //     class="draggable-img"
-            //     style="background-image: url(${this.props.imgurl}); 
-            //             background-repeat: no-repeat; 
-            //             background-position: center; 
-            //             background-size: contain;
-            //             width: 0;
-            //             height: 0;
-            //             padding-left:50%
-            //             padding-top: 66.64%"
-            //     ></div>
+            //     src=${this.props.imgurl}
+            //     onclick=${()=>{console.log('e.target')}}
+            //  />
             // ${this.myRef.current.innerHTML}`
-
-            // this.props.clearImgurl();
-            // if(this.state.position){
-            //     this.props.img.setAttribute('position', 'fixed');
-            //     this.props.img.setAttribute('top', '0px');
-            //     this.props.img.setAttribute('left', '0px');
-                // this.state.position.insertNode(this.props.img);
-                // img = this.props.img
-                // img = <img src={this.props.imgurl} />
-                
-            // }
         }
         return <div className="text">
             <div>

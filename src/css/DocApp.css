@@ -7,8 +7,12 @@ button:focus{
     overflow:scroll;
 }
 .docHeader{
-    /* position: fixed;
-    top: 0; */
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
     /* background-color: #F8F8F8; */
     color: #2C3E50;
     padding: 3px 10px;
@@ -112,6 +116,7 @@ button:focus{
 }
 .headerright .online-state:hover>.online-list{
     display: block;
+    z-index: 2;
 }
 .headerright .online-state:hover>.online-total{
     background-color: #a52e13;

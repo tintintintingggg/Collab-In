@@ -258,7 +258,7 @@ class ImgBtn extends React.Component{
         }
     }
     handleChange(e){
-        console.log(e.target.files[0])
+        // console.log(e.target.files[0])
         if(e.target.files[0]){
             this.setState({
                 file: e.target.files[0]

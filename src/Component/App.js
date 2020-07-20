@@ -23,6 +23,7 @@ class App extends React.Component{
             return <div className="app">
                 <Homepage 
                     db={this.props.db}
+                    realtimeDb={this.props.realtimeDb}
                     storage={this.props.storage}
                     signUp={this.signUp.bind(this)}
                     signIn={this.signIn.bind(this)}
@@ -44,8 +45,8 @@ class App extends React.Component{
         let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                // console.log(user)
-                this.onlineCheck(user.uid);
+                console.log(user)
+                // this.onlineCheck(user.uid);
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
@@ -204,81 +205,81 @@ class App extends React.Component{
           alert(error.message);
         });
     }
-    onlineCheck(uid){
-        let url = location.href.toString();
-        let docId = url.split('document/')[1];
-        console.log('uid',uid)
-        if(docId !== undefined){
-            let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
-            let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
-            let isOfflineForDatabase = {
-                state: 'offline',
-                last_changed: firebase.database.ServerValue.TIMESTAMP,
-            };
-            let isOnlineForDatabase = {
-                state: 'online',
-                last_changed: firebase.database.ServerValue.TIMESTAMP,
-            };
-            this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
-                if (snapshot.val() == false) {
-                    return;
-                };
-                userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-                    userStatusDatabaseRef.set(isOnlineForDatabase);
-                });
-            });
+    // onlineCheck(uid){
+    //     let url = location.href.toString();
+    //     let docId = url.split('document/')[1];
+    //     console.log('uid',uid)
+    //     if(docId !== undefined){
+    //         let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
+    //         let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
+    //         let isOfflineForDatabase = {
+    //             state: 'offline',
+    //             last_changed: firebase.database.ServerValue.TIMESTAMP,
+    //         };
+    //         let isOnlineForDatabase = {
+    //             state: 'online',
+    //             last_changed: firebase.database.ServerValue.TIMESTAMP,
+    //         };
+    //         this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+    //             if (snapshot.val() == false) {
+    //                 return;
+    //             };
+    //             userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+    //                 userStatusDatabaseRef.set(isOnlineForDatabase);
+    //             });
+    //         });
 
 
-            //////
-            if(uid !== null){
-                let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
-                let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
-                let isOfflineForFirestore = {
-                    state: 'offline',
-                    // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-                };
+    //         //////
+    //         if(uid !== null){
+    //             let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
+    //             let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
+    //             let isOfflineForFirestore = {
+    //                 state: 'offline',
+    //                 // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    //             };
                 
-                let isOnlineForFirestore = {
-                    state: 'online',
-                    // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-                };
+    //             let isOnlineForFirestore = {
+    //                 state: 'online',
+    //                 // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    //             };
                 
-                this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
-                    if (snapshot.val() == false) {
-                        userStatusFirestoreRef.set(isOfflineForFirestore);
-                        return;
-                    };
+    //             this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+    //                 if (snapshot.val() == false) {
+    //                     userStatusFirestoreRef.set(isOfflineForFirestore);
+    //                     return;
+    //                 };
                 
-                    userStatusDatabaseRef.onDisconnect()
-                        .set(isOfflineForDatabase)
-                        .then(function() {
-                            docStatusDatabaseRef.once("value")
-                            .then(function(doc){
-                                console.log(doc.val())
-                                let data = doc.val();
-                                let arr = []
-                                for(let prop in data){
-                                    // let obj = {}
-                                    if(data[prop]["state"] === 'online'){
-                                        // obj[prop] = data[prop]["state"]
-                                        arr.push(prop)
-                                    }
-                                }
-                                // console.log(arr)
-                                docStatusFirestoreRef.set({
-                                    total: arr
-                                })
-                                userStatusDatabaseRef.set(isOnlineForDatabase);
-                            })
+    //                 userStatusDatabaseRef.onDisconnect()
+    //                     .set(isOfflineForDatabase)
+    //                     .then(function() {
+    //                         docStatusDatabaseRef.once("value")
+    //                         .then(function(doc){
+    //                             console.log(doc.val())
+    //                             let data = doc.val();
+    //                             let arr = []
+    //                             for(let prop in data){
+    //                                 // let obj = {}
+    //                                 if(data[prop]["state"] === 'online'){
+    //                                     // obj[prop] = data[prop]["state"]
+    //                                     arr.push(prop)
+    //                                 }
+    //                             }
+    //                             // console.log(arr)
+    //                             docStatusFirestoreRef.set({
+    //                                 total: arr
+    //                             })
+    //                             userStatusDatabaseRef.set(isOnlineForDatabase);
+    //                         })
                             
                             
-                        });
-                });
-            }
+    //                     });
+    //             });
+    //         }
             
-        }
+    //     }
         
-    }
+    // }
 }
 
 export {App} ;

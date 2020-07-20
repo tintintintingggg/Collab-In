@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import '../css/ChatApp.css'
 
 class ChatContent extends React.Component{
@@ -52,7 +52,7 @@ class ChatContent extends React.Component{
                             <div className="content-name">{message.name}</div>
                             <div className="content-text">{message.text}</div>
                             <div className="content-time">
-                                <div><img src="/images/user.png" /></div>
+                                <div><img src="/images/clock.png" /></div>
                                 {hour+':'+minute}
                             </div>
                         </div>
@@ -123,8 +123,6 @@ class ChatInput extends React.Component{
     }
     render(){
         return  <div className="chat-input">
-            <div className="flex-left"></div>
-            <div className="flex-right">
                 <div>+</div>
                 {/* <form> */}
                 <textarea 
@@ -133,9 +131,7 @@ class ChatInput extends React.Component{
                     onChange={this.getInput.bind(this)}
                     ref={this.input}
                  />
-                
                 <div onClick={this.sendInput.bind(this)}>send</div>
-            </div> 
         </div>
     }
 }
@@ -143,24 +139,76 @@ class ChatInput extends React.Component{
 class ChatHeader extends React.Component{
     constructor(props){
         super(props);
+        this.membersList = React.createRef();
+        this.state={
+            members: [],
+            isLoading: false,
+            membersList: []
+        }
+    }
+    showMembers(){
+        let db = this.props.db;
+        if(this.membersList.current.style.display === 'none'){
+            this.membersList.current.style.display = 'flex';
+            this.state.members.map(doc=>{
+                db.collection('users').doc(doc.id).get()
+                .then(data=>{
+                    this.setState((prevState)=>({
+                        membersList: prevState.membersList.concat([data.data().name])
+                    }))
+                })
+                .catch(error=>{console.log(error.message)})
+            })
+        }else{
+            this.membersList.current.style.display = 'none';
+            this.setState({
+                membersList: []
+            })
+        }
+        
+        
     }
     render(){
-        let members = '1'
+        let members = ''
+        if(this.state.isLoading){
+            members = this.state.members.length
+        }
+        let list = ''
+        if(this.state.membersList.length>0){
+            let arr=[];
+            this.state.membersList.map(doc=>{
+                let item = <div key={doc}>{doc}</div>
+                arr.push(item);
+            })
+            list = arr
+        }
         return <div className="chat-header">
-            <div className="flex-left"></div>
-            <div className="flex-right">
-                {/* <div className="shrink-btn"><img src="/images/collapse.png" /></div> */}
-                <div className="group-members">Members ({members})</div>
-            </div>
+                <div>
+                    {/* <div className="shrink-btn"><img src="/images/collapse.png" /></div> */}
+                    <div className="group-members" onClick={this.showMembers.bind(this)}>Members ({members})</div>
+                </div>
+                <div className="members-list" ref={this.membersList}
+                    style={{display: 'none'}}
+                >{list}</div>
         </div>
     }
-    // componentDidMount(){
-    //     let db = this.props.db;
-    //     db.collection('chatrooms').doc(this.props.docId).collection('members')
-    //     .then((doc)=>{
-    //         console.log(doc.data())
-    //     }).catch((error)=>{console.log(error.message)})
-    // }
+    componentDidMount(){
+        let db = this.props.db;
+        db.collection('chatrooms').doc(this.props.docId).collection('members')
+        .onSnapshot((snap)=>{
+            let arr = [];
+            snap.docChanges().forEach(doc=>{
+                if(doc.type === 'added'){
+                    arr.push(doc.doc.data())
+                }
+            })
+            console.log('members', arr)
+            this.setState((prevState)=>({
+                isLoading: true,
+                members: prevState.members.concat(arr)
+            }))
+        })
+    }
 }
 
 class ChatApp extends React.Component{
@@ -174,18 +222,16 @@ class ChatApp extends React.Component{
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
              />
-            <div className="chat-main">
-                <ChatContent
+             <ChatContent
                     db={this.props.db}
                     docId={this.props.docId}
                     currentUser={this.props.currentUser}
-                 />
-                <ChatInput 
+             />
+            <ChatInput 
                     db={this.props.db}
                     docId={this.props.docId}
                     currentUser={this.props.currentUser}
-                 />
-            </div>
+             />
         </div>
     }
 }

@@ -73,6 +73,7 @@ class DocCreate extends React.Component{
         return <div className="document-layout">
             <DocApp 
                 db={this.props.db}
+                realtimeDb={this.props.realtimeDb}
                 storage={this.props.storage}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
@@ -84,6 +85,7 @@ class DocCreate extends React.Component{
              />
             <ChatApp 
                 db={this.props.db}
+                realtimeDb={this.props.realtimeDb}
                 storage={this.props.storage}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
@@ -132,7 +134,8 @@ class Homepage extends React.Component{
                     let chatroomMembers = db.collection('chatrooms').doc(newDoc.id)
                     .collection('members').doc(this.props.currentUser.uid)
                     chatroomMembers.set({
-                        time: Date.now()
+                        time: Date.now(),
+                        id: this.props.currentUser.uid
                     })
                     .then(()=>{
                         console.log('chatroom member is set')
@@ -180,10 +183,10 @@ class Homepage extends React.Component{
                      />}
                 </Route>
                 <Route path="/authentication" render={(props)=>{
+                    let routeProps = props.history;
                     console.log("Route Props", props);
                     console.log('route props', props.history.location)
-                    let routeProps = props.history;
-                    // console.log('goback', props.history.goBack)
+                    console.log('location', props.history.location.pathname)
                     return <Auth 
                         showMemberBlock={this.state.showMemberBlock}
                         currentUser={this.props.currentUser}
@@ -193,7 +196,6 @@ class Homepage extends React.Component{
                         facebookSignIn={this.props.facebookSignIn}
                         landingPage={this.state.landingPage}
                         routeProps={routeProps}
-                        // docId={docId}
                     />;
                 }} />
                 {/*}
@@ -212,6 +214,7 @@ class Homepage extends React.Component{
                 <Route exact path={path} >
                     <DocCreate 
                         db={this.props.db}
+                        realtimeDb={this.props.realtimeDb}
                         storage={this.props.storage}
                         docId={docId}
                         currentUser={this.props.currentUser}

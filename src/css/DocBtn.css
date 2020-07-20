@@ -1,10 +1,15 @@
 img{width: 100%;}
 /* btns */
 .doc-btn .btns{
+    background-color: #ffffff;
     display: flex;
     align-items: center;
     border-bottom: 1px solid #979797;
     padding: 5px;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 62px;
+    left: 0;
 }
 /* little btns */
 .doc-btn .btns>button,

@@ -160,7 +160,8 @@ class DocApp extends React.Component{
         .then(console.log('editors set!'))
         .catch((error)=>{error.message})
         db.collection('chatrooms').doc(this.props.docId).collection('members').doc(currentUser.uid).set({
-            time: Date.now()
+            time: Date.now(),
+            id: currentUser.uid
         })
         .then(()=>{
             console.log('chatroom members set!')
@@ -177,6 +178,74 @@ class DocApp extends React.Component{
             saved: issaved
         })
     }
+    onlineCheck(uid){
+        let url = location.href.toString();
+        let docId = url.split('document/')[1];
+        console.log('uid',uid)
+        if(docId !== undefined){
+            let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
+            let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
+            let isOfflineForDatabase = {
+                state: 'offline',
+            };
+            let isOnlineForDatabase = {
+                state: 'online',
+            };
+            this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+                if (snapshot.val() == false) {
+                    return;
+                };
+                userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase)
+                .then(function() {
+                    userStatusDatabaseRef.set(isOnlineForDatabase);
+                });
+            });
+
+
+            //////
+            if(uid !== null){
+                let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
+                let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
+                let isOfflineForFirestore = {
+                    state: 'offline',
+                };
+                
+                let isOnlineForFirestore = {
+                    state: 'online',
+                };
+                
+                this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+                    if (snapshot.val() == false) {
+                        userStatusFirestoreRef.set(isOfflineForFirestore);
+                        return;
+                    };                
+                    userStatusDatabaseRef.onDisconnect()
+                        .set(isOfflineForDatabase)
+                        .then(function() {
+                            docStatusDatabaseRef.once("value")
+                            .then(function(doc){
+                                console.log(doc.val())
+                                let data = doc.val();
+                                let arr = []
+                                for(let prop in data){
+                                    if(data[prop]["state"] === 'online'){
+                                        arr.push(prop)
+                                    }
+                                }
+                                docStatusFirestoreRef.set({
+                                    total: arr
+                                })
+                                userStatusDatabaseRef.set(isOnlineForDatabase);
+                            })
+                            
+                            
+                        });
+                });
+            }
+            
+        }
+        
+    }
 
     render(){
         let doc;
@@ -186,6 +255,7 @@ class DocApp extends React.Component{
         if(!this.props.currentUser){
             return <Redirect to="/authentication" />
         }
+        this.onlineCheck.bind(this, this.props.currentUser.uid)();
         if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
             doc = <div className='loading-page'></div>
         }else if(this.state.isOwner || this.state.isEditor){
@@ -208,10 +278,6 @@ class DocApp extends React.Component{
                 <DocPrevStep 
                     handleEditor={this.handleEditor.bind(this)}
                     currentUser={this.props.currentUser}
-                    // signUp={this.props.signUp}
-                    // signIn={this.props.signIn}
-                    // googleSignIn={this.props.googleSignIn}
-                    // facebookSignIn={this.props.facebookSignIn}
                  />
                 <DocHeader
                     db={this.props.db} 
