@@ -198,7 +198,6 @@ class App extends React.Component{
           var errorMessage = error.message;
           var email = error.email;
           var credential = error.credential;
-          console.log('error')
           console.log(email)
           console.log(credential)
           console.log(errorMessage);

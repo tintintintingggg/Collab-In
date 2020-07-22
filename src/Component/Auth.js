@@ -64,9 +64,10 @@ class Auth extends React.Component{
 
     render(){
         if(this.props.currentUser){
-            // return <Redirect to={this.props.landingPage} />
-            this.props.routeProps.goBack();
-            return true
+            console.log(this.props.landingPage)
+            return <Redirect to={this.props.landingPage} />
+            // this.props.routeProps.goBack();
+            // return true
         }else{
             return <div className="memberBlock" ref={this.myRef} >
                 <div className="signInBlock" style={{display: 'block'}}>

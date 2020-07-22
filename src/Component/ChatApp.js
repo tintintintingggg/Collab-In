@@ -35,32 +35,48 @@ class ChatContent extends React.Component{
                 let minute = new Date(message.time).getMinutes()
                 if(minute.toString().length<2){minute = '0'+minute}
                 if(this.props.currentUser.uid !== message.user){
+                    let photoSrc = '/images/chat-user.png';
+                    if(message.photo){ photoSrc = message.photo; }
+                    
                     item = <div key={index} className="message-item other-user">
-                        <div className="user-pic">{message.name}</div>
+                        <div className="user-pic"><img src={photoSrc} /></div>
                         <div className="message-content">
                             <div className="content-name">{message.name}</div>
-                            <div className="content-text">{message.text}</div>
-                            <div className="content-time">
-                                <div><img src="/images/user.png" /></div>
-                                {hour+':'+minute}
+                            <div className="text-wrap">
+                                <div className="content-text">{message.text}</div>
+                                <div className="content-time">
+                                    <div><img src="/images/clock.png" /></div>
+                                    {hour+':'+minute}
+                                </div>
                             </div>
                         </div>
                     </div>
                 }else{
                     item = <div key={index} className="message-item myself">
                         <div className="message-content">
-                            <div className="content-name">{message.name}</div>
-                            <div className="content-text">{message.text}</div>
-                            <div className="content-time">
-                                <div><img src="/images/clock.png" /></div>
-                                {hour+':'+minute}
+                            {/* <div className="content-name">{message.name}</div> */}
+                            <div className="text-wrap">
+                                <div className="content-text">{message.text}</div>
+                                <div className="content-time">
+                                    <div><img src="/images/clock.png" /></div>
+                                    {hour+':'+minute}
+                                </div>
                             </div>
                         </div>
-                        <div className="user-pic">{message.name}</div>
                     </div>
                 }
                 content.push(item)
             })
+        }
+        if(document.getElementById('chat-app')){
+            let div = document.getElementById('chat-app')
+            div.scrollIntoView(false)
+            // console.log('height',div.scrollTop);
+            // console.log('height',div.scrollHeight);
+            // console.log('height',div.clientHeight);
+            // div.scrollTop = (div.scrollHeight)-(div.clientHeight);
+            // div.scrollTop = (div.scrollHeight-82)
+            div.scrollTop = 999999999
         }
         return <div className="chat-content">
            {content}
@@ -82,6 +98,10 @@ class ChatContent extends React.Component{
                 content: prevState.content.concat(arr)
             }))
         })
+        let div = document.getElementById('chat-app')
+        console.log('height',div.scrollTop);
+        console.log('height',div.scrollHeight);
+        div.scrollTop = (div.scrollHeight)-(div.clientHeight);
     }
 }
 
@@ -98,7 +118,8 @@ class ChatInput extends React.Component{
             input: e.target.value
         })
     }
-    sendInput(){
+    sendInput(e){
+        e.preventDefault();
         let db = this.props.db;
         if(this.props.currentUser){
             if(this.state.input){
@@ -106,6 +127,7 @@ class ChatInput extends React.Component{
                 db.collection('chatrooms').doc(this.props.docId).collection('messages').doc().set({
                     user: this.props.currentUser.uid,
                     name: this.props.currentUser.displayName,
+                    photo: this.props.currentUser.photoURL,
                     text: this.state.input,
                     time: Date.now()
                 })
@@ -115,7 +137,7 @@ class ChatInput extends React.Component{
                     })
                 }).catch((error)=>{alert(error)})
             }else{
-                alert("you don't type anything")
+                alert("You didn't type anything")
             }
         }else{
             alert('not log in')
@@ -123,15 +145,19 @@ class ChatInput extends React.Component{
     }
     render(){
         return  <div className="chat-input">
-                <div>+</div>
-                {/* <form> */}
-                <textarea 
-                    type="text" 
-                    placeholder="Type something..." 
-                    onChange={this.getInput.bind(this)}
-                    ref={this.input}
-                 />
-                <div onClick={this.sendInput.bind(this)}>send</div>
+                <form onSubmit={this.sendInput.bind(this)}>
+                    <button><img src="/images/chat-input-add.png" /></button>
+                    {/* <div></div> */}
+                    <input
+                        id="chat-input-block"
+                        type="text" 
+                        placeholder="Say something..." 
+                        onChange={this.getInput.bind(this)}
+                        ref={this.input}
+                      />
+                    {/* <div></div> */}
+                    <button id="chat-input-submit" type="submit"><img src="/images/chat-input-send.png" /></button>
+                </form>
         </div>
     }
 }
@@ -216,21 +242,21 @@ class ChatApp extends React.Component{
         super(props);
     }
     render(){
-        return <div className='chat-app'>
+        return <div className='chat-app' id="chat-app">
             <ChatHeader
                 db={this.props.db}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
              />
              <ChatContent
-                    db={this.props.db}
-                    docId={this.props.docId}
-                    currentUser={this.props.currentUser}
+                db={this.props.db}
+                docId={this.props.docId}
+                currentUser={this.props.currentUser}
              />
             <ChatInput 
-                    db={this.props.db}
-                    docId={this.props.docId}
-                    currentUser={this.props.currentUser}
+                db={this.props.db}
+                docId={this.props.docId}
+                currentUser={this.props.currentUser}
              />
         </div>
     }

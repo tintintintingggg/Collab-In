@@ -3,8 +3,8 @@ button:focus{
     outline: none;
 }
 .doc{
-    height:100vh;
     overflow:scroll;
+    height: calc(100vh - 62px);
 }
 .docHeader{
     position: sticky;
@@ -26,7 +26,7 @@ button:focus{
     display: flex;
     align-items: center;
 }
-.logo{
+.docHeader .logo{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -135,6 +135,7 @@ button:focus{
     border-bottom: 1px solid #979797 ;
     display: flex;
     align-items: center;
+    word-wrap: break-word;
 }
 .online-list>div>div{
     width: 13px;
@@ -146,20 +147,13 @@ button:focus{
 
 /* docPrevStep */
 .docPrevStep{
-    /* position: fixed;
-    top:0;left:0;
-    height: 100vh; */
-    width: 100%;
+    width: 100vh;
     margin: 0 auto;
     text-align: center;
-    /* background-color: rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 .docPrevStep .container{
     position: fixed;
-    top:0;left:0;
+    top:0;left: 0;
     height: 100vh;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.2);

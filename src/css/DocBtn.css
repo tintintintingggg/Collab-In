@@ -4,11 +4,11 @@ img{width: 100%;}
     background-color: #ffffff;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #979797;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     padding: 5px;
     position: sticky;
     position: -webkit-sticky;
-    top: 62px;
+    top: 0;
     left: 0;
 }
 /* little btns */
