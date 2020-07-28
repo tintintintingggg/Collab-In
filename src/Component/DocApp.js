@@ -2,6 +2,7 @@ import React from 'react';
 import {DocBtn} from './DocBtn';
 import '../css/DocApp.css';
 import { Redirect } from 'react-router-dom';
+import {LoadingPage} from './LoadingPage';
 
 class DocPrevStep extends React.Component{
     constructor(props){
@@ -23,7 +24,6 @@ class DocApp extends React.Component{
             isWaitingEditor: false,
             isEditor: false,
             isUser: null
-            // landingPage: '/document/'+this.props.docId
         }
     }
     handleEditor(currentUser){
@@ -127,15 +127,14 @@ class DocApp extends React.Component{
 
     render(){
         let doc;
-        // if(this.state.isUser===false){
-        //     return <Redirect to="/authentication" />
-        // }
         if(!this.props.currentUser){
-            return <Redirect to="/authentication" />
+            return <Redirect 
+                push to={{pathname:"/authentication"}}
+                 />
         }
         this.onlineCheck.bind(this, this.props.currentUser.uid)();
         if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
-            doc = <div className='loading-page'></div>
+            doc = <LoadingPage />
         }else if(this.state.isOwner || this.state.isEditor){
             doc = <div className='doc'>
                 <DocBtn 
@@ -171,11 +170,6 @@ class DocApp extends React.Component{
     componentDidMount(){
         let db = this.props.db;
         let noname = true;
-        // if(!this.props.currentUser){
-        //     this.setState({
-        //         isUser: false
-        //     })
-        // }
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             if(this.props.currentUser){

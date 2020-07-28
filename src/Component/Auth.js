@@ -65,13 +65,12 @@ class Auth extends React.Component{
     render(){
         if(this.props.currentUser){
             console.log(this.props.landingPage)
-            return <Redirect to={this.props.landingPage} />
-            // this.props.routeProps.goBack();
-            // return true
+            // return <Redirect to={this.props.landingPage} />
+            this.props.routeProps.goBack();
+            return true
         }else{
             return <div className="memberBlock" ref={this.myRef} >
                 <div className="signInBlock" style={{display: 'block'}}>
-                    {/* <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div> */}
                     <div className="google-signin" onClick={this.props.googleSignIn}><div><img src="/images/google.png" /></div>Sign in with Google</div>
                     <div className="facebook-signin" onClick={this.props.facebookSignIn}><div><img src="/images/fb.svg" /></div>Sign in with Facebook</div>
                     <div className="seperator"><div className="seperator-line"></div><div>Or</div><div className="seperator-line"></div></div>
@@ -83,7 +82,6 @@ class Auth extends React.Component{
                     <div className="reminder">No account? <span onClick={this.handleSigninOrup.bind(this)}>Create one!</span></div>
                 </div>
                 <div className="signUpBlock" style={{display: 'none'}}>
-                    {/* <div className="close-btn" onClick={this.props.handleMemberBlock}><img src="/images/remove.png" /></div> */}
                     <div className="email-signup">
                         <div><input onChange={this.getSignUpName.bind(this)} placeholder="Your Name"  /></div>
                         <div><input onChange={this.getSignUpEmail.bind(this)} placeholder="Email"  /></div>

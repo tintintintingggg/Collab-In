@@ -4,9 +4,13 @@ import '../css/WebHeader.css';
 class WebHeader extends React.Component{
     constructor(props){
         super(props);
+        this.urlInput = React.createRef();
+        this.shareList = React.createRef();
+        this.shareImg = React.createRef();
         this.state = {
             nameValue: '',
-            onlineUser: null
+            onlineUser: null,
+            copyUrl: ''
         }
     }
     getName(e){
@@ -20,13 +24,29 @@ class WebHeader extends React.Component{
             name: this.state.nameValue
         })
         .then(console.log('submit success')).catch(() => {console.log(error.message)})
+    } 
+    copyUrl(){
+        this.urlInput.current.select();
+        document.execCommand('copy');
+        if(document.execCommand('copy')){
+            this.setState({copyUrl: 'Copied'},
+                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 2000)}
+            )
+        }else{
+            this.setState({copyUrl: 'Fail to Copy!'},
+                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 2000)}
+            )
+        }
     }
-    download(){
-        var link = document.createElement('a');
-        link.href = document.getElementById('selectable-area');
-        link.download = 'file.pdf';
-        link.dispatchEvent(new MouseEvent('click'));
-    }    
+    handleShareList(){
+        if(this.shareList.current.style.display === 'none'){
+            this.shareList.current.style.display = 'block';
+            this.shareImg.current.classList.add('img-on-hover');
+        }else{
+            this.shareList.current.style.display = 'none';
+            this.shareImg.current.classList.remove('img-on-hover');
+        }
+    }
     render(){
         let save; let icon;
         if(!this.props.saved){
@@ -36,9 +56,7 @@ class WebHeader extends React.Component{
             save = "Saved!";
             icon = "/images/cloud-computing.png";
         }
-        // let colors = ['red','green','blue','yellow','cyan','black']
         let onlineUserName = [];
-
         let online = '';
         if(this.state.onlineUser){
             for(let i =0; i<this.state.onlineUser.length; i++){
@@ -48,18 +66,23 @@ class WebHeader extends React.Component{
                 }
             }
             online = <div className="online-state">
-                <div className="online-total">
+                <div className="online-total" id="online-total-web">
                     <div><img src="/images/online.png" /></div>
                     {this.state.onlineUser.length+" ONLINE"}
+                </div>
+                <div className="online-total" id="online-total-mobile">
+                    <div><img src="/images/online.png" /></div>
+                    {this.state.onlineUser.length}
                 </div>
                 <div className="online-list">
                     {onlineUserName}
                 </div>
             </div>
         }
+        let copied = this.state.copyUrl;
         return <div className='docHeader'>
             <div className="headerleft">
-                <div className="logo"><img src="/images/docicon.png" /></div>
+                <div className="logo"><a href="/"><img src="/images/main-logo.png" /></a></div>
                 <div className="docname">
                     <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
                     <button onClick={this.submitName.bind(this)}><img src="/images/save.png" /></button>
@@ -71,14 +94,43 @@ class WebHeader extends React.Component{
                 
             </div>
             <div className="headerright">
-                <div className="download" ><img src="/images/download.png" onClick={this.download.bind(this)} /></div>
-                <div className="share">
-                    <a href={"mailto:?subject=I wanted you to see this site&body="+window.location.href} title="Share by Email" >
-                        <img src="/images/mail.png" alt="Share by Email" />
-                    </a>
+                <div className="share-list" style={{display: 'none'}} ref={this.shareList}>
+                    <section className="section1">
+                        <main>Share by URL<span>{copied}</span></main>
+                        <article>
+                            <div className="href-url"><input id="input-url" value={window.location.href} ref={this.urlInput} readOnly></input></div>
+                            <div className="href-btn" onClick={this.copyUrl.bind(this)}>Copy</div>
+                        </article>
+                    </section>
+                    <section>
+                        <main>Share by Email</main>
+                        <article>
+                            <div className="href-url"><input value={window.location.href} readOnly /></div>
+                            <div className="href-btn">
+                                <a href={"mailto:?subject=Share a document with you!&body="+window.location.href} title="Share by Email" >
+                                    Send Email
+                                </a>
+                            </div>
+                        </article>
+                    </section>
+                </div>
+                <div className="share" onClick={this.handleShareList.bind(this)}>
+                    <img ref={this.shareImg} src="/images/share.png" />
+                </div>
+                <div id="header-nav-mobile-icon">
+                    <img src="/images/share.png" />
                 </div>
                 {online}
             </div>
+            {/* <div id="header-nav-mobile">
+                <div className="docname">
+                    <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
+                    <button onClick={this.submitName.bind(this)}><img src="/images/save.png" /></button>
+                </div>
+                <div className="share" onClick={this.handleShareList.bind(this)}>
+                    <img ref={this.shareImg} src="/images/share.png" />
+                </div>
+            </div> */}
         </div>
     }
     componentDidMount(){

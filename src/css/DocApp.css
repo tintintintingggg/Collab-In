@@ -1,21 +1,19 @@
 *{box-sizing: border-box;}
-button:focus{
-    outline: none;
-}
+button:focus{outline: none;}
 .doc{
     overflow:scroll;
     height: calc(100vh - 62px);
+    background-color: #F8F9FA;
 }
 .docHeader{
-    position: sticky;
     position: -webkit-sticky;
-    z-index: 2;
+    position: sticky;
+    z-index: 4;
     top: 0;
     left: 0;
     background-color: #ffffff;
-    /* background-color: #F8F8F8; */
     color: #2C3E50;
-    padding: 3px 10px;
+    padding: 10px 10px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -30,7 +28,7 @@ button:focus{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
+    width: 40px;
     margin: 0 10px;
 }
 .docname{
@@ -77,15 +75,100 @@ button:focus{
     align-items: center;
 }
 /* right */
-.headerright .download{
-    width: 50px;
-}
-.share{
+#header-nav-mobile .share,
+.headerright .share{
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 25px;
+    margin: 0 20px;
+    cursor: pointer;
+}
+#header-nav-mobile .share,
+.headerright .share img:hover{
+    opacity: .8;
     width: 30px;
-    margin: 0 10px;
+}
+.img-on-hover{
+    opacity: .8;
+    width: 30px;
+}
+#header-nav-mobile .share>a,
+.headerright .share>a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#header-nav-mobile .share-list,
+.headerright .share-list{
+    position: absolute;
+    width: 300px;
+    top:59px;
+    right: 60px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+#header-nav-mobile .share-list main,
+.headerright .share-list main{
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+#header-nav-mobile .share-list .section1,
+.headerright .share-list .section1{
+    position: relative;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 20px;
+    padding-bottom: 25px;
+}
+#header-nav-mobile .share-list .section1>main>span,
+.headerright .share-list .section1>main>span{
+    color: #F54F29;
+    margin-left: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+#header-nav-mobile .share-list article,
+.headerright .share-list article{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+#header-nav-mobile .share-list article .href-url,
+.headerright .share-list article .href-url{
+    width: 65%;
+    padding: 5px 10px;
+    font-size: 10px;
+    overflow: hidden;
+    background-color: #dddddd;
+    margin-right: 5px ;
+    border-right: 1px solid #dddddd ;
+    color: rgba(0, 0, 0, 0.4);
+    white-space:nowrap;
+}
+#header-nav-mobile .share-list article .href-url>input,
+.headerright .share-list article .href-url>input{
+    border: none;
+    background-color: #dddddd;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.4)
+}
+#header-nav-mobile .share-list article .href-btn,
+.headerright .share-list article .href-btn{
+    width: 35%;
+    text-align: center;
+    font-size: 12px;
+}
+#header-nav-mobile-icon{
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    margin: 0 20px;
+    cursor: pointer;
+    display: none;
 }
 .headerright .online-state{
     display: flex;
@@ -104,7 +187,7 @@ button:focus{
     height: 35px;
     line-height: 35px;
     background-color: #F54F29;
-    border-radius: 5px;
+    border-radius: 10px;
     color: #f5f5f5;
 }
 .headerright .online-total>div{
@@ -120,6 +203,9 @@ button:focus{
 }
 .headerright .online-state:hover>.online-total{
     background-color: #a52e13;
+}
+#online-total-mobile{
+    display: none;
 }
 .online-list{
     display: none;
@@ -160,4 +246,40 @@ button:focus{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+/* nav-mobile */
+#header-nav-mobile{
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    top: auto;
+
+}
+@media(max-width: 680px){
+    #online-total-mobile{
+        display: flex;
+        width: 50px;
+    }
+    #online-total-web{
+        display: none;
+    }
+}
+@media(max-width: 600px){
+    #header-nav-mobile-icon{
+        display: flex;
+    }
+    .docHeader .headerleft .docname,
+    .docHeader .headerright .share{
+        display: none;
+    }
+    #header-nav-mobile{
+        display: flex;
+    }
 }

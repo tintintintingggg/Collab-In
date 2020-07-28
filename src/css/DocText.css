@@ -7,8 +7,9 @@
 }
 .text>div{
     background-color: #FFFFFF;
-    width: 756px;
-    min-height: 1086px;
+    max-width: 649px;
+    width: 100%;
+    min-height: 978px;
     margin: 10px 0;
     border: 1px solid #dddddd;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1),
@@ -23,4 +24,9 @@
 }
 #selectable-area:focus{
     outline: 0px solid transparent;
+}
+@media(max-width: 450px){
+    .text{
+        padding: 5px 15px;
+    }
 }

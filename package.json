@@ -23,8 +23,11 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^1.6.10",
     "firebase": "^7.15.5",
     "firebase-admin": "^8.13.0",
+    "html2canvas": "^1.0.0-rc.5",
+    "jspdf": "^1.5.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-mutation-observer": "^1.1.0",

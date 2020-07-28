@@ -1,52 +1,59 @@
 img{width: 100%;}
 /* btns */
+.doc-btn .btns-wrap{
+    overflow: scroll;
+}
 .doc-btn .btns{
     background-color: #ffffff;
     display: flex;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 5px;
-    position: sticky;
     position: -webkit-sticky;
+    position: sticky;
+    padding: 5px;
     top: 0;
     left: 0;
+    min-width: 550px;
 }
 /* little btns */
 .doc-btn .btns>button,
 .doc-btn .btns .font-size-btn-arrow>button,
 .doc-btn .btns .colorbtn,
-.doc-btn .btns .background-colorbtn{
+.doc-btn .btns .background-colorbtn,
+.img-btn>div{
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 7px;
     margin: 0 5px;
-    /* font-size: 26px; */
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     background-color: transparent;
     border-radius: 5px;
     border: 1px solid transparent;
+    cursor: pointer;
 }
 #color-input,
 #background-color-input{
     width: 100%;
     background-color: transparent;
     background-image: url('/images/color.png');
-    background-position: center;
-    background-size: cover;
+    background-position: top;
+    background-size: contain;
     background-repeat: no-repeat;
     -webkit-appearance: none;
 	border: none;
-    padding: 18px 0 1px;
+    padding: 18.5px 0 0.5px;
+    cursor: pointer;
 }
 #background-color-input{
-    background-image: url('/images/color.png');
+    background-image: url('/images/color-fill.png');
 }
 .doc-btn .btns>button:hover,
 .doc-btn .btns .font-size-btn-arrow>button:hover,
 .doc-btn .btns .colorbtn:hover,
-.doc-btn .btns .background-colorbtn:hover{
+.doc-btn .btns .background-colorbtn:hover,
+.img-btn>div:hover{
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid #dddddd;
 }
@@ -106,6 +113,17 @@ img{width: 100%;}
 .font-size-btn-list>button:hover{
     background-color: #eeeeee;
 }
+.img-btn>div>label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.img-btn>div>input{
+    visibility:hidden;
+    width:0;
+    height:0
+}
 /* functions */
 .clear{
     background-color: #ffffff;
@@ -129,30 +147,18 @@ img{width: 100%;}
 .un-italic{
     font-style: normal;
 }
-/* .underline{
-    text-decoration: underline;
+.un-color{
+    background-color: #ffffff;
+    color: #000000;
 }
-.linethrough{
-    text-decoration: line-through;
-    text-decoration: none;
-} */
-.align-center{
-    text-align: center;
-}
-.align-left{
-    text-align: left;
-}
-
 /* drag img */
 #selectable-area img{
     width: 100%;
-
 }
 .gragging{
     opacity: .25;
 }
 #selectable-area img:hover{
-    /* box-sizing: content-box; */
     outline: 2px dashed #979797;
     border: 4px solid #ffffff;
 }

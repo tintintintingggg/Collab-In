@@ -1,4 +1,5 @@
-import React, { createRef } from 'react';
+import React, { createRef, Children } from 'react';
+import {LoadingPage} from './LoadingPage';
 import '../css/ChatApp.css'
 
 class ChatContent extends React.Component{
@@ -35,7 +36,7 @@ class ChatContent extends React.Component{
                 let minute = new Date(message.time).getMinutes()
                 if(minute.toString().length<2){minute = '0'+minute}
                 if(this.props.currentUser.uid !== message.user){
-                    let photoSrc = '/images/chat-user.png';
+                    let photoSrc = '/images/user-1.png';
                     if(message.photo){ photoSrc = message.photo; }
                     
                     item = <div key={index} className="message-item other-user">
@@ -54,7 +55,6 @@ class ChatContent extends React.Component{
                 }else{
                     item = <div key={index} className="message-item myself">
                         <div className="message-content">
-                            {/* <div className="content-name">{message.name}</div> */}
                             <div className="text-wrap">
                                 <div className="content-text">{message.text}</div>
                                 <div className="content-time">
@@ -71,11 +71,6 @@ class ChatContent extends React.Component{
         if(document.getElementById('chat-app')){
             let div = document.getElementById('chat-app')
             div.scrollIntoView(false)
-            // console.log('height',div.scrollTop);
-            // console.log('height',div.scrollHeight);
-            // console.log('height',div.clientHeight);
-            // div.scrollTop = (div.scrollHeight)-(div.clientHeight);
-            // div.scrollTop = (div.scrollHeight-82)
             div.scrollTop = 999999999
         }
         return <div className="chat-content">
@@ -109,6 +104,7 @@ class ChatInput extends React.Component{
     constructor(props){
         super(props);
         this.input = React.createRef();
+        this.emojis = React.createRef();
         this.state={
             input: null
         }
@@ -143,21 +139,135 @@ class ChatInput extends React.Component{
             alert('not log in')
         }
     }
+    pickEmoji(e){
+        this.input.current.value = this.input.current.value+e.target.textContent;
+        this.setState({
+            input: this.input.current.value
+        })
+        let emojis = this.emojis.current;
+        emojis.style.display = 'none';
+        emojis.innerHTML = ''
+
+    }
+    getEmojis(){
+        let emojis = this.emojis.current;
+        if(emojis.style.display === 'none'){
+            emojis.style.display = 'block';
+            let emojiList = [
+                '&#128512;', '&#128513;', '&#128514;','&#129315;', '&#128515;', 
+                '&#128516;', '&#128517;', '&#128518;', '&#128521;', '&#128522;',	
+                '&#128523;', '&#128526;',
+                '&#128525;',	
+                '&#128536;',	
+                '&#128535;',	
+                '&#128537;',	
+                '&#128538;',	
+                '&#128578;',	
+                '&#129303;',	
+                '&#129300;',	
+                '&#128528;',	
+                '&#128529;',	
+                '&#128566;',	
+                '&#128580;',	
+                '&#128527;',	
+                '&#128547;',	
+                '&#128549;',	
+                '&#128558;',	
+                '&#129296;',	
+                '&#128559;',
+                '&#128554;',	
+                '&#128555;',	
+                '&#128564;',	
+                '&#128524;',	
+                '&#129299;',	
+                '&#128539;',	
+                '&#128540;',	
+                '&#128541;',	
+                '&#129316;',	
+                '&#128530;',	
+                '&#128531;',	
+                '&#128532;',	
+                '&#128533;',	
+                '&#128579;',	
+                '&#129297;',
+                '&#128562;',	
+                '&#128577;',	
+                '&#128534;',	
+                '&#128542;',	
+                '&#128543;',	
+                '&#128548;',	
+                '&#128546;',	
+                '&#128557;',	
+                '&#128550;',	
+                '&#128551;',	
+                '&#128552;',	
+                '&#128553;',	
+                '&#128556;',	
+                '&#128560;',	
+                '&#128561;',	
+                '&#128563;',	
+                '&#128565;',	
+                '&#128545;',	
+                '&#128544;',	
+                '&#128519;',	
+                '&#129312;',	
+                '&#129313;',	
+                '&#129317;',	
+                '&#128567;',	
+                '&#129298;',	
+                '&#129301;',	
+                '&#129314;',	
+                '&#129319;',
+                '&#128520;',	
+                '&#128127;',	
+                '&#128121;',	
+                '&#128122;',	
+                '&#128128;',	
+                '&#128123;',	
+                '&#128125;',	
+                '&#128126;',	
+                '&#129302;',	
+                '&#128169;',	
+                '&#128570;',	
+                '&#128568;',	
+                '&#128569;',	
+                '&#128571;',	
+                '&#128572;',	
+                '&#128573;',	
+                '&#128576;',	
+                '&#128575;',	
+                '&#128574;',	
+                '&#128584;',	
+                '&#128585;',	
+                '&#128586;',	
+            ];
+            for(let i = 0; i<emojiList.length; i++){
+                let item = document.createElement('span');
+                item.innerHTML = emojiList[i]+' ';
+                item.setAttribute('class', "my-emoji");
+                item.onclick = this.pickEmoji.bind(this);
+                emojis.appendChild(item);
+            }
+        }else{
+            emojis.style.display = 'none';
+            emojis.innerHTML = ''
+        }
+    }
     render(){
         return  <div className="chat-input">
-                <form onSubmit={this.sendInput.bind(this)}>
-                    <button><img src="/images/chat-input-add.png" /></button>
-                    {/* <div></div> */}
-                    <input
-                        id="chat-input-block"
-                        type="text" 
-                        placeholder="Say something..." 
-                        onChange={this.getInput.bind(this)}
-                        ref={this.input}
-                      />
-                    {/* <div></div> */}
-                    <button id="chat-input-submit" type="submit"><img src="/images/chat-input-send.png" /></button>
-                </form>
+            <div className="emojis" style={{display: 'none'}} ref={this.emojis}>
+            </div>
+            <button onClick={this.getEmojis.bind(this)}><img src="/images/chat-input-add.png" /></button>
+            <form onSubmit={this.sendInput.bind(this)}>
+                <input
+                    id="chat-input-block"
+                    type="text" 
+                    placeholder="Say something..." 
+                    onChange={this.getInput.bind(this)}
+                    ref={this.input}
+                  />
+                <button id="chat-input-submit" type="submit"><img src="/images/chat-input-send.png" /></button>
+            </form>
         </div>
     }
 }
@@ -191,8 +301,6 @@ class ChatHeader extends React.Component{
                 membersList: []
             })
         }
-        
-        
     }
     render(){
         let members = ''
@@ -210,7 +318,7 @@ class ChatHeader extends React.Component{
         }
         return <div className="chat-header">
                 <div>
-                    {/* <div className="shrink-btn"><img src="/images/collapse.png" /></div> */}
+                    <div className="shrink-btn" onClick={this.props.handleChatRoom}><img src="/images/minimize.png" /></div>
                     <div className="group-members" onClick={this.showMembers.bind(this)}>Members ({members})</div>
                 </div>
                 <div className="members-list" ref={this.membersList}
@@ -242,11 +350,12 @@ class ChatApp extends React.Component{
         super(props);
     }
     render(){
-        return <div className='chat-app' id="chat-app">
+        return <div className='chat-app' id="chat-app" style={{display: 'flex'}}>
             <ChatHeader
                 db={this.props.db}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
+                handleChatRoom={this.props.handleChatRoom}
              />
              <ChatContent
                 db={this.props.db}
@@ -263,3 +372,238 @@ class ChatApp extends React.Component{
 }
 
 export {ChatApp};
+
+
+
+
+
+	
+	
+	
+	
+	
+
+// 👦	BOY	&#x1F466;	&#128102;	
+// 👦🏻	boy, type-1-2	&#x1F466; &#x1F3FB;	&#128102; &#127995;	
+// 👦🏼	boy, type-3	&#x1F466; &#x1F3FC;	&#128102; &#127996;	
+// 👦🏽	boy, type-4	&#x1F466; &#x1F3FD;	&#128102; &#127997;	
+// 👦🏾	boy, type-5	&#x1F466; &#x1F3FE;	&#128102; &#127998;	
+// 👦🏿	boy, type-6	&#x1F466; &#x1F3FF;	&#128102; &#127999;	
+// 👧	GIRL	&#x1F467;	&#128103;	
+// 👧🏻	girl, type-1-2	&#x1F467; &#x1F3FB;	&#128103; &#127995;	
+// 👧🏼	girl, type-3	&#x1F467; &#x1F3FC;	&#128103; &#127996;	
+// 👧🏽	girl, type-4	&#x1F467; &#x1F3FD;	&#128103; &#127997;	
+// 👧🏾	girl, type-5	&#x1F467; &#x1F3FE;	&#128103; &#127998;	
+// 👧🏿	girl, type-6	&#x1F467; &#x1F3FF;	&#128103; &#127999;	
+// 👨	MAN	&#x1F468;	&#128104;	
+// 👨🏻	man, type-1-2	&#x1F468; &#x1F3FB;	&#128104; &#127995;	
+// 👨🏼	man, type-3	&#x1F468; &#x1F3FC;	&#128104; &#127996;	
+// 👨🏽	man, type-4	&#x1F468; &#x1F3FD;	&#128104; &#127997;	
+// 👨🏾	man, type-5	&#x1F468; &#x1F3FE;	&#128104; &#127998;	
+// 👨🏿	man, type-6	&#x1F468; &#x1F3FF;	&#128104; &#127999;	
+// 👩	WOMAN	&#x1F469;	&#128105;	
+// 👩🏻	woman, type-1-2	&#x1F469; &#x1F3FB;	&#128105; &#127995;	
+// 👩🏼	woman, type-3	&#x1F469; &#x1F3FC;	&#128105; &#127996;	
+// 👩🏽	woman, type-4	&#x1F469; &#x1F3FD;	&#128105; &#127997;	
+// 👩🏾	woman, type-5	&#x1F469; &#x1F3FE;	&#128105; &#127998;	
+// 👩🏿	woman, type-6	&#x1F469; &#x1F3FF;	&#128105; &#127999;	
+// 👴	OLDER MAN ≊ old man	&#x1F474;	&#128116;	
+// 👴🏻	old man, type-1-2	&#x1F474; &#x1F3FB;	&#128116; &#127995;	
+// 👴🏼	old man, type-3	&#x1F474; &#x1F3FC;	&#128116; &#127996;	
+// 👴🏽	old man, type-4	&#x1F474; &#x1F3FD;	&#128116; &#127997;	
+// 👴🏾	old man, type-5	&#x1F474; &#x1F3FE;	&#128116; &#127998;	
+// 👴🏿	old man, type-6	&#x1F474; &#x1F3FF;	&#128116; &#127999;	
+// 👵	OLDER WOMAN ≊ old woman	&#x1F475;	&#128117;	
+// 👵🏻	old woman, type-1-2	&#x1F475; &#x1F3FB;	&#128117; &#127995;	
+// 👵🏼	old woman, type-3	&#x1F475; &#x1F3FC;	&#128117; &#127996;	
+// 👵🏽	old woman, type-4	&#x1F475; &#x1F3FD;	&#128117; &#127997;	
+// 👵🏾	old woman, type-5	&#x1F475; &#x1F3FE;	&#128117; &#127998;	
+// 👵🏿	old woman, type-6	&#x1F475; &#x1F3FF;	&#128117; &#127999;	
+// 👶	BABY	&#x1F476;	&#128118;	
+// 👶🏻	baby, type-1-2	&#x1F476; &#x1F3FB;	&#128118; &#127995;	
+// 👶🏼	baby, type-3	&#x1F476; &#x1F3FC;	&#128118; &#127996;	
+// 👶🏽	baby, type-4	&#x1F476; &#x1F3FD;	&#128118; &#127997;	
+// 👶🏾	baby, type-5	&#x1F476; &#x1F3FE;	&#128118; &#127998;	
+// 👶🏿	baby, type-6	&#x1F476; &#x1F3FF;	&#128118; &#127999;	
+// 👼	BABY ANGEL	&#x1F47C;	&#128124;	
+// 👼🏻	baby angel, type-1-2	&#x1F47C; &#x1F3FB;	&#128124; &#127995;	
+// 👼🏼	baby angel, type-3	&#x1F47C; &#x1F3FC;	&#128124; &#127996;	
+// 👼🏽	baby angel, type-4	&#x1F47C; &#x1F3FD;	&#128124; &#127997;	
+// 👼🏾	baby angel, type-5	&#x1F47C; &#x1F3FE;	&#128124; &#127998;	
+// 👼🏿	baby angel, type-6	&#x1F47C; &#x1F3FF;	&#128124; &#127999;	
+// 👮	POLICE OFFICER	&#x1F46E;	&#128110;	
+// 👮🏻	police officer, type-1-2	&#x1F46E; &#x1F3FB;	&#128110; &#127995;	
+// 👮🏼	police officer, type-3	&#x1F46E; &#x1F3FC;	&#128110; &#127996;	
+// 👮🏽	police officer, type-4	&#x1F46E; &#x1F3FD;	&#128110; &#127997;	
+// 👮🏾	police officer, type-5	&#x1F46E; &#x1F3FE;	&#128110; &#127998;	
+// 👮🏿	police officer, type-6	&#x1F46E; &#x1F3FF;	&#128110; &#127999;	
+// 🕵	SLEUTH OR SPY ≊ detective	&#x1F575;	&#128373;	
+// 🕵🏻	detective, type-1-2	&#x1F575; &#x1F3FB;	&#128373; &#127995;	
+// 🕵🏼	detective, type-3	&#x1F575; &#x1F3FC;	&#128373; &#127996;	
+// 🕵🏽	detective, type-4	&#x1F575; &#x1F3FD;	&#128373; &#127997;	
+// 🕵🏾	detective, type-5	&#x1F575; &#x1F3FE;	&#128373; &#127998;	
+// 🕵🏿	detective, type-6	&#x1F575; &#x1F3FF;	&#128373; &#127999;	
+// 💂	GUARDSMAN	&#x1F482;	&#128130;	
+// 💂🏻	guardsman, type-1-2	&#x1F482; &#x1F3FB;	&#128130; &#127995;	
+// 💂🏼	guardsman, type-3	&#x1F482; &#x1F3FC;	&#128130; &#127996;	
+// 💂🏽	guardsman, type-4	&#x1F482; &#x1F3FD;	&#128130; &#127997;	
+// 💂🏾	guardsman, type-5	&#x1F482; &#x1F3FE;	&#128130; &#127998;	
+// 💂🏿	guardsman, type-6	&#x1F482; &#x1F3FF;	&#128130; &#127999;	
+// 👷	CONSTRUCTION WORKER	&#x1F477;	&#128119;	
+// 👷🏻	construction worker, type-1-2	&#x1F477; &#x1F3FB;	&#128119; &#127995;	
+// 👷🏼	construction worker, type-3	&#x1F477; &#x1F3FC;	&#128119; &#127996;	
+// 👷🏽	construction worker, type-4	&#x1F477; &#x1F3FD;	&#128119; &#127997;	
+// 👷🏾	construction worker, type-5	&#x1F477; &#x1F3FE;	&#128119; &#127998;	
+// 👷🏿	construction worker, type-6	&#x1F477; &#x1F3FF;	&#128119; &#127999;	
+// 👳	MAN WITH TURBAN ≊ person with turban	&#x1F473;	&#128115;	
+// 👳🏻	person with turban, type-1-2	&#x1F473; &#x1F3FB;	&#128115; &#127995;	
+// 👳🏼	person with turban, type-3	&#x1F473; &#x1F3FC;	&#128115; &#127996;	
+// 👳🏽	person with turban, type-4	&#x1F473; &#x1F3FD;	&#128115; &#127997;	
+// 👳🏾	person with turban, type-5	&#x1F473; &#x1F3FE;	&#128115; &#127998;	
+// 👳🏿	person with turban, type-6	&#x1F473; &#x1F3FF;	&#128115; &#127999;	
+// 👱	PERSON WITH BLOND HAIR ≊ blond person	&#x1F471;	&#128113;	
+// 👱🏻	blond person, type-1-2	&#x1F471; &#x1F3FB;	&#128113; &#127995;	
+// 👱🏼	blond person, type-3	&#x1F471; &#x1F3FC;	&#128113; &#127996;	
+// 👱🏽	blond person, type-4	&#x1F471; &#x1F3FD;	&#128113; &#127997;	
+// 👱🏾	blond person, type-5	&#x1F471; &#x1F3FE;	&#128113; &#127998;	
+// 👱🏿	blond person, type-6	&#x1F471; &#x1F3FF;	&#128113; &#127999;	
+// 🎅	FATHER CHRISTMAS ≊ santa claus	&#x1F385;	&#127877;	
+// 🎅🏻	santa claus, type-1-2	&#x1F385; &#x1F3FB;	&#127877; &#127995;	
+// 🎅🏼	santa claus, type-3	&#x1F385; &#x1F3FC;	&#127877; &#127996;	
+// 🎅🏽	santa claus, type-4	&#x1F385; &#x1F3FD;	&#127877; &#127997;	
+// 🎅🏾	santa claus, type-5	&#x1F385; &#x1F3FE;	&#127877; &#127998;	
+// 🎅🏿	santa claus, type-6	&#x1F385; &#x1F3FF;	&#127877; &#127999;	
+// 🤶	MOTHER CHRISTMAS	&#x1F936;	&#129334;	
+// 🤶🏻	mother christmas, type-1-2	&#x1F936; &#x1F3FB;	&#129334; &#127995;	
+// 🤶🏼	mother christmas, type-3	&#x1F936; &#x1F3FC;	&#129334; &#127996;	
+// 🤶🏽	mother christmas, type-4	&#x1F936; &#x1F3FD;	&#129334; &#127997;	
+// 🤶🏾	mother christmas, type-5	&#x1F936; &#x1F3FE;	&#129334; &#127998;	
+// 🤶🏿	mother christmas, type-6	&#x1F936; &#x1F3FF;	&#129334; &#127999;	
+// 👸	PRINCESS	&#x1F478;	&#128120;	
+// 👸🏻	princess, type-1-2	&#x1F478; &#x1F3FB;	&#128120; &#127995;	
+// 👸🏼	princess, type-3	&#x1F478; &#x1F3FC;	&#128120; &#127996;	
+// 👸🏽	princess, type-4	&#x1F478; &#x1F3FD;	&#128120; &#127997;	
+// 👸🏾	princess, type-5	&#x1F478; &#x1F3FE;	&#128120; &#127998;	
+// 👸🏿	princess, type-6	&#x1F478; &#x1F3FF;	&#128120; &#127999;	
+// 🤴	PRINCE	&#x1F934;	&#129332;	
+// 🤴🏻	prince, type-1-2	&#x1F934; &#x1F3FB;	&#129332; &#127995;	
+// 🤴🏼	prince, type-3	&#x1F934; &#x1F3FC;	&#129332; &#127996;	
+// 🤴🏽	prince, type-4	&#x1F934; &#x1F3FD;	&#129332; &#127997;	
+// 🤴🏾	prince, type-5	&#x1F934; &#x1F3FE;	&#129332; &#127998;	
+// 🤴🏿	prince, type-6	&#x1F934; &#x1F3FF;	&#129332; &#127999;	
+// 👰	BRIDE WITH VEIL	&#x1F470;	&#128112;	
+// 👰🏻	bride with veil, type-1-2	&#x1F470; &#x1F3FB;	&#128112; &#127995;	
+// 👰🏼	bride with veil, type-3	&#x1F470; &#x1F3FC;	&#128112; &#127996;	
+// 👰🏽	bride with veil, type-4	&#x1F470; &#x1F3FD;	&#128112; &#127997;	
+// 👰🏾	bride with veil, type-5	&#x1F470; &#x1F3FE;	&#128112; &#127998;	
+// 👰🏿	bride with veil, type-6	&#x1F470; &#x1F3FF;	&#128112; &#127999;	
+// 🤵	MAN IN TUXEDO	&#x1F935;	&#129333;	
+// 🤵🏻	man in tuxedo, type-1-2	&#x1F935; &#x1F3FB;	&#129333; &#127995;	
+// 🤵🏼	man in tuxedo, type-3	&#x1F935; &#x1F3FC;	&#129333; &#127996;	
+// 🤵🏽	man in tuxedo, type-4	&#x1F935; &#x1F3FD;	&#129333; &#127997;	
+// 🤵🏾	man in tuxedo, type-5	&#x1F935; &#x1F3FE;	&#129333; &#127998;	
+// 🤵🏿	man in tuxedo, type-6	&#x1F935; &#x1F3FF;	&#129333; &#127999;	
+// 🤰	PREGNANT WOMAN	&#x1F930;	&#129328;	
+// 🤰🏻	pregnant woman, type-1-2	&#x1F930; &#x1F3FB;	&#129328; &#127995;	
+// 🤰🏼	pregnant woman, type-3	&#x1F930; &#x1F3FC;	&#129328; &#127996;	
+// 🤰🏽	pregnant woman, type-4	&#x1F930; &#x1F3FD;	&#129328; &#127997;	
+// 🤰🏾	pregnant woman, type-5	&#x1F930; &#x1F3FE;	&#129328; &#127998;	
+// 🤰🏿	pregnant woman, type-6	&#x1F930; &#x1F3FF;	&#129328; &#127999;	
+// 👲	MAN WITH GUA PI MAO ≊ man with chinese cap	&#x1F472;	&#128114;	
+// 👲🏻	man with chinese cap, type-1-2	&#x1F472; &#x1F3FB;	&#128114; &#127995;	
+// 👲🏼	man with chinese cap, type-3	&#x1F472; &#x1F3FC;	&#128114; &#127996;	
+// 👲🏽	man with chinese cap, type-4	&#x1F472; &#x1F3FD;	&#128114; &#127997;	
+// 👲🏾	man with chinese cap, type-5	&#x1F472; &#x1F3FE;	&#128114; &#127998;	
+// 👲🏿	man with chinese cap, type-6	&#x1F472; &#x1F3FF;	&#128114; &#127999;	
+// 🙍	PERSON FROWNING	&#x1F64D;	&#128589;	
+// 🙍🏻	person frowning, type-1-2	&#x1F64D; &#x1F3FB;	&#128589; &#127995;	
+// 🙍🏼	person frowning, type-3	&#x1F64D; &#x1F3FC;	&#128589; &#127996;	
+// 🙍🏽	person frowning, type-4	&#x1F64D; &#x1F3FD;	&#128589; &#127997;	
+// 🙍🏾	person frowning, type-5	&#x1F64D; &#x1F3FE;	&#128589; &#127998;	
+// 🙍🏿	person frowning, type-6	&#x1F64D; &#x1F3FF;	&#128589; &#127999;	
+// 🙎	PERSON WITH POUTING FACE ≊ person pouting	&#x1F64E;	&#128590;	
+// 🙎🏻	person pouting, type-1-2	&#x1F64E; &#x1F3FB;	&#128590; &#127995;	
+// 🙎🏼	person pouting, type-3	&#x1F64E; &#x1F3FC;	&#128590; &#127996;	
+// 🙎🏽	person pouting, type-4	&#x1F64E; &#x1F3FD;	&#128590; &#127997;	
+// 🙎🏾	person pouting, type-5	&#x1F64E; &#x1F3FE;	&#128590; &#127998;	
+// 🙎🏿	person pouting, type-6	&#x1F64E; &#x1F3FF;	&#128590; &#127999;	
+// 🙅	FACE WITH NO GOOD GESTURE ≊ person gesturing not ok	&#x1F645;	&#128581;	
+// 🙅🏻	person gesturing not ok, type-1-2	&#x1F645; &#x1F3FB;	&#128581; &#127995;	
+// 🙅🏼	person gesturing not ok, type-3	&#x1F645; &#x1F3FC;	&#128581; &#127996;	
+// 🙅🏽	person gesturing not ok, type-4	&#x1F645; &#x1F3FD;	&#128581; &#127997;	
+// 🙅🏾	person gesturing not ok, type-5	&#x1F645; &#x1F3FE;	&#128581; &#127998;	
+// 🙅🏿	person gesturing not ok, type-6	&#x1F645; &#x1F3FF;	&#128581; &#127999;	
+// 🙆	FACE WITH OK GESTURE ≊ person gesturing ok	&#x1F646;	&#128582;	
+// 🙆🏻	person gesturing ok, type-1-2	&#x1F646; &#x1F3FB;	&#128582; &#127995;	
+// 🙆🏼	person gesturing ok, type-3	&#x1F646; &#x1F3FC;	&#128582; &#127996;	
+// 🙆🏽	person gesturing ok, type-4	&#x1F646; &#x1F3FD;	&#128582; &#127997;	
+// 🙆🏾	person gesturing ok, type-5	&#x1F646; &#x1F3FE;	&#128582; &#127998;	
+// 🙆🏿	person gesturing ok, type-6	&#x1F646; &#x1F3FF;	&#128582; &#127999;	
+// 💁	INFORMATION DESK PERSON ≊ person tipping hand	&#x1F481;	&#128129;	
+// 💁🏻	person tipping hand, type-1-2	&#x1F481; &#x1F3FB;	&#128129; &#127995;	
+// 💁🏼	person tipping hand, type-3	&#x1F481; &#x1F3FC;	&#128129; &#127996;	
+// 💁🏽	person tipping hand, type-4	&#x1F481; &#x1F3FD;	&#128129; &#127997;	
+// 💁🏾	person tipping hand, type-5	&#x1F481; &#x1F3FE;	&#128129; &#127998;	
+// 💁🏿	person tipping hand, type-6	&#x1F481; &#x1F3FF;	&#128129; &#127999;	
+// 🙋	HAPPY PERSON RAISING ONE HAND ≊ person raising hand	&#x1F64B;	&#128587;	
+// 🙋🏻	person raising hand, type-1-2	&#x1F64B; &#x1F3FB;	&#128587; &#127995;	
+// 🙋🏼	person raising hand, type-3	&#x1F64B; &#x1F3FC;	&#128587; &#127996;	
+// 🙋🏽	person raising hand, type-4	&#x1F64B; &#x1F3FD;	&#128587; &#127997;	
+// 🙋🏾	person raising hand, type-5	&#x1F64B; &#x1F3FE;	&#128587; &#127998;	
+// 🙋🏿	person raising hand, type-6	&#x1F64B; &#x1F3FF;	&#128587; &#127999;	
+// 🙇	PERSON BOWING DEEPLY ≊ person bowing	&#x1F647;	&#128583;	
+// 🙇🏻	person bowing, type-1-2	&#x1F647; &#x1F3FB;	&#128583; &#127995;	
+// 🙇🏼	person bowing, type-3	&#x1F647; &#x1F3FC;	&#128583; &#127996;	
+// 🙇🏽	person bowing, type-4	&#x1F647; &#x1F3FD;	&#128583; &#127997;	
+// 🙇🏾	person bowing, type-5	&#x1F647; &#x1F3FE;	&#128583; &#127998;	
+// 🙇🏿	person bowing, type-6	&#x1F647; &#x1F3FF;	&#128583; &#127999;	
+// 🤦	FACE PALM ≊ person facepalming	&#x1F926;	&#129318;	
+// 🤦🏻	person facepalming, type-1-2	&#x1F926; &#x1F3FB;	&#129318; &#127995;	
+// 🤦🏼	person facepalming, type-3	&#x1F926; &#x1F3FC;	&#129318; &#127996;	
+// 🤦🏽	person facepalming, type-4	&#x1F926; &#x1F3FD;	&#129318; &#127997;	
+// 🤦🏾	person facepalming, type-5	&#x1F926; &#x1F3FE;	&#129318; &#127998;	
+// 🤦🏿	person facepalming, type-6	&#x1F926; &#x1F3FF;	&#129318; &#127999;	
+// 🤷	SHRUG ≊ person shrugging	&#x1F937;	&#129335;	
+// 🤷🏻	person shrugging, type-1-2	&#x1F937; &#x1F3FB;	&#129335; &#127995;	
+// 🤷🏼	person shrugging, type-3	&#x1F937; &#x1F3FC;	&#129335; &#127996;	
+// 🤷🏽	person shrugging, type-4	&#x1F937; &#x1F3FD;	&#129335; &#127997;	
+// 🤷🏾	person shrugging, type-5	&#x1F937; &#x1F3FE;	&#129335; &#127998;	
+// 🤷🏿	person shrugging, type-6	&#x1F937; &#x1F3FF;	&#129335; &#127999;	
+// 💆	FACE MASSAGE ≊ person getting massage	&#x1F486;	&#128134;	
+// 💆🏻	person getting massage, type-1-2	&#x1F486; &#x1F3FB;	&#128134; &#127995;	
+// 💆🏼	person getting massage, type-3	&#x1F486; &#x1F3FC;	&#128134; &#127996;	
+// 💆🏽	person getting massage, type-4	&#x1F486; &#x1F3FD;	&#128134; &#127997;	
+// 💆🏾	person getting massage, type-5	&#x1F486; &#x1F3FE;	&#128134; &#127998;	
+// 💆🏿	person getting massage, type-6	&#x1F486; &#x1F3FF;	&#128134; &#127999;	
+// 💇	HAIRCUT ≊ person getting haircut	&#x1F487;	&#128135;	
+// 💇🏻	person getting haircut, type-1-2	&#x1F487; &#x1F3FB;	&#128135; &#127995;	
+// 💇🏼	person getting haircut, type-3	&#x1F487; &#x1F3FC;	&#128135; &#127996;	
+// 💇🏽	person getting haircut, type-4	&#x1F487; &#x1F3FD;	&#128135; &#127997;	
+// 💇🏾	person getting haircut, type-5	&#x1F487; &#x1F3FE;	&#128135; &#127998;	
+// 💇🏿	person getting haircut, type-6	&#x1F487; &#x1F3FF;	&#128135; &#127999;	
+// 🚶	PEDESTRIAN ≊ person walking	&#x1F6B6;	&#128694;	
+// 🚶🏻	person walking, type-1-2	&#x1F6B6; &#x1F3FB;	&#128694; &#127995;	
+// 🚶🏼	person walking, type-3	&#x1F6B6; &#x1F3FC;	&#128694; &#127996;	
+// 🚶🏽	person walking, type-4	&#x1F6B6; &#x1F3FD;	&#128694; &#127997;	
+// 🚶🏾	person walking, type-5	&#x1F6B6; &#x1F3FE;	&#128694; &#127998;	
+// 🚶🏿	person walking, type-6	&#x1F6B6; &#x1F3FF;	&#128694; &#127999;	
+// 🏃	RUNNER ≊ person running	&#x1F3C3;	&#127939;	
+// 🏃🏻	person running, type-1-2	&#x1F3C3; &#x1F3FB;	&#127939; &#127995;	
+// 🏃🏼	person running, type-3	&#x1F3C3; &#x1F3FC;	&#127939; &#127996;	
+// 🏃🏽	person running, type-4	&#x1F3C3; &#x1F3FD;	&#127939; &#127997;	
+// 🏃🏾	person running, type-5	&#x1F3C3; &#x1F3FE;	&#127939; &#127998;	
+// 🏃🏿	person running, type-6	&#x1F3C3; &#x1F3FF;	&#127939; &#127999;	
+// 💃	DANCER ≊ woman dancing	&#x1F483;	&#128131;	
+// 💃🏻	woman dancing, type-1-2	&#x1F483; &#x1F3FB;	&#128131; &#127995;	
+// 💃🏼	woman dancing, type-3	&#x1F483; &#x1F3FC;	&#128131; &#127996;	
+// 💃🏽	woman dancing, type-4	&#x1F483; &#x1F3FD;	&#128131; &#127997;	
+// 💃🏾	woman dancing, type-5	&#x1F483; &#x1F3FE;	&#128131; &#127998;	
+// 💃🏿	woman dancing, type-6	&#x1F483; &#x1F3FF;	&#128131; &#127999;	
+// 🕺	MAN DANCING	&#x1F57A;	&#128378;	
+// 🕺🏻	man dancing, type-1-2	&#x1F57A; &#x1F3FB;	&#128378; &#127995;	
+// 🕺🏼	man dancing, type-3	&#x1F57A; &#x1F3FC;	&#128378; &#127996;	
+// 🕺🏽	man dancing, type-4	&#x1F57A; &#x1F3FD;	&#128378; &#127997;	
+// 🕺🏾	man dancing, type-5	&#x1F57A; &#x1F3FE;	&#128378; &#127998;	
+// 🕺🏿	man dancing, type-6	&#x1F57A; &#x1F3FF;	&#128378; &#127999;	
+// 👯	WOMAN WITH BUNNY EARS ≊ people partying	&#x1F46F;	&#128111;	
+// 🕴	MAN IN BUSINESS SUIT LEVITATING	&#x1F574;	&#128372

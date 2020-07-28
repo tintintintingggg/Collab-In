@@ -1,6 +1,7 @@
 import React from 'react';
 import {Auth} from './Auth';
 import {MainPage} from './MainPage';
+import {Account} from './Account';
 import { BrowserRouter, Route, Link ,Redirect} from "react-router-dom";
 import "firebase/auth";
 import "firebase/firestore";
@@ -17,15 +18,13 @@ class Main extends React.Component{
     }
     addClassOnscroll(el){
         let rect = el.getBoundingClientRect();
-        if(rect.top >= 0 && rect.bottom-110 <= (window.innerHeight || document.documentElement.clientHeight)){
+        if(rect.top >= 0 && rect.bottom-420 <= (window.innerHeight || document.documentElement.clientHeight)){
             el.classList.add('main-pic-in-viewport');
         }else{
             el.classList.remove('main-pic-in-viewport');
         }
     }
     handleScroll(e){
-        // console.log(window.scrollY)
-        // console.log(window.pageYOffset)
         if(this.header.current){
             if(window.scrollY>0){
                 this.header.current.classList.add('sticky');
@@ -69,6 +68,19 @@ class Main extends React.Component{
             }
         }
         setInterval(()=>{plusSlides(counter)}, 4000)
+        // intro text animation
+        window.setTimeout(()=>{
+            document.getElementById('animation1').setAttribute('style', 'margin-top: 0px');
+            document.getElementById('animation1').setAttribute('style', 'opacity: 1');
+            window.setTimeout(()=>{
+                document.getElementById('animation2').setAttribute('style', 'margin-top: 0px');
+                document.getElementById('animation2').setAttribute('style', 'opacity: 1');  
+                window.setTimeout(()=>{
+                    document.getElementById('animation3').setAttribute('style', 'margin-top: 0px');
+                    document.getElementById('animation3').setAttribute('style', 'opacity: 1');   
+                }, 500)
+            }, 500)
+        }, 500)
     }
 
     render(){
@@ -80,15 +92,15 @@ class Main extends React.Component{
         let memberNav;let memberBtn;let memberImg;
         if(this.props.currentUser){
             memberNav = <div className="memberNav" >
-                <div>My Account</div>
+                <div><Link to={`/account/${this.props.currentUser.uid}`}>My Account</Link></div>
                 <div onClick={this.props.signOut}>Sign Out</div>
             </div>
-            memberBtn = <button id="member-btn">
-                See My Documents</button>
+            memberBtn = <button id="member-btn"><Link to={`/account/${this.props.currentUser.uid}`}>
+                See My Documents</Link></button>
             memberImg = <img src="/images/member-hover.png" />
         }else{
             memberNav = <div className="memberNav" >
-                <div>My Account</div>
+                <div><Link to="/authentication">My Account</Link></div>
                 <div><Link to="/authentication">Sign In / Up</Link></div>
             </div>
             memberBtn = <Link to="/authentication">
@@ -100,13 +112,13 @@ class Main extends React.Component{
         return <div className="homepage-wrap">
                 <header ref={this.header}>
                     <header>
-                        <div className="logo">CollabIn</div>
+                        <div className="logo"><a href="/">CollabIn</a></div>
                         <div className="nav">
-                            <div>QuickStart</div>
-                            <div>About</div>
-                            <div>Features</div>
-                            <div>Contact Us</div>
-                            {helloMessage}
+                            <a href="#nav-features" >Features</a>
+                            <a href="#nav-about">About</a>
+                            <a href="#">Back to Top</a>
+                            <a href={"mailto:st920090st920090@gmail.com?subject=Contact with CollabIn!"}>Contact Us</a>
+                            {/* {helloMessage} */}
                             <div className="member">
                                 {memberImg}
                                 {memberNav}
@@ -115,16 +127,12 @@ class Main extends React.Component{
                     </header>
                 </header>
             <div className="background" style={{backgroundImage: "url('/images/background.png')"}}>
-                {/* <div className="background-imgs">
-                    <div id="img-left"><img src="/images/2929004.jpg" /></div>
-                    <div id="img-right"><img src="/images/pen.png" /></div>
-                </div> */}
                 <div className="homepage section1">
                     <main className="introduction">
                         <div className="intro-text">
-                            <div className="title">Welcome to Collab-In!</div>
-                            <div className="intro-lines">Let's start to create a new document, Let's start to create a new document, Let's start to create a new document, Let's start to create</div>
-                            <div className="btns">
+                            <div id="animation1" className="title" style={{marginTop: '200px', opacity: '0'}}>Welcome to Collab-In!</div>
+                            <div id="animation2" className="intro-lines" style={{marginTop: '200px', opacity: '0'}}>Let's start to create a new document, Let's start to create a new document, Let's start to create a new document, Let's start to create</div>
+                            <div id="animation3" className="btns" style={{marginTop: '200px', opacity: '0'}}>
                                 <button id="create-doc-btn" onClick={this.props.handleDocCreate}>Create a New Doc</button>
                                 {memberBtn}
                             </div>
@@ -133,19 +141,19 @@ class Main extends React.Component{
                     <section className="main-pic" id="main-pic"><img src="/images/main.png" /></section>
                 </div>
             </div>
-            <div className="section2">
+            <div className="section2" id="nav-features">
                 <main>
                     <div className="title">Features</div>
                     <div id="slide-container">
                         <div id="homepage-slide" className="slide" ref={this.slide}>
                             <div><img className='img1' src="/images/collaborate.png" /><div>Collaborate on Documents</div></div>
                             <div><img className='img2' src="/images/format.png" /><div>Format Documents</div></div>
-                            <div><img className='img3' src="/images/share.png" /><div>Share Documents</div></div>
+                            <div><img className='img3' src="/images/share-docs.png" /><div>Share Documents</div></div>
                             <div><img className='img4' src="/images/chat.png" /><div>Online Chatrooms</div></div>
                             {/* clone */}
                             <div className="clone"><img className='img1' src="/images/collaborate.png" /><div>Collaborate on Documents</div></div>
                             <div className="clone"><img className='img2' src="/images/format.png" /><div>Format Documents</div></div>
-                            <div className="clone"><img className='img3' src="/images/share.png" /><div>Share Documents</div></div>
+                            <div className="clone"><img className='img3' src="/images/share-docs.png" /><div>Share Documents</div></div>
                             <div className="clone"><img className='img4' src="/images/chat.png" /><div>Online Chatrooms</div></div>
                         </div>
                         <div id="slide-dots">
@@ -157,7 +165,7 @@ class Main extends React.Component{
                     </div>
                 </main>
             </div>
-            <div className="section3">
+            <div className="section3" id="nav-about">
                 <main>
                     <article>
                         <p>Co-working</p>
@@ -305,6 +313,10 @@ class Homepage extends React.Component{
                 path = path+docId
             }
         }
+        let accountPath = '/account/'
+        if(this.props.currentUser){
+            accountPath = '/account/'+this.props.currentUser.uid
+        }
         return <BrowserRouter>
                 <Route exact path='/' >
                     {docId ? <Redirect to={path} /> : <Main
@@ -315,9 +327,6 @@ class Homepage extends React.Component{
                 </Route>
                 <Route path="/authentication" render={(props)=>{
                     let routeProps = props.history;
-                    console.log("Route Props", props);
-                    console.log('route props', props.history.location)
-                    console.log('location', props.history.location.pathname)
                     return <Auth 
                         showMemberBlock={this.state.showMemberBlock}
                         currentUser={this.props.currentUser}
@@ -329,19 +338,6 @@ class Homepage extends React.Component{
                         routeProps={routeProps}
                     />;
                 }} />
-                {/*}
-                <Route path="/authentication">
-                    <Auth 
-                        showMemberBlock={this.state.showMemberBlock}
-                        currentUser={this.props.currentUser}
-                        signUp={this.props.signUp}
-                        signIn={this.props.signIn}
-                        googleSignIn={this.props.googleSignIn}
-                        facebookSignIn={this.props.facebookSignIn}
-                        landingPage={this.state.landingPage}
-                     />
-                </Route>
-                {*/}
                 <Route exact path={path} >
                     <DocCreate 
                         db={this.props.db}
@@ -355,16 +351,19 @@ class Homepage extends React.Component{
                         facebookSignIn={this.props.facebookSignIn}
                      />
                 </Route>
+                <Route exact path={accountPath} >
+                    <Account
+                        db={this.props.db}
+                        docId={docId}
+                        currentUser={this.props.currentUser}
+                        storage={this.props.storage}
+                        handleDocCreate={this.handleDocCreate.bind(this)}
+                     />
+                </Route>
         </BrowserRouter>     
     }
 
     componentDidMount(){
-        // if(document.getElementById('img-left') && document.getElementById('img-right')){
-        //     setTimeout(() => {
-        //         document.getElementById('img-left').style.bottom = '10px';
-        //         document.getElementById('img-right').style.bottom = '200px';
-        //     }, 1000)
-        // }
         let url = location.href.toString();
         let id = url.split('document/')[1];
         if(id){

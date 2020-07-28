@@ -18,6 +18,17 @@ class MainPage extends React.Component{
             saved: issaved
         })
     }
+    handleChatRoom(){
+        let chatAppBlock = document.getElementById('chat-app');
+        let mobileChatroomIcon = document.getElementById('mobile-chatroom-icon');
+        if(chatAppBlock.style.display === 'flex' && mobileChatroomIcon.style.display === 'none'){
+            chatAppBlock.style.display = 'none';
+            mobileChatroomIcon.style.display = 'block';
+        }else if(chatAppBlock.style.display === 'none' && mobileChatroomIcon.style.display === 'block'){
+            chatAppBlock.style.display = 'flex';
+            mobileChatroomIcon.style.display = 'none'
+        }
+    }
     render(){
         return <div className="web-header">
             <WebHeader
@@ -47,8 +58,15 @@ class MainPage extends React.Component{
                     storage={this.props.storage}
                     docId={this.props.docId}
                     currentUser={this.props.currentUser}
+                    handleChatRoom={this.handleChatRoom.bind(this)}
                  />
+                <div 
+                    id="mobile-chatroom-icon" 
+                    style={{display: 'none'}} 
+                    onClick={this.handleChatRoom.bind(this)}
+                 ><img src="/images/mobile-chat.png" /></div>
             </div>
+
         </div>
     }
 }

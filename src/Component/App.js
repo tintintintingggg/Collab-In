@@ -4,8 +4,9 @@ import "firebase/auth";
 import "firebase/firestore";
 import {Homepage} from './Homepage';
 import { Redirect } from 'react-router-dom';
+import {LoadingPage} from './LoadingPage';
 
-import "../css/App.css"
+// import "../css/App.css"
 
 
 class App extends React.Component{
@@ -36,9 +37,7 @@ class App extends React.Component{
                  />
             </div>
         }else{
-            return <div className="loading-page">
-                <div>loading...</div>
-            </div>
+            return <LoadingPage />
         }
     }
     componentDidMount(){
@@ -137,9 +136,11 @@ class App extends React.Component{
                     currentUserName: name
                 });
                 alert('You are logged in!');
-            }).catch(error => {
-                alert(error.message);
-              });
+            })
+            // .catch(error => {
+            //     alert('sign up wrong')
+            //     alert(error.message);
+            //   });
         }   
     }
     signIn(email, password){
@@ -187,10 +188,6 @@ class App extends React.Component{
     
     facebookSignIn(){
         let fbProvider = new firebase.auth.FacebookAuthProvider();
-        provider.addScope('user_birthday');
-        // fbProvider.setCustomParameters({
-        //     'display': 'popup'
-        //   });
         firebase.auth().signInWithPopup(fbProvider).then(function(result) {
           var token = result.credential.accessToken;
           alert('You are logged in!');

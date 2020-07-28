@@ -43,10 +43,6 @@ class DocText extends React.Component{
     //     }
     //     return null;
     // }
-    handleSize(e){
-        console.log(e.target);
-        // e.target.style.width = '50%'
-    }
     
     render(){
         if(this.props.imgurl){
@@ -54,19 +50,11 @@ class DocText extends React.Component{
             img.setAttribute('draggable', true);
             img.setAttribute('src', this.props.imgurl);
             img.setAttribute('class', "draggable-img");
-            img.onclick=this.handleSize.bind(this);
+            img.setAttribute('contenteditable', true)
             this.myRef.current.appendChild(img);
-            // this.myRef.current.innerHTML =
-            // `<img 
-            //     draggable="true"
-            //     class="draggable-img"
-            //     src=${this.props.imgurl}
-            //     onclick=${()=>{console.log('e.target')}}
-            //  />
-            // ${this.myRef.current.innerHTML}`
         }
         return <div className="text">
-            <div>
+            <div id="canvas-area">
                 <div  
                     contentEditable="true" 
                     suppressContentEditableWarning='true'
