@@ -3,7 +3,8 @@
     padding: 20px 50px;
     display: flex;
     justify-content: center;
-    background-color: #F8F9FA;
+    /* background-color: #F8F9FA; */
+    background-color: #cccccc;
 }
 .text>div{
     background-color: #FFFFFF;
@@ -12,8 +13,10 @@
     min-height: 978px;
     margin: 10px 0;
     border: 1px solid #dddddd;
-    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1),
-    -1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1),
+    -1px 1px 1px 1px rgba(0, 0, 0, 0.1); */
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2),
+    -1px 1px 1px 1px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     display: flex;
     justify-content: center;

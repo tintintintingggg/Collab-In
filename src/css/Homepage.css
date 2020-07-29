@@ -1,14 +1,16 @@
-*{box-sizing: border-box;}
+*{box-sizing: border-box; font-family: 'Ubuntu', sans-serif;}
 img{width: 100%;}
 input:focus{outline: none;}
 a{text-decoration: none; color: rgba(0, 0, 0, 0.8); line-height: 1;}
 button:focus{outline: none;}
 p{margin: 0;}
 html{scroll-behavior: smooth;}
-
 body{
     margin: 0;
     padding: 0;
+    /* font-family: 'Recursive', sans-serif; */
+    /* font-family: 'Nunito', sans-serif; */
+    font-family: 'Ubuntu', sans-serif;
 }
 /* background */
 .background{
@@ -26,16 +28,17 @@ body{
 }
 .homepage .main-pic{
     position: absolute;
-    width: 1000px;
-    bottom: -150px;
+    width: 1200px;
+    bottom: 100px;
     left: 0;
     right: 0;
     margin: 0 auto;
     transition: all 0.6s linear 0s;
-    box-shadow: 0 0 7px 4px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 0 7px 4px rgba(0, 0, 0, 0.2); */
+    box-shadow: 0 0 7px 4px rgba(0, 0, 0, 0.3);
 }
 .homepage .main-pic.main-pic-in-viewport{
-    bottom: -30px;
+    bottom: 300px;
 }
 /* header */
 .homepage-wrap>header{
@@ -56,7 +59,7 @@ body{
 }
 .homepage-wrap .logo{
     font-size: 28px;
-    font-weight: bolder;
+    font-weight: 900;
     margin-left: 8px;
     letter-spacing: 1px;
     text-align: center;
@@ -65,7 +68,8 @@ body{
     color: #F54F29;
 }
 .sticky{
-    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.2); */
+    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.3);
     background-color: #ffffffe1;
     position: sticky;
     top: 0;
@@ -145,15 +149,15 @@ body{
     transition: all 1.5s cubic-bezier(0.6, -0.1, 0.735, 0.045) 1s;
 }
 .homepage .intro-text .title{
-    font-size: 60px;
+    font-size: 62px;
     font-weight: bolder;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     transition: all 1.5s ease-out 0s;
 }
 .homepage .intro-text .intro-lines{
     font-size: 20px;
-    margin-bottom: 15px;
-    line-height: 1.5;
+    margin-bottom: 20px;
+    line-height: 1.8;
     transition: all 1.5s ease-out 0s;
 }
 
@@ -167,6 +171,7 @@ body{
 }
 #create-doc-btn,
 #member-btn{
+    font-family: 'Ubuntu', sans-serif;
     cursor: pointer;
     width: 190px;
     margin: 0 30px;
@@ -212,8 +217,6 @@ body{
     width: 100%;
     overflow: hidden;
     margin: 0 auto;
-    /* box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.2),
-    inset 10px 0 10px -10px rgba(0, 0, 0, 0.2) */
 }
 .section2>main .slide{
     display: flex;
@@ -258,13 +261,19 @@ body{
 /* section3 */
 .section3{
     padding: 50px 0;
+    overflow: hidden;
 }
-.section3>main{
+.section3 .section3-main{
     max-width: 1200px;
     margin: 0 auto;
     margin-bottom: 50px;
     width: 100%;
     display: flex;
+    transform: translateX(1700px);
+    transition: transform 1s ease-out;
+}
+.section3 .section3-main-middle{
+    transform: translateX(-1700px);
 }
 .section3>main>article{
     width: 40%;
@@ -283,6 +292,9 @@ body{
     font-size: 32px;
     font-weight: bold;
     margin: 5px 0 8px;
+}
+.section3-main-in-viewport{
+    transform: translateX(0) !important;
 }
 /* Auth */
 .memberBlock{
@@ -380,6 +392,7 @@ body{
 .memberBlock .signInBlock .email-signin>button,
 .memberBlock .signUpBlock .email-signup>button{
     background-color: #FFD393;
+    cursor: pointer;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
@@ -391,6 +404,10 @@ body{
     font-size: 16px;
     box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
 }
+.memberBlock .signInBlock .email-signin>button:hover,
+.memberBlock .signUpBlock .email-signup>button:hover{
+    background-color: #fabf66;
+}
 .reminder{
     color: rgba(0, 0, 0, 0.6);
     margin: 20px 0 10px;
@@ -398,36 +415,11 @@ body{
 }
 .reminder>span{
     cursor: pointer;
+    color: #f54f29;
 }
 .reminder>span:hover{
-    color: #F54F29;
+    text-decoration: underline;
 }
-
-/* Create New Doc */
-.createDoc .doc-name-div{
-    width: 100%;
-    border-bottom: 3px solid #9C9B7A;
-    /* background-color: #9C9B7A; */
-    margin: 20px 0;
-}
-.createDoc #doc-name{
-    text-align: center;
-    background-color: transparent;
-    width: 100%;
-    border: none;
-    line-height: 2;
-    font-size: 22px;
-    border-radius: 5px;
-}
-.createDoc #doc-name:focus{
-    background-color: rgba(0, 0, 0, 0.05);
-}
-.createDoc #submit-doc-name-btn{
-    border: none;
-    background-color: transparent;
-    font-size: 16px;
-}
-
 /* document-layout */
 .document-layout{
     display: flex;
@@ -439,6 +431,15 @@ body{
 .document-layout .container{
     z-index: 2;
     width: 65%;
+}
+@media(max-width: 1440px){
+    .homepage .main-pic{
+        bottom: -150px;
+        width: 1000px;
+    }
+    .homepage .main-pic.main-pic-in-viewport{
+        bottom: -30px;
+    }
 }
 @media(max-width: 900px){
     .document-layout{

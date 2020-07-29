@@ -1,13 +1,9 @@
 .my-account{
     display: flex;
-    /* color: #DBDBDB; */
     color: #a4a7b2;
 }
 .my-account>nav{
     width: 320px;
-    /* background-color: #262626; */
-    /* background-color: #F46149; */
-    /* background-color: #F8F8F8; */
     background-color: #ffffff;
     min-height: 100vh;
     position: relative;
@@ -44,9 +40,8 @@
 }
 .my-account>main{
     width: 100%;
-    /* background-color: #f5f5f5; */
-    /* background-color:  #F3D2BD; */
-    background-color: #F8F9FB;
+    /* background-color: #F8F9FB; */
+    background-color: #cccccc;
     min-height: 100vh;
     padding: 50px 0;
 }
@@ -151,9 +146,9 @@
     border-radius: 10px;
 }
 .handle-docs-wrap>main>a:hover{
-    background-color: #eeeeee;
-    /* background-color: #f4604921;
-    color: #f46149; */
+    /* background-color: #eeeeee; */
+    background-color: #f4604921;
+    color: #f46149;
 }
 .handle-docs-wrap>main>a .doc-item-name{
     font-weight: bold;

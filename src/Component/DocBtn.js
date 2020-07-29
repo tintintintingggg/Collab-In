@@ -291,6 +291,7 @@ class DocBtn extends React.Component{
             <div className="btns-wrap">
                 <div className="btns">
                     <UndoBtn step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)} />
+                    <FontSizeBtn surroundSelection={this.surroundSelection.bind(this)} remainSelection={this.remainSelection.bind(this)} changeFocus={this.changeFocus.bind(this)}/>
                     <BoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
                     <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
                     <ItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
@@ -298,7 +299,6 @@ class DocBtn extends React.Component{
                     <ColorBtn surroundSelection={this.surroundSelection.bind(this)}/>
                     <BackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
                     <ClearBackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
-                    <FontSizeBtn surroundSelection={this.surroundSelection.bind(this)} remainSelection={this.remainSelection.bind(this)} changeFocus={this.changeFocus.bind(this)}/>
                     <ImgBtn storage={this.props.storage} docId={this.props.docId} position={this.state.position} getImgurl={this.getImgurl.bind(this)} />
                     <DownloadBtn docId={this.props.docId} db={this.props.db}  />
                 </div>

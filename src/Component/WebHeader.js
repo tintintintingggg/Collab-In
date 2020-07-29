@@ -13,28 +13,38 @@ class WebHeader extends React.Component{
             copyUrl: ''
         }
     }
+    // getName(e){
+    //     this.setState({
+    //         nameValue: e.target.value
+    //     })
+    // }
+    // submitName(){
+    //     let db = this.props.db;
+    //     db.collection('documents').doc(this.props.docId).update({
+    //         name: this.state.nameValue
+    //     })
+    //     .then(console.log('submit success')).catch(() => {console.log(error.message)})
+    // } 
     getName(e){
-        this.setState({
-            nameValue: e.target.value
+        let db = this.props.db;
+        this.setState({nameValue: e.target.value}, ()=>{
+            db.collection('documents').doc(this.props.docId).update({
+                name: this.state.nameValue
+            })
+            .then()
+            .catch(() => {console.log(error.message)})
         })
     }
-    submitName(){
-        let db = this.props.db;
-        db.collection('documents').doc(this.props.docId).update({
-            name: this.state.nameValue
-        })
-        .then(console.log('submit success')).catch(() => {console.log(error.message)})
-    } 
     copyUrl(){
         this.urlInput.current.select();
         document.execCommand('copy');
         if(document.execCommand('copy')){
             this.setState({copyUrl: 'Copied'},
-                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 2000)}
+                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
             )
         }else{
             this.setState({copyUrl: 'Fail to Copy!'},
-                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 2000)}
+                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
             )
         }
     }
@@ -85,7 +95,7 @@ class WebHeader extends React.Component{
                 <div className="logo"><a href="/"><img src="/images/main-logo.png" /></a></div>
                 <div className="docname">
                     <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
-                    <button onClick={this.submitName.bind(this)}><img src="/images/save.png" /></button>
+                    {/* <button><img src="/images/save.png" /></button> */}
                 </div>
                 <div className="store-state">
                     <div id="upload-icon" className="upload-icon"><img src={icon} /></div>
@@ -144,9 +154,11 @@ class WebHeader extends React.Component{
 
         db.collection('documents').doc(this.props.docId)
         .onSnapshot((doc) => {
-            this.setState({
-                nameValue: doc.data().name
-            })
+            if(!doc.metadata.hasPendingWrites){
+                this.setState({
+                    nameValue: doc.data().name
+                })
+            }
         });
 
         db.collection('status').doc(this.props.docId).collection('online').doc("total")

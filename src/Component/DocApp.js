@@ -80,7 +80,6 @@ class DocApp extends React.Component{
                 });
             });
 
-
             //////
             if(uid !== null){
                 let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
@@ -115,14 +114,10 @@ class DocApp extends React.Component{
                                 })
                                 userStatusDatabaseRef.set(isOnlineForDatabase);
                             })
-                            
-                            
                         });
                 });
             }
-            
         }
-        
     }
 
     render(){
@@ -131,40 +126,41 @@ class DocApp extends React.Component{
             return <Redirect 
                 push to={{pathname:"/authentication"}}
                  />
-        }
-        this.onlineCheck.bind(this, this.props.currentUser.uid)();
-        if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
-            doc = <LoadingPage />
-        }else if(this.state.isOwner || this.state.isEditor){
-            doc = <div className='doc'>
-                <DocBtn 
-                    db={this.props.db} 
-                    docId={this.props.docId}
-                    storage={this.props.storage}
-                    currentUser={this.props.currentUser}
-                    detectUpload={this.props.detectUpload}
-                  />
+        }else{
+            // this.onlineCheck.bind(this, this.props.currentUser.uid)();
+            if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
+                doc = <LoadingPage />
+            }else if(this.state.isOwner || this.state.isEditor){
+                doc = <div className='doc'>
+                    <DocBtn 
+                        db={this.props.db} 
+                        docId={this.props.docId}
+                        storage={this.props.storage}
+                        currentUser={this.props.currentUser}
+                        detectUpload={this.props.detectUpload}
+                      />
+                </div>
+            }else if(this.state.isWaitingEditor){
+                doc = <div className='doc'>
+                    <DocPrevStep 
+                        handleEditor={this.handleEditor.bind(this)}
+                        currentUser={this.props.currentUser}
+                        db={this.props.db} 
+                        docId={this.props.docId}
+                     />
+                    <DocBtn 
+                        db={this.props.db} 
+                        docId={this.props.docId}
+                        storage={this.props.storage}
+                        currentUser={this.props.currentUser}
+                        detectUpload={this.props.detectUpload}
+                      />
+                </div>
+            }
+            return <div className='container'>
+                {doc}
             </div>
-        }else if(this.state.isWaitingEditor){
-            doc = <div className='doc'>
-                <DocPrevStep 
-                    handleEditor={this.handleEditor.bind(this)}
-                    currentUser={this.props.currentUser}
-                    db={this.props.db} 
-                    docId={this.props.docId}
-                 />
-                <DocBtn 
-                    db={this.props.db} 
-                    docId={this.props.docId}
-                    storage={this.props.storage}
-                    currentUser={this.props.currentUser}
-                    detectUpload={this.props.detectUpload}
-                  />
-            </div>
         }
-        return <div className='container'>
-            {doc}
-        </div>
     }
 
     componentDidMount(){
@@ -200,6 +196,9 @@ class DocApp extends React.Component{
             alert("Your URL is Wrong! Go Check Again")
             console.log(error.message)
         })
+        // if(this.props.currentUser){
+        //     this.onlineCheck.bind(this, this.props.currentUser.uid)();
+        // }
     }
 }
 

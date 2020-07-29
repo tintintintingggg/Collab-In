@@ -18,11 +18,19 @@ class Main extends React.Component{
     }
     addClassOnscroll(el){
         let rect = el.getBoundingClientRect();
-        if(rect.top >= 0 && rect.bottom-420 <= (window.innerHeight || document.documentElement.clientHeight)){
+        if(rect.top >= 0 && rect.bottom-400 <= (window.innerHeight || document.documentElement.clientHeight)){
             el.classList.add('main-pic-in-viewport');
         }else{
             el.classList.remove('main-pic-in-viewport');
         }
+    }
+    addClassOnscrollOnAbout(el){
+        el.childNodes.forEach((item)=>{
+            let rect = item.childNodes[0].getBoundingClientRect();
+            if(rect.top >= 0 && rect.bottom-200 <= (window.innerHeight || document.documentElement.clientHeight)){
+                item.classList.add('section3-main-in-viewport');
+            }
+        })
     }
     handleScroll(e){
         if(this.header.current){
@@ -35,6 +43,10 @@ class Main extends React.Component{
         if(document.getElementById('main-pic')){
             let mainPic = document.getElementById('main-pic');
             this.addClassOnscroll(mainPic);
+        }
+        if(document.getElementById('nav-about')){
+            let navAbout = document.getElementById('nav-about');
+            this.addClassOnscrollOnAbout(navAbout);
         }
     }
     handleSlide(){
@@ -84,11 +96,6 @@ class Main extends React.Component{
     }
 
     render(){
-        let helloMessage = '';
-        if(this.props.currentUser && this.props.currentUser.displayName){
-            helloMessage = 'Hi! '+this.props.currentUser.displayName;
-        }
-
         let memberNav;let memberBtn;let memberImg;
         if(this.props.currentUser){
             memberNav = <div className="memberNav" >
@@ -118,7 +125,6 @@ class Main extends React.Component{
                             <a href="#nav-about">About</a>
                             <a href="#">Back to Top</a>
                             <a href={"mailto:st920090st920090@gmail.com?subject=Contact with CollabIn!"}>Contact Us</a>
-                            {/* {helloMessage} */}
                             <div className="member">
                                 {memberImg}
                                 {memberNav}
@@ -166,7 +172,7 @@ class Main extends React.Component{
                 </main>
             </div>
             <div className="section3" id="nav-about">
-                <main>
+                <main className="section3-main">
                     <article>
                         <p>Co-working</p>
                         <main>I don't know</main>
@@ -176,7 +182,7 @@ class Main extends React.Component{
                         <img src="/images/co-working.png" />
                     </div>
                 </main>
-                <main>
+                <main className="section3-main  section3-main-middle">
                     <div>
                         <img src="/images/edit-text.jpg" />
                     </div>
@@ -186,9 +192,9 @@ class Main extends React.Component{
                         <div>I don't knowI don't knowI don't knowI don't know</div>
                     </article>
                 </main>
-                <main>
+                <main className="section3-main">
                     <article>
-                        <p>Manager docs</p>
+                        <p>Manage docs</p>
                         <main>I don't know</main>
                         <div>I don't knowI don't knowI don't knowI don't know</div>
                     </article>

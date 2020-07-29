@@ -3,7 +3,8 @@ button:focus{outline: none;}
 .doc{
     overflow:scroll;
     height: calc(100vh - 62px);
-    background-color: #F8F9FA;
+    /* background-color: #F8F9FA; */
+    background-color: #cccccc;
 }
 .docHeader{
     position: -webkit-sticky;
@@ -18,7 +19,8 @@ button:focus{outline: none;}
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
+    border-bottom: 1px solid #979797;
 }
 .docHeader>div{
     display: flex;
@@ -32,7 +34,7 @@ button:focus{outline: none;}
     margin: 0 10px;
 }
 .docname{
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px dashed transparent;
     border-radius: 5px;
     padding: 5px;
     margin: 0 10px;
@@ -40,13 +42,13 @@ button:focus{outline: none;}
     align-items: center;
 }
 .docname:hover{
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border: 1px solid #979797;
 }
 .docname>input{
     border: none;
     font-size: 20px;
-    min-width: 180px;
-    width: fit-content;
+    width: 180px;
     color: #2C3E50;
 }
 .docname>button{
@@ -106,7 +108,8 @@ button:focus{outline: none;}
     top:59px;
     right: 60px;
     background-color: #ffffff;
-    border: 1px solid #dddddd;
+    /* border: 1px solid #dddddd; */
+    border: 1px solid #cccccc;
     border-radius: 5px;
     padding: 20px;
 }
@@ -118,7 +121,8 @@ button:focus{outline: none;}
 #header-nav-mobile .share-list .section1,
 .headerright .share-list .section1{
     position: relative;
-    border-bottom: 1px solid #dddddd;
+    /* border-bottom: 1px solid #dddddd; */
+    border-bottom: 1px solid #979797;
     margin-bottom: 20px;
     padding-bottom: 25px;
 }
@@ -134,7 +138,8 @@ button:focus{outline: none;}
     display: flex;
     align-items: center;
     width: 100%;
-    border: 1px solid #dddddd;
+    /* border: 1px solid #dddddd; */
+    border: 1px solid #979797;
     border-radius: 5px;
 }
 #header-nav-mobile .share-list article .href-url,
@@ -143,21 +148,25 @@ button:focus{outline: none;}
     padding: 5px 10px;
     font-size: 10px;
     overflow: hidden;
-    background-color: #dddddd;
+    /* background-color: #dddddd; */
+    background-color: #cccccc;
     margin-right: 5px ;
-    border-right: 1px solid #dddddd ;
-    color: rgba(0, 0, 0, 0.4);
+    /* border-right: 1px solid #dddddd ; */
+    border-right: 1px solid #cccccc ;
+    color: rgba(0, 0, 0, 0.5);
     white-space:nowrap;
 }
 #header-nav-mobile .share-list article .href-url>input,
 .headerright .share-list article .href-url>input{
     border: none;
-    background-color: #dddddd;
+    /* background-color: #dddddd; */
+    background-color: #cccccc;
     padding: 0;
     color: rgba(0, 0, 0, 0.4)
 }
 #header-nav-mobile .share-list article .href-btn,
 .headerright .share-list article .href-btn{
+    cursor: pointer;
     width: 35%;
     text-align: center;
     font-size: 12px;
@@ -242,7 +251,7 @@ button:focus{outline: none;}
     top:0;left: 0;
     height: 100vh;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;

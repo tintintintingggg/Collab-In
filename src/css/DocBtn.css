@@ -1,13 +1,14 @@
 img{width: 100%;}
 /* btns */
 .doc-btn .btns-wrap{
-    overflow: scroll;
+    overflow-x: scroll;
 }
 .doc-btn .btns{
     background-color: #ffffff;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
+    border-bottom: 1px solid #979797;
     position: -webkit-sticky;
     position: sticky;
     padding: 5px;
@@ -54,8 +55,10 @@ img{width: 100%;}
 .doc-btn .btns .colorbtn:hover,
 .doc-btn .btns .background-colorbtn:hover,
 .img-btn>div:hover{
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid #dddddd;
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: #cccccc;
+    /* border: 1px solid #dddddd; */
+    border: 1px solid #cccccc;
 }
 ::-webkit-color-swatch {
     border: none;
@@ -91,12 +94,14 @@ img{width: 100%;}
     text-align: center;
     border: 1px solid #979797;
     background-color: #ffffff;
-    position: absolute;
-    z-index: 2;
-    left: 4px;
-    top: 38px;
+    /* position: absolute; */
+    position: fixed;
+    z-index: 10;
+    left: auto;
+    top: 110px;
     width: 36px;
     padding: 0;
+    margin: 0 5px;
 }
 .font-size-btn-list>button{
     margin: 0 auto;
