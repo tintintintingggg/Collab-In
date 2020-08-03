@@ -1,0 +1,142 @@
+/* Auth */
+.memberBlock{
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top:0;left:0;
+    z-index: 2;
+    width: 100%;
+    padding: 100px 20px;
+}
+.signUpBlock,
+.signInBlock{
+    background-color: #ffffff;
+    width: 500px;
+    margin: 0 auto;
+    padding: 60px 0;
+    position: relative;
+    border-radius: 10px;
+}
+.close-btn{
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 2;
+    width: 35px;
+}
+
+.memberBlock .signInBlock .google-signin,
+.memberBlock .signInBlock .facebook-signin{
+    width: 500px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
+}
+.memberBlock .signInBlock .facebook-signin{
+    background-color: #3b5998;
+    color: #ffffff;
+}
+.memberBlock .signInBlock .google-signin{
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.memberBlock .signInBlock .facebook-signin>div{
+    width: 50px;
+    height: 50px;
+}
+.memberBlock .signInBlock .google-signin>div,
+.memberBlock .signInBlock .facebook-signin>div{
+    width: 45px;
+    height: 45px;
+    margin: 0 10px;
+}
+.memberBlock .signInBlock .seperator{
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
+}
+.memberBlock .signInBlock .seperator .seperator-line{
+    height: 2px;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0 20px;
+}
+.memberBlock .signInBlock .email-signin,
+.memberBlock .signUpBlock .email-signup{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+.memberBlock .signInBlock .email-signin>div,
+.memberBlock .signUpBlock .email-signup>div{
+    margin: 20px auto;
+    width: 300px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+.memberBlock .signInBlock .email-signin>div>input,
+.memberBlock .signUpBlock .email-signup>div>input{
+    width: 280px;
+    border: none;
+    line-height: 2;
+    font-size: 14px;
+}
+.memberBlock .signInBlock .email-signin>button,
+.memberBlock .signUpBlock .email-signup>button{
+    background-color: #FFD393;
+    cursor: pointer;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 300px;
+    border: none;
+    padding: 15px 0;
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: 16px;
+    box-shadow: 2.5px 2.5px 2.5px 1px rgba(0, 0, 0, 0.2)
+}
+.memberBlock .signInBlock .email-signin>button:hover,
+.memberBlock .signUpBlock .email-signup>button:hover{
+    background-color: #fabf66;
+}
+.reminder{
+    color: rgba(0, 0, 0, 0.6);
+    margin: 20px 0 10px;
+    text-align: center;
+}
+.reminder>span{
+    cursor: pointer;
+    color: #f54f29;
+}
+.reminder>span:hover{
+    text-decoration: underline;
+}
+@media(max-width: 600px){
+    .signUpBlock,
+    .signInBlock{
+        width: 100%;
+    }
+    .memberBlock{
+        background-color: #ffffff;
+        padding: 20px 5px;
+    }
+    .memberBlock .signInBlock .google-signin,
+    .memberBlock .signInBlock .facebook-signin,
+    .memberBlock .signInBlock .email-signin>button,
+    .memberBlock .signUpBlock .email-signup>button{
+        width: 250px;
+        font-size: 14px;
+    }
+}

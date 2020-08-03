@@ -1,12 +1,14 @@
 .my-account{
     display: flex;
     color: #a4a7b2;
+    height: 100vh;
 }
 .my-account>nav{
     width: 320px;
     background-color: #ffffff;
-    min-height: 100vh;
     position: relative;
+    height: 100vh;
+    overflow: hidden;
 }
 .my-account>nav>div{
     padding: 20px 0;
@@ -40,31 +42,29 @@
 }
 .my-account>main{
     width: 100%;
-    /* background-color: #F8F9FB; */
-    background-color: #cccccc;
+    overflow-y: scroll;
+    background-color: #F8F9FB;
     min-height: 100vh;
     padding: 50px 0;
 }
 #profile-info{
-    position: fixed;
-    top: 30px;
-    right: 30px;
     display: flex;
     align-items: center;
-    background-color: #f4604911;
-    padding: 10px 20px;
-    border-radius: 50px;
+    padding: 20px 30px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
 #profile-info>div{
     width: 60px;
     display: flex;
     align-items: center;
-    margin-left: 20px;
+    margin-right: 20px;
 }
 #profile-info>p{
     letter-spacing: 1px;
     font-weight: bolder;
-    color: #f46149;
+    color: rgba(0, 0, 0, .8);
 }
 /* logo */
 .my-account .account-logo{
@@ -77,34 +77,36 @@
     font-size: 26px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    padding-left: 30px;
 }
 .my-account .account-logo>a>div{
     width: 50px;
-    margin-right: 5px;
+    margin-right: 15px;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
 }
 .my-account .account-logo>a>p{
-    margin-left: 5px;
+    font-size: 30px;
 }
 /* create new doc */
 .my-account .create-new-doc{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 30px 0;
-}
-.my-account .create-new-doc>p{
+    margin: 40px 30px 30px;
     cursor: pointer;
     background-color: #f46149;
     color: #ffffff;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 15px;
+    line-height: 25px;
 }
 .my-account .create-new-doc>div{
-    width: 40px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
     margin-left: 10px;
 }
 /* my documents / collab documents */

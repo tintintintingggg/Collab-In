@@ -15,7 +15,6 @@ class DocText extends React.Component{
 
         }
     }
-
     update(text, name){
         console.log('update currentText');
         this.setState({
@@ -23,27 +22,6 @@ class DocText extends React.Component{
             docName: name
         })
     }
-    // recordPosition(e){
-    //     console.log(e.pageX, e.pageY)
-    //     this.setState({
-    //         position: {x: e.pageX, y:e.pageY}
-    //     })
-    // }
-    // getPosition() {
-    //     if (window.getSelection) {
-    //         let sel = window.getSelection();
-    //         let range = new Range();
-    //         console.log(range)
-    //         if (sel.getRangeAt) {
-    //             console.log(sel.getRangeAt(0).startOffset, sel.getRangeAt(0).startContainer);
-    //             this.setState({
-    //                 position: range
-    //             })
-    //         }
-    //     }
-    //     return null;
-    // }
-    
     render(){
         if(this.props.imgurl){
             let img = document.createElement('img');
@@ -61,9 +39,6 @@ class DocText extends React.Component{
                     id="selectable-area"  
                     db={this.props.db}
                     ref={this.myRef}
-                    // onClick={this.props.recordPosition}
-                    // onClick={this.recordPosition.bind(this)}
-                    // onClick={this.getPosition.bind(this)}
                 >
                 </div>
             </div>
@@ -156,9 +131,5 @@ class DocText extends React.Component{
     }
 
 }
-
-// onMouseUp={this.props.getSelection}
-// onMouseDown={this.remainSelection.bind(this)}
-// window.addEventListener('mousedown', (e) => {e.preventDefault();})
 
 export {DocText};

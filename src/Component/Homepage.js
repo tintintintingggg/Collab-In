@@ -12,6 +12,7 @@ class Main extends React.Component{
         super(props);
         this.header = React.createRef();
         this.slide = React.createRef();
+        this.nav = React.createRef();
         this.state={
             scrollTop: 0
         }
@@ -94,7 +95,17 @@ class Main extends React.Component{
             }, 500)
         }, 500)
     }
-
+    handleSideNav(){
+        if(this.nav.current.style.left === '-100%'){
+            this.nav.current.style.left = '0';
+            document.getElementById('sidebar-open').style.display = 'none';
+            document.getElementById('sidebar-close').style.display = 'block';
+        }else if(this.nav.current.style.left = '0'){
+            this.nav.current.style.left = '-100%';
+            document.getElementById('sidebar-open').style.display = 'block';
+            document.getElementById('sidebar-close').style.display = 'none';
+        }
+    }
     render(){
         let memberNav;let memberBtn;let memberImg;
         if(this.props.currentUser){
@@ -119,12 +130,15 @@ class Main extends React.Component{
         return <div className="homepage-wrap">
                 <header ref={this.header}>
                     <header>
+                        <button onClick={this.handleSideNav.bind(this)}><img id="sidebar-open" style={{display: 'block'}} src="/images/sidebar.png" /><img style={{display: 'none'}} id="sidebar-close" src="/images/close-sidebar.png" /></button>
                         <div className="logo"><a href="/">CollabIn</a></div>
                         <div className="nav">
-                            <a href="#nav-features" >Features</a>
-                            <a href="#nav-about">About</a>
-                            <a href="#">Back to Top</a>
-                            <a href={"mailto:st920090st920090@gmail.com?subject=Contact with CollabIn!"}>Contact Us</a>
+                            <section ref={this.nav}>
+                                <a onClick={this.handleSideNav.bind(this)} href="#nav-features" >Features</a>
+                                <a onClick={this.handleSideNav.bind(this)} href="#nav-about">About</a>
+                                <a onClick={this.handleSideNav.bind(this)} href="#">Back to Top</a>
+                                <a onClick={this.handleSideNav.bind(this)} href={"mailto:st920090st920090@gmail.com?subject=Contact with CollabIn!"}>Contact Us</a>
+                            </section>
                             <div className="member">
                                 {memberImg}
                                 {memberNav}
@@ -137,14 +151,21 @@ class Main extends React.Component{
                     <main className="introduction">
                         <div className="intro-text">
                             <div id="animation1" className="title" style={{marginTop: '200px', opacity: '0'}}>Welcome to Collab-In!</div>
-                            <div id="animation2" className="intro-lines" style={{marginTop: '200px', opacity: '0'}}>Let's start to create a new document, Let's start to create a new document, Let's start to create a new document, Let's start to create</div>
+                            <div id="animation2" className="intro-lines" style={{marginTop: '200px', opacity: '0'}}>
+                                Resource-sharing, immediate messaging, Downloadable files. <br />All-in-one platform for real-time task solving and completing.
+                            </div>
                             <div id="animation3" className="btns" style={{marginTop: '200px', opacity: '0'}}>
                                 <button id="create-doc-btn" onClick={this.props.handleDocCreate}>Create a New Doc</button>
                                 {memberBtn}
                             </div>
                         </div>
                     </main>
-                    <section className="main-pic" id="main-pic"><img src="/images/main.png" /></section>
+                    {/* <section className="main-pic" id="main-pic"><img src="/images/main.png" /></section> */}
+                    <section className="main-pic" id="main-pic">
+                        <video width="100%" autoPlay='autoplay' muted loop id="myVideo">
+                            <source id="main-video" src="/images/main-video.MOV" type="video/mp4" />
+                        </video>
+                    </section>
                 </div>
             </div>
             <div className="section2" id="nav-features">
@@ -152,15 +173,15 @@ class Main extends React.Component{
                     <div className="title">Features</div>
                     <div id="slide-container">
                         <div id="homepage-slide" className="slide" ref={this.slide}>
-                            <div><img className='img1' src="/images/collaborate.png" /><div>Collaborate on Documents</div></div>
-                            <div><img className='img2' src="/images/format.png" /><div>Format Documents</div></div>
-                            <div><img className='img3' src="/images/share-docs.png" /><div>Share Documents</div></div>
-                            <div><img className='img4' src="/images/chat.png" /><div>Online Chatrooms</div></div>
+                            <div><img className='img1' src="/images/collaborate.png" /><div>Collaborative</div></div>
+                            <div><img className='img2' src="/images/format.png" /><div>Format Docs</div></div>
+                            <div><img className='img3' src="/images/share-docs.png" /><div>Shareable</div></div>
+                            <div><img className='img4' src="/images/chat.png" /><div>Live Chat</div></div>
                             {/* clone */}
-                            <div className="clone"><img className='img1' src="/images/collaborate.png" /><div>Collaborate on Documents</div></div>
-                            <div className="clone"><img className='img2' src="/images/format.png" /><div>Format Documents</div></div>
-                            <div className="clone"><img className='img3' src="/images/share-docs.png" /><div>Share Documents</div></div>
-                            <div className="clone"><img className='img4' src="/images/chat.png" /><div>Online Chatrooms</div></div>
+                            <div className="clone"><img className='img1' src="/images/collaborate.png" /><div>Collaborative</div></div>
+                            <div className="clone"><img className='img2' src="/images/format.png" /><div>Format Docs</div></div>
+                            <div className="clone"><img className='img3' src="/images/share-docs.png" /><div>Shareable</div></div>
+                            <div className="clone"><img className='img4' src="/images/chat.png" /><div>Live Chat</div></div>
                         </div>
                         <div id="slide-dots">
                             <div></div>
@@ -175,8 +196,8 @@ class Main extends React.Component{
                 <main className="section3-main">
                     <article>
                         <p>Co-working</p>
-                        <main>I don't know</main>
-                        <div>I don't knowI don't knowI don't knowI don't know</div>
+                        <main>More efficient, more flexible</main>
+                        <div>Just click a share button and everything is there! Collab-In provides a shared platform where you could collaborate with team members for projects or assignments in any time and in any places!</div>
                     </article>
                     <div>
                         <img src="/images/co-working.png" />
@@ -187,19 +208,19 @@ class Main extends React.Component{
                         <img src="/images/edit-text.jpg" />
                     </div>
                     <article>
-                        <p>Edit Document Online</p>
-                        <main>I don't know</main>
-                        <div>I don't knowI don't knowI don't knowI don't know</div>
+                        <p>Format Documents</p>
+                        <main>Decorate with personal style</main>
+                        <div>Customize your documents with your own style! You can change the color and format every single letter, also upload pictures to anywhere of the whole page. Just edit as you like!</div>
                     </article>
                 </main>
                 <main className="section3-main">
                     <article>
-                        <p>Manage docs</p>
-                        <main>I don't know</main>
-                        <div>I don't knowI don't knowI don't knowI don't know</div>
+                        <p>Live Chat</p>
+                        <main>Chating without border</main>
+                        <div>Are you tired of switching between Line and Google docs when doing group projects! Collab-In provides you instant messaging function! Now you can discuss and finish your project in the same page! No more annoying swithcing is needed!</div>
                     </article>
                     <div>
-                        <img src="/images/manager.jpg" />
+                        <img src="/images/onlinechat.png" />
                     </div>
                 </main>
             </div>
@@ -208,6 +229,7 @@ class Main extends React.Component{
     componentDidMount(){
         window.addEventListener('scroll', this.handleScroll.bind(this))
         window.addEventListener('load', this.handleSlide.bind(this)())
+        document.getElementById('main-video').playbackRate = 3.0;
     }
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);

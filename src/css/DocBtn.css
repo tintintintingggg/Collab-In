@@ -2,6 +2,10 @@ img{width: 100%;}
 /* btns */
 .doc-btn .btns-wrap{
     overflow-x: scroll;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
 }
 .doc-btn .btns{
     background-color: #ffffff;
@@ -9,11 +13,7 @@ img{width: 100%;}
     align-items: center;
     /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
     border-bottom: 1px solid #979797;
-    position: -webkit-sticky;
-    position: sticky;
     padding: 5px;
-    top: 0;
-    left: 0;
     min-width: 550px;
 }
 /* little btns */
@@ -94,11 +94,10 @@ img{width: 100%;}
     text-align: center;
     border: 1px solid #979797;
     background-color: #ffffff;
-    /* position: absolute; */
     position: fixed;
-    z-index: 10;
+    z-index: 99999;
     left: auto;
-    top: 110px;
+    top: 121px;
     width: 36px;
     padding: 0;
     margin: 0 5px;

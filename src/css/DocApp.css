@@ -3,8 +3,7 @@ button:focus{outline: none;}
 .doc{
     overflow:scroll;
     height: calc(100vh - 62px);
-    /* background-color: #F8F9FA; */
-    background-color: #cccccc;
+    background-color: #F8F9FA;
 }
 .docHeader{
     position: -webkit-sticky;
@@ -19,8 +18,7 @@ button:focus{outline: none;}
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
-    border-bottom: 1px solid #979797;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .docHeader>div{
     display: flex;
@@ -31,7 +29,7 @@ button:focus{outline: none;}
     align-items: center;
     justify-content: center;
     width: 40px;
-    margin: 0 10px;
+    margin-left: 10px;
 }
 .docname{
     border: 1px dashed transparent;
@@ -42,8 +40,7 @@ button:focus{outline: none;}
     align-items: center;
 }
 .docname:hover{
-    /* border: 1px solid rgba(0, 0, 0, 0.2); */
-    border: 1px solid #979797;
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .docname>input{
     border: none;
@@ -108,8 +105,7 @@ button:focus{outline: none;}
     top:59px;
     right: 60px;
     background-color: #ffffff;
-    /* border: 1px solid #dddddd; */
-    border: 1px solid #cccccc;
+    border: 1px solid #dddddd;
     border-radius: 5px;
     padding: 20px;
 }
@@ -121,8 +117,7 @@ button:focus{outline: none;}
 #header-nav-mobile .share-list .section1,
 .headerright .share-list .section1{
     position: relative;
-    /* border-bottom: 1px solid #dddddd; */
-    border-bottom: 1px solid #979797;
+    border-bottom: 1px solid #dddddd;
     margin-bottom: 20px;
     padding-bottom: 25px;
 }
@@ -138,8 +133,7 @@ button:focus{outline: none;}
     display: flex;
     align-items: center;
     width: 100%;
-    /* border: 1px solid #dddddd; */
-    border: 1px solid #979797;
+    border: 1px solid #dddddd;
     border-radius: 5px;
 }
 #header-nav-mobile .share-list article .href-url,
@@ -148,19 +142,16 @@ button:focus{outline: none;}
     padding: 5px 10px;
     font-size: 10px;
     overflow: hidden;
-    /* background-color: #dddddd; */
-    background-color: #cccccc;
+    background-color: #dddddd;
     margin-right: 5px ;
-    /* border-right: 1px solid #dddddd ; */
-    border-right: 1px solid #cccccc ;
+    border-right: 1px solid #dddddd ;
     color: rgba(0, 0, 0, 0.5);
     white-space:nowrap;
 }
 #header-nav-mobile .share-list article .href-url>input,
 .headerright .share-list article .href-url>input{
     border: none;
-    /* background-color: #dddddd; */
-    background-color: #cccccc;
+    background-color: #dddddd;
     padding: 0;
     color: rgba(0, 0, 0, 0.4)
 }
@@ -251,10 +242,23 @@ button:focus{outline: none;}
     top:0;left: 0;
     height: 100vh;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.docPrevStep .container>button{
+    cursor: pointer;
+    background-color: #F54F29;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+}
+.docPrevStep .container>button:hover{
+    background-color: #e05232;
+    font-size: large;
+    border: 4px solid #e05232;
 }
 /* nav-mobile */
 #header-nav-mobile{
@@ -281,14 +285,33 @@ button:focus{outline: none;}
     }
 }
 @media(max-width: 600px){
-    #header-nav-mobile-icon{
-        display: flex;
-    }
-    .docHeader .headerleft .docname,
-    .docHeader .headerright .share{
+    #upload-text{
         display: none;
     }
-    #header-nav-mobile{
-        display: flex;
+    .docHeader .store-state{
+        position: fixed;
+        padding: 8px;
+        width: 50px;
+        height: 50px;
+        bottom: 80px;
+        right: 20px;
+    }
+}
+@media(max-width: 450px){
+    .docHeader .headerright .share{
+        margin: 0;
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+        position: fixed;
+        bottom: 130px;
+        right: 20px;
+    }
+    .docHeader .headerright .share-list{
+        position: fixed;
+        bottom: 10px;
+        top: auto;
+        right: 80px;
+        width: 270px;
     }
 }

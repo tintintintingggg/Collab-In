@@ -5,6 +5,7 @@ import '../css/ChatApp.css'
 class ChatContent extends React.Component{
     constructor(props){
         super(props);
+        this.chatContent=React.createRef();
         this.state={
             content: [],
             isLoading: false
@@ -19,12 +20,13 @@ class ChatContent extends React.Component{
                 let item;
                 let dateSeparator;
                 let year = new Date(message.time).getFullYear();
-                let month = new Date(message.time).getMonth()+1;
+                // let month = new Date(message.time).getMonth()+1;
+                let month = new Date(message.time).toLocaleString('en-us', {month: 'long'});
                 if(!date){
-                    dateSeparator = <div className="date-separator" key={message.time}>{`${year} / ${month} / ${new Date(message.time).getDate()}`}</div>
+                    dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
                 }else{
                     if(date !== new Date(message.time).getDate()){
-                        dateSeparator = <div className="date-separator" key={message.time}>{`${year} / ${month} / ${new Date(message.time).getDate()}`}</div>
+                        dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
                     }
                 }
                 if(dateSeparator){
@@ -68,12 +70,11 @@ class ChatContent extends React.Component{
                 content.push(item)
             })
         }
-        if(document.getElementById('chat-app')){
-            let div = document.getElementById('chat-app')
-            div.scrollIntoView(false)
-            div.scrollTop = 999999999
+        if(this.chatContent.current){
+            this.chatContent.current.scrollIntoView(false);
+            this.chatContent.current.scrollTop = 9999999999;
         }
-        return <div className="chat-content">
+        return <div className="chat-content" ref={this.chatContent}>
            {content}
         </div>
     }
@@ -93,9 +94,7 @@ class ChatContent extends React.Component{
                 content: prevState.content.concat(arr)
             }))
         })
-        let div = document.getElementById('chat-app')
-        console.log('height',div.scrollTop);
-        console.log('height',div.scrollHeight);
+        let div = this.chatContent.current
         div.scrollTop = (div.scrollHeight)-(div.clientHeight);
     }
 }
@@ -348,9 +347,101 @@ class ChatHeader extends React.Component{
 class ChatApp extends React.Component{
     constructor(props){
         super(props);
+        this.chatapp = React.createRef();
+        this.state={
+            startX: null,
+            setBorder: false,
+            mouseUpEvent: false,
+            mouseDownEvent: false,
+            mouseMoveEvent: false
+        }
     }
+    // getBorder(e){
+    //     let div = this.chatapp.current;
+    //     let rect = div.getBoundingClientRect();
+    //     let x = e.clientX - rect.left;
+    //     let thickness = 5;
+    //     if(x<thickness && x>(-thickness)){
+    //         div.style.cursor = 'col-resize';
+    //         // if(this.state.setBorder === false){
+    //         //     this.setState({setBorder: true}, ()=>{
+    //         //         // window.addEventListener('mousedown', this.initDrag.bind(this));
+    //         //         // window.addEventListener('mousemove', this.doDrag.bind(this));
+    //         //         // window.addEventListener('mouseup', this.stopDrag.bind(this));
+    //         //     })
+    //         // }
+    //     }else{
+    //         div.style.cursor = 'default';
+    //     }
+    //     if(this.state.startX){
+    //         let startX = this.state.startX;
+    //         let div = this.chatapp.current;
+    //         let parentDiv = div.parentNode;
+    //         let rect = div.getBoundingClientRect();
+    //         let parentDivRect = parentDiv.getBoundingClientRect();
+    //         let startWidth = (rect.right - rect.left)/(parentDivRect.right - parentDivRect.left)*100;
+    //         // console.log(startWidth, startX, e.clientX, startX-e.clientX)
+    //         console.log((rect.right-rect.left), (startX-e.clientX))
+    //         console.log(((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left)*100)
+    //         div.style.width = ( ((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left)*100 )+'%';
+    //     }
+    // }
+    // initDrag(e){
+    //     console.log('heeee');
+    //     this.setState({
+    //         startX: e.clientX
+    //     }
+    //     // , ()=>{
+    //     //     if(this.state.mouseMoveEvent === false){
+    //     //         this.setState({mouseMoveEvent: true}, ()=>{
+    //     //             window.addEventListener('mousemove', this.doDrag.bind(this));
+                    
+    //     //         })
+                
+    //     //     }    
+    //     // }
+    //     )
+    // }
+    // startDrag(e){
+    //     // e.preventDefault();
+    //     // if(this.state.startX){
+    //     //     let startX = this.state.startX;
+    //     //     let div = this.chatapp.current;
+    //     //     let parentDiv = div.parentNode;
+    //     //     let rect = div.getBoundingClientRect();
+    //     //     let parentDivRect = parentDiv.getBoundingClientRect();
+    //     //     let startWidth = (rect.right - rect.left)/(parentDivRect.right - parentDivRect.left)*100;
+    //     //     console.log(startWidth, startX, e.clientX, startX-e.clientX)
+    //     //     div.style.width = ( ((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left) )+'%';
+    //     // }
+    //     let div = this.chatapp.current;
+    //     let rect = div.getBoundingClientRect();
+    //     let x = e.clientX - rect.left;
+    //     let thickness = 5;
+    //     if(x<thickness && x>(-thickness)){
+    //         this.setState({
+    //             startX: e.clientX
+    //         })
+    //     }
+        
+    // }
+    // stopDrag(e){
+    //     // e.preventDefault();
+    //     console.log('stoppp')
+    //     this.setState({
+    //         startX: null,  
+    //     })
+    // }
     render(){
-        return <div className='chat-app' id="chat-app" style={{display: 'flex'}}>
+        return <div 
+            className='chat-app' 
+            id="chat-app" 
+            style={{display: 'flex'}} 
+            ref={this.chatapp}
+            // onMouseMove={this.getBorder.bind(this)}
+            // onMouseDown={this.startDrag.bind(this)}
+            // onMouseUp={this.stopDrag.bind(this)}
+        >
             <ChatHeader
                 db={this.props.db}
                 docId={this.props.docId}

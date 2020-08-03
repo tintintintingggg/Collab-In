@@ -13,18 +13,6 @@ class WebHeader extends React.Component{
             copyUrl: ''
         }
     }
-    // getName(e){
-    //     this.setState({
-    //         nameValue: e.target.value
-    //     })
-    // }
-    // submitName(){
-    //     let db = this.props.db;
-    //     db.collection('documents').doc(this.props.docId).update({
-    //         name: this.state.nameValue
-    //     })
-    //     .then(console.log('submit success')).catch(() => {console.log(error.message)})
-    // } 
     getName(e){
         let db = this.props.db;
         this.setState({nameValue: e.target.value}, ()=>{
@@ -95,7 +83,6 @@ class WebHeader extends React.Component{
                 <div className="logo"><a href="/"><img src="/images/main-logo.png" /></a></div>
                 <div className="docname">
                     <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
-                    {/* <button><img src="/images/save.png" /></button> */}
                 </div>
                 <div className="store-state">
                     <div id="upload-icon" className="upload-icon"><img src={icon} /></div>

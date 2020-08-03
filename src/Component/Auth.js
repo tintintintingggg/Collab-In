@@ -1,9 +1,8 @@
 import React from 'react';
 import "firebase/auth";
 import "firebase/firestore";
-
 import '../css/Homepage.css';
-import { Redirect } from 'react-router-dom';
+import '../css/Auth.css';
 
 
 class Auth extends React.Component{
@@ -64,8 +63,6 @@ class Auth extends React.Component{
 
     render(){
         if(this.props.currentUser){
-            console.log(this.props.landingPage)
-            // return <Redirect to={this.props.landingPage} />
             this.props.routeProps.goBack();
             return true
         }else{

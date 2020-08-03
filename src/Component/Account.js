@@ -186,7 +186,6 @@ class AccountSetting extends React.Component{
         }
     }
     componentDidMount(){
-        let db = this.props.db;
         let currentUser = this.props.currentUser;
         let photoURL;
         if(currentUser.photoURL){
@@ -241,10 +240,10 @@ class Account extends React.Component{
             }else{
                 photoURL = '/images/user-1.png';
             }
-            userInfo = <div id="profile-info">
-                        <p>{'Hi! '+this.state.currentUser.displayName}</p>
+            userInfo = <section id="profile-info">
                         <div><img src={photoURL} /></div>
-                    </div>
+                        <p>{this.state.currentUser.displayName}</p>
+                    </section>
         }
         return <div className="my-account">
             <nav>
@@ -255,7 +254,8 @@ class Account extends React.Component{
                     </a>
                 </article>
                 <article className="create-new-doc">
-                    <p onClick={this.props.handleDocCreate}>New Documents <span>+</span></p>
+                    <p onClick={this.props.handleDocCreate}>Create Docs</p>
+                    <div><img src="/images/plus.png" /></div>
                 </article>
                 <div onClick={this.handleCurrentPage.bind(this, 'myDocuments')}>
                     <div className='img-before'><img  src="/images/icon1.png" /></div>
@@ -272,11 +272,11 @@ class Account extends React.Component{
                     <div className="img-hover"><img src="/images/icon3-hover.png" /></div>
                     <p>Account Setting</p>
                 </div>
+                {userInfo}
             </nav>
             <main>
                 {main}
             </main>
-            {userInfo}
         </div>
     }
 }

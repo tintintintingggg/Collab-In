@@ -2,9 +2,9 @@
 img{width: 100%;}
 .chat-app{
     position: relative;
+    /* z-index: 5; */
     width: 100%;
     height: calc(100vh - 62px);
-    overflow:scroll;
     background-color: #FAEBD7;
     display: flex;
     flex-direction: column;
@@ -149,11 +149,12 @@ img{width: 100%;}
 /* chat content */
 .chat-content{
     flex: auto;
-    padding: 30px 10px 70px;
+    padding: 30px 15px 70px;
     color: rgba(0, 0, 0, 0.8);
+    overflow: scroll;
 }
 .chat-content .message-item{
-    margin: 25px 0;
+    margin: 20px 0;
     display: flex;
     align-items: flex-end;
 }
@@ -162,7 +163,7 @@ img{width: 100%;}
     height: 35px;
     text-align: center;
     background-color: transparent;
-    margin: 0 20px;
+    margin-right: 10px;
 }
 .chat-content .message-item .user-pic>img{
     border-radius: 50%;
@@ -214,8 +215,8 @@ img{width: 100%;}
 /* date */
 .date-separator{
     text-align: center;
+    color: rgba(0, 0, 0, 0.5);
 }
-
 /* mobile-chatroom */
 #mobile-chatroom-icon{
     position: fixed;
@@ -239,9 +240,3 @@ img{width: 100%;}
         display: flex;
     }
 }
-/* @media(max-width: 400px){
-    .chat-input{
-        position: fixed;
-        bottom: 0;
-    }
-} */
