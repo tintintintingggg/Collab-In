@@ -74,7 +74,6 @@ button:focus{outline: none;}
     align-items: center;
 }
 /* right */
-#header-nav-mobile .share,
 .headerright .share{
     display: flex;
     align-items: center;
@@ -83,7 +82,6 @@ button:focus{outline: none;}
     margin: 0 20px;
     cursor: pointer;
 }
-#header-nav-mobile .share,
 .headerright .share img:hover{
     opacity: .8;
     width: 30px;
@@ -92,13 +90,11 @@ button:focus{outline: none;}
     opacity: .8;
     width: 30px;
 }
-#header-nav-mobile .share>a,
 .headerright .share>a{
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#header-nav-mobile .share-list,
 .headerright .share-list{
     position: absolute;
     width: 300px;
@@ -109,26 +105,22 @@ button:focus{outline: none;}
     border-radius: 5px;
     padding: 20px;
 }
-#header-nav-mobile .share-list main,
 .headerright .share-list main{
     font-size: 14px;
     padding-bottom: 10px;
 }
-#header-nav-mobile .share-list .section1,
 .headerright .share-list .section1{
     position: relative;
     border-bottom: 1px solid #dddddd;
     margin-bottom: 20px;
     padding-bottom: 25px;
 }
-#header-nav-mobile .share-list .section1>main>span,
 .headerright .share-list .section1>main>span{
     color: #F54F29;
     margin-left: 10px;
     text-align: left;
     font-weight: bold;
 }
-#header-nav-mobile .share-list article,
 .headerright .share-list article{
     display: flex;
     align-items: center;
@@ -136,7 +128,6 @@ button:focus{outline: none;}
     border: 1px solid #dddddd;
     border-radius: 5px;
 }
-#header-nav-mobile .share-list article .href-url,
 .headerright .share-list article .href-url{
     width: 65%;
     padding: 5px 10px;
@@ -148,14 +139,12 @@ button:focus{outline: none;}
     color: rgba(0, 0, 0, 0.5);
     white-space:nowrap;
 }
-#header-nav-mobile .share-list article .href-url>input,
 .headerright .share-list article .href-url>input{
     border: none;
     background-color: #dddddd;
     padding: 0;
     color: rgba(0, 0, 0, 0.4)
 }
-#header-nav-mobile .share-list article .href-btn,
 .headerright .share-list article .href-btn{
     cursor: pointer;
     width: 35%;

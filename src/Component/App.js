@@ -7,8 +7,6 @@ import { Redirect } from 'react-router-dom';
 import {LoadingPage} from './LoadingPage';
 
 // import "../css/App.css"
-
-
 class App extends React.Component{
     constructor(props){
         super(props);

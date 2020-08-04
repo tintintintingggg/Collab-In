@@ -80,7 +80,6 @@ class MainPage extends React.Component{
     onlineCheck(uid){
         let url = location.href.toString();
         let docId = url.split('document/')[1];
-        // console.log('uid',uid)
         if(docId !== undefined){
             let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
             let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
@@ -117,7 +116,6 @@ class MainPage extends React.Component{
                         .then(function() {
                             docStatusDatabaseRef.once("value")
                             .then(function(doc){
-                                // console.log(doc.val())
                                 let data = doc.val();
                                 let arr = []
                                 for(let prop in data){
@@ -134,6 +132,9 @@ class MainPage extends React.Component{
                 });
             }
         }
+    }
+    handleDocSize(){
+        
     }
     render(){
         let doc;

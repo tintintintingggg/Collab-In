@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {App} from './Component/App';
-import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
-
+import { createStore } from 'redux'
 import firebase, { firestore } from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -28,14 +27,27 @@ let storage = firebase.storage();
 
 
 window.addEventListener("load", () => {
+    let reducer = function(state, action){
+        switch(action.type){
+            case "UPDATE_SWITCH":
+                return {on: !state.on};
+            default:
+                return state;
+        }
+    }
+    let handler = function(){
+        console.log(store.getState())
+    }
+    // 建立儲存空間(store)，必須準備好狀態處理函式(reducer)，以及初始的狀態物件
+    const store = createStore(reducer, {on:false})
+    console.log(store);
+    let unsbuscribe = store.subscribe(handler);
+    document.addEventListener('click', ()=>{
+        store.dispatch({
+            type: "UPDATE_SWITCH"
+        })
+    })
     ReactDOM.render(
         <App db={db} realtimeDb={realtimeDb} storage={storage}/> 
         , document.getElementById('root'));
 })
-
-
-
-// componentDidMount(){} 畫面被 render 出來後做事，可以用來跟資料庫拿資料
-// 第一時間：畫面載入（還不知道資料 -> loading期間）
-// 第二時間：componentDidMount(){去拿資料，資料放進 state}
-// 第三時間：state被改變 -> 畫面重新 render

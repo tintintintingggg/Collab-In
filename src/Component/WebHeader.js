@@ -119,15 +119,6 @@ class WebHeader extends React.Component{
                 </div>
                 {online}
             </div>
-            {/* <div id="header-nav-mobile">
-                <div className="docname">
-                    <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
-                    <button onClick={this.submitName.bind(this)}><img src="/images/save.png" /></button>
-                </div>
-                <div className="share" onClick={this.handleShareList.bind(this)}>
-                    <img ref={this.shareImg} src="/images/share.png" />
-                </div>
-            </div> */}
         </div>
     }
     componentDidMount(){

@@ -10,7 +10,6 @@ class LoadingPage extends React.Component{
             <div className="loading-box">
                 <div className="loading-text">Loading...</div>
             </div>
-            {/* <div className="loading-text">Loading...</div> */}
         </div>
     }
 }

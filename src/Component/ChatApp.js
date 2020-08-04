@@ -1,5 +1,4 @@
 import React, { createRef, Children } from 'react';
-import {LoadingPage} from './LoadingPage';
 import '../css/ChatApp.css'
 
 class ChatContent extends React.Component{
@@ -155,35 +154,12 @@ class ChatInput extends React.Component{
             let emojiList = [
                 '&#128512;', '&#128513;', '&#128514;','&#129315;', '&#128515;', 
                 '&#128516;', '&#128517;', '&#128518;', '&#128521;', '&#128522;',	
-                '&#128523;', '&#128526;',
-                '&#128525;',	
-                '&#128536;',	
-                '&#128535;',	
-                '&#128537;',	
-                '&#128538;',	
-                '&#128578;',	
-                '&#129303;',	
-                '&#129300;',	
-                '&#128528;',	
-                '&#128529;',	
-                '&#128566;',	
-                '&#128580;',	
-                '&#128527;',	
-                '&#128547;',	
-                '&#128549;',	
-                '&#128558;',	
-                '&#129296;',	
-                '&#128559;',
-                '&#128554;',	
-                '&#128555;',	
-                '&#128564;',	
-                '&#128524;',	
-                '&#129299;',	
-                '&#128539;',	
-                '&#128540;',	
-                '&#128541;',	
-                '&#129316;',	
-                '&#128530;',	
+                '&#128523;', '&#128526;', '&#128525;', '&#128536;',	'&#128535;',	
+                '&#128537;', '&#128538;', '&#128578;', '&#129303;',	'&#129300;',	
+                '&#128528;', '&#128529;', '&#128566;', '&#128580;', '&#128527;',	
+                '&#128547;', '&#128549;', '&#128558;', '&#129296;', '&#128559;',
+                '&#128554;', '&#128555;', '&#128564;', '&#128524;', '&#129299;',	
+                '&#128539;', '&#128540;', '&#128541;', '&#129316;', '&#128530;',	
                 '&#128531;',	
                 '&#128532;',	
                 '&#128533;',	
@@ -238,7 +214,19 @@ class ChatInput extends React.Component{
                 '&#128574;',	
                 '&#128584;',	
                 '&#128585;',	
-                '&#128586;',	
+                '&#128586;',
+                '&#128129;',	
+                '&#127995;',	
+                '&#127996;',	
+                '&#127997;',	
+                '&#127998;',	
+                '&#127999;',	
+                '&#128587;',	
+                '&#127995;',	
+                '&#127996;',	
+                '&#127997;',	
+                '&#127998;',	
+                '&#127999;',		
             ];
             for(let i = 0; i<emojiList.length; i++){
                 let item = document.createElement('span');
@@ -349,98 +337,58 @@ class ChatApp extends React.Component{
         super(props);
         this.chatapp = React.createRef();
         this.state={
-            startX: null,
-            setBorder: false,
-            mouseUpEvent: false,
-            mouseDownEvent: false,
-            mouseMoveEvent: false
+            startX: null
         }
     }
-    // getBorder(e){
-    //     let div = this.chatapp.current;
-    //     let rect = div.getBoundingClientRect();
-    //     let x = e.clientX - rect.left;
-    //     let thickness = 5;
-    //     if(x<thickness && x>(-thickness)){
-    //         div.style.cursor = 'col-resize';
-    //         // if(this.state.setBorder === false){
-    //         //     this.setState({setBorder: true}, ()=>{
-    //         //         // window.addEventListener('mousedown', this.initDrag.bind(this));
-    //         //         // window.addEventListener('mousemove', this.doDrag.bind(this));
-    //         //         // window.addEventListener('mouseup', this.stopDrag.bind(this));
-    //         //     })
-    //         // }
-    //     }else{
-    //         div.style.cursor = 'default';
-    //     }
-    //     if(this.state.startX){
-    //         let startX = this.state.startX;
-    //         let div = this.chatapp.current;
-    //         let parentDiv = div.parentNode;
-    //         let rect = div.getBoundingClientRect();
-    //         let parentDivRect = parentDiv.getBoundingClientRect();
-    //         let startWidth = (rect.right - rect.left)/(parentDivRect.right - parentDivRect.left)*100;
-    //         // console.log(startWidth, startX, e.clientX, startX-e.clientX)
-    //         console.log((rect.right-rect.left), (startX-e.clientX))
-    //         console.log(((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left)*100)
-    //         div.style.width = ( ((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left)*100 )+'%';
-    //     }
-    // }
-    // initDrag(e){
-    //     console.log('heeee');
-    //     this.setState({
-    //         startX: e.clientX
-    //     }
-    //     // , ()=>{
-    //     //     if(this.state.mouseMoveEvent === false){
-    //     //         this.setState({mouseMoveEvent: true}, ()=>{
-    //     //             window.addEventListener('mousemove', this.doDrag.bind(this));
-                    
-    //     //         })
-                
-    //     //     }    
-    //     // }
-    //     )
-    // }
-    // startDrag(e){
-    //     // e.preventDefault();
-    //     // if(this.state.startX){
-    //     //     let startX = this.state.startX;
-    //     //     let div = this.chatapp.current;
-    //     //     let parentDiv = div.parentNode;
-    //     //     let rect = div.getBoundingClientRect();
-    //     //     let parentDivRect = parentDiv.getBoundingClientRect();
-    //     //     let startWidth = (rect.right - rect.left)/(parentDivRect.right - parentDivRect.left)*100;
-    //     //     console.log(startWidth, startX, e.clientX, startX-e.clientX)
-    //     //     div.style.width = ( ((rect.right-rect.left)+(startX-e.clientX))/(parentDivRect.right-parentDivRect.left) )+'%';
-    //     // }
-    //     let div = this.chatapp.current;
-    //     let rect = div.getBoundingClientRect();
-    //     let x = e.clientX - rect.left;
-    //     let thickness = 5;
-    //     if(x<thickness && x>(-thickness)){
-    //         this.setState({
-    //             startX: e.clientX
-    //         })
-    //     }
-        
-    // }
-    // stopDrag(e){
-    //     // e.preventDefault();
-    //     console.log('stoppp')
-    //     this.setState({
-    //         startX: null,  
-    //     })
-    // }
+    getBorder(e){
+        let div = this.chatapp.current;
+        let rect = div.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let thickness = 5;
+        if(x<thickness && x>(-thickness)){
+            div.style.cursor = 'col-resize';
+        }else{
+            div.style.cursor = 'default';
+        }
+        // after clicking
+        if(this.state.startX){
+            let startX = this.state.startX;
+            let div = this.chatapp.current;
+            let parentDiv = div.parentNode;
+            let rect = div.getBoundingClientRect();
+            let parentDivRect = parentDiv.getBoundingClientRect();
+            let parentDivWidth = parentDivRect.right-parentDivRect.left;
+            let startWidth = rect.right-rect.left;
+            let changingWidth = (startX-e.clientX)/20;
+            let resizedWidth = (startWidth+changingWidth)/parentDivWidth*100
+            if(resizedWidth<60 && resizedWidth>20){
+                div.style.width = resizedWidth+'%';
+                document.getElementsByClassName('container')[0].style.width = (100-resizedWidth)+'%';
+            }
+        }
+    }
+    startDrag(e){
+        let div = this.chatapp.current;
+        let rect = div.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let thickness = 5;
+        if(x<thickness && x>(-thickness)){
+            this.setState({
+                startX: e.clientX
+            })
+        }
+    }
+    stopDrag(){
+        this.setState({
+            startX: null,  
+        })
+    }
     render(){
         return <div 
             className='chat-app' 
             id="chat-app" 
             style={{display: 'flex'}} 
             ref={this.chatapp}
-            // onMouseMove={this.getBorder.bind(this)}
-            // onMouseDown={this.startDrag.bind(this)}
-            // onMouseUp={this.stopDrag.bind(this)}
         >
             <ChatHeader
                 db={this.props.db}
@@ -459,6 +407,16 @@ class ChatApp extends React.Component{
                 currentUser={this.props.currentUser}
              />
         </div>
+    }
+    componentDidMount(){
+        window.addEventListener('mousemove', this.getBorder.bind(this))
+        window.addEventListener('mousedown', this.startDrag.bind(this))
+        window.addEventListener('mouseup', this.stopDrag.bind(this))
+    }
+    componentWillUnmount(){
+        window.removeEventListener('mousemove', this.getBorder.bind(this))
+        window.removeEventListener('mousedown', this.startDrag.bind(this))
+        window.removeEventListener('mouseup', this.stopDrag.bind(this))
     }
 }
 
@@ -630,18 +588,7 @@ export {ChatApp};
 // 🙆🏽	person gesturing ok, type-4	&#x1F646; &#x1F3FD;	&#128582; &#127997;	
 // 🙆🏾	person gesturing ok, type-5	&#x1F646; &#x1F3FE;	&#128582; &#127998;	
 // 🙆🏿	person gesturing ok, type-6	&#x1F646; &#x1F3FF;	&#128582; &#127999;	
-// 💁	INFORMATION DESK PERSON ≊ person tipping hand	&#x1F481;	&#128129;	
-// 💁🏻	person tipping hand, type-1-2	&#x1F481; &#x1F3FB;	&#128129; &#127995;	
-// 💁🏼	person tipping hand, type-3	&#x1F481; &#x1F3FC;	&#128129; &#127996;	
-// 💁🏽	person tipping hand, type-4	&#x1F481; &#x1F3FD;	&#128129; &#127997;	
-// 💁🏾	person tipping hand, type-5	&#x1F481; &#x1F3FE;	&#128129; &#127998;	
-// 💁🏿	person tipping hand, type-6	&#x1F481; &#x1F3FF;	&#128129; &#127999;	
-// 🙋	HAPPY PERSON RAISING ONE HAND ≊ person raising hand	&#x1F64B;	&#128587;	
-// 🙋🏻	person raising hand, type-1-2	&#x1F64B; &#x1F3FB;	&#128587; &#127995;	
-// 🙋🏼	person raising hand, type-3	&#x1F64B; &#x1F3FC;	&#128587; &#127996;	
-// 🙋🏽	person raising hand, type-4	&#x1F64B; &#x1F3FD;	&#128587; &#127997;	
-// 🙋🏾	person raising hand, type-5	&#x1F64B; &#x1F3FE;	&#128587; &#127998;	
-// 🙋🏿	person raising hand, type-6	&#x1F64B; &#x1F3FF;	&#128587; &#127999;	
+
 // 🙇	PERSON BOWING DEEPLY ≊ person bowing	&#x1F647;	&#128583;	
 // 🙇🏻	person bowing, type-1-2	&#x1F647; &#x1F3FB;	&#128583; &#127995;	
 // 🙇🏼	person bowing, type-3	&#x1F647; &#x1F3FC;	&#128583; &#127996;	

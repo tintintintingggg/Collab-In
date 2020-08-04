@@ -13,7 +13,6 @@ class UndoBtn extends React.Component{
         if(document.getElementById('selectable-area')){
             if(this.props.step>1){
                 document.getElementById('selectable-area').innerHTML = this.props.record[this.props.step-2];
-                console.log('undo');
                 this.props.updateRecord();
             }else{
                 alert('沒有上一步');

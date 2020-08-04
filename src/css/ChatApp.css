@@ -2,7 +2,7 @@
 img{width: 100%;}
 .chat-app{
     position: relative;
-    /* z-index: 5; */
+    z-index: 3;
     width: 100%;
     height: calc(100vh - 62px);
     background-color: #FAEBD7;
@@ -32,7 +32,6 @@ img{width: 100%;}
     position: absolute;
     left: 25px;
     cursor: pointer;
-    /* display: flex; */
     align-items: center;
     justify-content: center;
     width: 25px;
