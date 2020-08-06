@@ -1,4 +1,4 @@
-import React, { createRef, Children } from 'react';
+import React from 'react';
 import '../css/ChatApp.css'
 
 class ChatContent extends React.Component{
@@ -10,7 +10,6 @@ class ChatContent extends React.Component{
             isLoading: false
         }
     }
-    
     render(){
         let content = [];
         let date;
@@ -19,18 +18,14 @@ class ChatContent extends React.Component{
                 let item;
                 let dateSeparator;
                 let year = new Date(message.time).getFullYear();
-                // let month = new Date(message.time).getMonth()+1;
                 let month = new Date(message.time).toLocaleString('en-us', {month: 'long'});
-                if(!date){
+                if(!date || date !== new Date(message.time).getDate()){
                     dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
-                }else{
-                    if(date !== new Date(message.time).getDate()){
-                        dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
-                    }
-                }
-                if(dateSeparator){
                     content.push(dateSeparator)
                 }
+                // if(dateSeparator){
+                //     content.push(dateSeparator)
+                // }
                 date = new Date(message.time).getDate();
                 let hour = new Date(message.time).getHours();
                 if(hour.toString().length<2){hour = '0'+hour}
@@ -160,73 +155,20 @@ class ChatInput extends React.Component{
                 '&#128547;', '&#128549;', '&#128558;', '&#129296;', '&#128559;',
                 '&#128554;', '&#128555;', '&#128564;', '&#128524;', '&#129299;',	
                 '&#128539;', '&#128540;', '&#128541;', '&#129316;', '&#128530;',	
-                '&#128531;',	
-                '&#128532;',	
-                '&#128533;',	
-                '&#128579;',	
-                '&#129297;',
-                '&#128562;',	
-                '&#128577;',	
-                '&#128534;',	
-                '&#128542;',	
-                '&#128543;',	
-                '&#128548;',	
-                '&#128546;',	
-                '&#128557;',	
-                '&#128550;',	
-                '&#128551;',	
-                '&#128552;',	
-                '&#128553;',	
-                '&#128556;',	
-                '&#128560;',	
-                '&#128561;',	
-                '&#128563;',	
-                '&#128565;',	
-                '&#128545;',	
-                '&#128544;',	
-                '&#128519;',	
-                '&#129312;',	
-                '&#129313;',	
-                '&#129317;',	
-                '&#128567;',	
-                '&#129298;',	
-                '&#129301;',	
-                '&#129314;',	
-                '&#129319;',
-                '&#128520;',	
-                '&#128127;',	
-                '&#128121;',	
-                '&#128122;',	
-                '&#128128;',	
-                '&#128123;',	
-                '&#128125;',	
-                '&#128126;',	
-                '&#129302;',	
-                '&#128169;',	
-                '&#128570;',	
-                '&#128568;',	
-                '&#128569;',	
-                '&#128571;',	
-                '&#128572;',	
-                '&#128573;',	
-                '&#128576;',	
-                '&#128575;',	
-                '&#128574;',	
-                '&#128584;',	
-                '&#128585;',	
-                '&#128586;',
-                '&#128129;',	
-                '&#127995;',	
-                '&#127996;',	
-                '&#127997;',	
-                '&#127998;',	
-                '&#127999;',	
-                '&#128587;',	
-                '&#127995;',	
-                '&#127996;',	
-                '&#127997;',	
-                '&#127998;',	
-                '&#127999;',		
+                '&#128531;', '&#128532;', '&#128533;', '&#128579;',	'&#129297;',
+                '&#128562;', '&#128577;', '&#128534;', '&#128542;',	'&#128543;',	
+                '&#128548;', '&#128546;', '&#128557;', '&#128550;',	'&#128551;',	
+                '&#128552;', '&#128553;', '&#128556;', '&#128560;',	'&#128561;',	
+                '&#128563;', '&#128565;', '&#128545;', '&#128544;', '&#128519;',	
+                '&#129312;', '&#129313;', '&#129317;', '&#128567;',	'&#129298;',	
+                '&#129301;', '&#129314;', '&#129319;', '&#128520;',	'&#128127;',	
+                '&#128121;', '&#128122;', '&#128128;', '&#128123;',	'&#128125;',	
+                '&#128126;', '&#129302;', '&#128169;', '&#128570;',	'&#128568;',	
+                '&#128569;', '&#128571;', '&#128572;', '&#128573;',	'&#128576;',	
+                '&#128575;', '&#128574;', '&#128584;', '&#128585;', '&#128586;',
+                '&#128129;', '&#127995;', '&#127996;', '&#127997;', '&#127998;',	
+                '&#127999;', '&#128587;', '&#127995;', '&#127996;', '&#127997;',	
+                '&#127998;', '&#127999;',		
             ];
             for(let i = 0; i<emojiList.length; i++){
                 let item = document.createElement('span');
@@ -363,7 +305,7 @@ class ChatApp extends React.Component{
             let resizedWidth = (startWidth+changingWidth)/parentDivWidth*100
             if(resizedWidth<60 && resizedWidth>20){
                 div.style.width = resizedWidth+'%';
-                document.getElementsByClassName('container')[0].style.width = (100-resizedWidth)+'%';
+                div.previousSibling.style.width = (100-resizedWidth)+'%';
             }
         }
     }

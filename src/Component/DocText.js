@@ -5,14 +5,10 @@ import '../css/DocText.css';
 class DocText extends React.Component{
     constructor(props){
         super(props);
-        this.myRef = React.createRef();
+        this.selectableArea = React.createRef();
         this.state = {
             docName: null,
-            docText: null,
-            cooldown: false,
-            time: 0,
-            position: null   
-
+            docText: null
         }
     }
     update(text, name){
@@ -29,7 +25,7 @@ class DocText extends React.Component{
             img.setAttribute('src', this.props.imgurl);
             img.setAttribute('class', "draggable-img");
             img.setAttribute('contenteditable', true)
-            this.myRef.current.appendChild(img);
+            this.selectableArea.current.appendChild(img);
         }
         return <div className="text">
             <div id="canvas-area">
@@ -38,7 +34,7 @@ class DocText extends React.Component{
                     suppressContentEditableWarning='true'
                     id="selectable-area"  
                     db={this.props.db}
-                    ref={this.myRef}
+                    ref={this.selectableArea}
                 >
                 </div>
             </div>
@@ -51,7 +47,7 @@ class DocText extends React.Component{
         let db = this.props.db
         let docData = db.collection("documents").doc(docId);
         let text; let name;
-        let textContainer = this.myRef.current;
+        let textContainer = this.selectableArea.current;
         let currentVersion=0;
         let starttime = null;
         docData.get().then(function(doc){
@@ -72,7 +68,7 @@ class DocText extends React.Component{
                         starttime = Date.now();
                         setTimeout(()=>{
                             starttime=null;
-                            let currentHTML = this.myRef.current.innerHTML;
+                            let currentHTML = this.selectableArea.current.innerHTML;
                             if(currentHTML !== text){
                                 docData.get()
                                 .then((doc) => {
@@ -95,7 +91,7 @@ class DocText extends React.Component{
                         }, 2000)
                     }
                 });
-                mutationObserver.observe(this.myRef.current, {
+                mutationObserver.observe(this.selectableArea.current, {
                     attributes: true,
                     characterData: true,
                     childList: true,
@@ -113,7 +109,6 @@ class DocText extends React.Component{
             console.log("is local?",doc.metadata.hasPendingWrites);
             if(!doc.metadata.hasPendingWrites){
                 if(doc.data().text !== textContainer.innerHTML){
-                    console.log("Current data: ", doc.data().text);
                     textContainer.innerHTML = doc.data().text;
                     text = doc.data().text
                     this.setState({

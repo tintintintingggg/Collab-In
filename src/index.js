@@ -42,11 +42,11 @@ window.addEventListener("load", () => {
     const store = createStore(reducer, {on:false})
     console.log(store);
     let unsbuscribe = store.subscribe(handler);
-    document.addEventListener('click', ()=>{
-        store.dispatch({
-            type: "UPDATE_SWITCH"
-        })
-    })
+    // document.addEventListener('click', ()=>{
+    //     store.dispatch({
+    //         type: "UPDATE_SWITCH"
+    //     })
+    // })
     ReactDOM.render(
         <App db={db} realtimeDb={realtimeDb} storage={storage}/> 
         , document.getElementById('root'));

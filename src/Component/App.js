@@ -3,18 +3,16 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import {Homepage} from './Homepage';
-import { Redirect } from 'react-router-dom';
 import {LoadingPage} from './LoadingPage';
 
-// import "../css/App.css"
 class App extends React.Component{
     constructor(props){
         super(props);
+        this.setUserDataInState = this.setUserDataInState.bind(this);
         this.state = {
             userCredential: null,
             currentUser: undefined,
-            currentUserName: undefined,
-            currentUserId: undefined
+            currentUserName: undefined
         }
     }
     render(){
@@ -29,8 +27,6 @@ class App extends React.Component{
                     googleSignIn={this.googleSignIn.bind(this)}
                     facebookSignIn={this.facebookSignIn.bind(this)}
                     currentUser={this.state.currentUser}
-                    currentUserId={this.state.currentUserId}
-                    currentUserName={this.state.currentUserName}
                     signOut={this.signOut.bind(this)}
                  />
             </div>
@@ -42,8 +38,8 @@ class App extends React.Component{
         let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
+                this.setUserDataInState(user);
                 console.log(user)
-                // this.onlineCheck(user.uid);
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
@@ -55,11 +51,7 @@ class App extends React.Component{
                                     name: user.displayName
                                 })
                                 .then(
-                                    this.setState({
-                                        currentUser: user,
-                                        currentUserId: user.uid,
-                                        currentUserName: user.displayName
-                                    })
+                                    console.log('data is set')
                                 )
                                 .catch((error) => {
                                     alert(error.message);
@@ -68,12 +60,6 @@ class App extends React.Component{
                             .catch((error) => {
                                 alert(error.message);
                             });
-                    }else{
-                        this.setState({
-                            currentUser: user,
-                            currentUserId: user.uid,
-                            currentUserName: user.displayName
-                        })
                     }
                 }else if(user.photoURL !== null){
                     db.collection('users').doc(user.uid).get()
@@ -91,34 +77,22 @@ class App extends React.Component{
                             .catch((error)=>{
                                 alert(error.message);
                             });
-                        }else{
-                            this.setState({
-                                currentUser: user,
-                                currentUserId: user.uid,
-                                currentUserName: user.displayName
-                            })
                         }
                     }).catch((error)=>{
                         alert(error.message);
                     });
-                }else{
-                    this.setState({
-                        currentUser: user,
-                        currentUserId: user.uid,
-                        currentUserName: user.displayName
-                    })
                 }
             }else{
-                this.setState({
-                    currentUser: null,
-                    currentUserId: null,
-                    currentUserName: null
-                })
+                this.setUserDataInState(null)
             }
         });  
         
     }
-    
+    setUserDataInState(data){
+        this.setState({
+            currentUser: data
+        })
+    }
     signUp(email, password, name){
         if(!email){
             alert('You forget to enter Email!')
@@ -155,7 +129,7 @@ class App extends React.Component{
                 alert('You are logged in!');
             })
             .catch((error) => {
-              alert(error.message);
+                alert(error.message);
             });
         }
     }
@@ -164,116 +138,35 @@ class App extends React.Component{
         googleProvider.setCustomParameters({
             'login_hint': 'user@example.com'
         });
-        firebase.auth().signInWithPopup(googleProvider).then(function(result) {
-            var token = result.credential.accessToken;
+        firebase.auth().signInWithPopup(googleProvider)
+        .then(function(result) {
+            let token = result.credential.accessToken;
             alert('You are logged in!');
         }).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            var email = error.email;
-            var credential = error.credential;
-            console.log(errorCode, errorMessage, email, credential);
+            alert(error.message);
+        });
+    }
+
+    facebookSignIn(){
+        let fbProvider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().signInWithPopup(fbProvider)
+        .then(function(result) {
+            let token = result.credential.accessToken;
+            alert('You are logged in!');
+        })
+        .catch(function(error) {
             alert(error.message);
         });
     }
     signOut(){
-        firebase.auth().signOut().then(function() {
+        firebase.auth().signOut()
+        .then(function() {
             alert("Sign Out!");
-          }).catch(function(error) {
+        })
+        .catch(function(error) {
             alert(error.message);
-          });
-    }
-    
-    facebookSignIn(){
-        let fbProvider = new firebase.auth.FacebookAuthProvider();
-        firebase.auth().signInWithPopup(fbProvider).then(function(result) {
-          var token = result.credential.accessToken;
-          alert('You are logged in!');
-        }).catch(function(error) {
-          var errorMessage = error.message;
-          var email = error.email;
-          var credential = error.credential;
-          console.log(email)
-          console.log(credential)
-          console.log(errorMessage);
-          alert(error.message);
         });
     }
-    // onlineCheck(uid){
-    //     let url = location.href.toString();
-    //     let docId = url.split('document/')[1];
-    //     console.log('uid',uid)
-    //     if(docId !== undefined){
-    //         let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
-    //         let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
-    //         let isOfflineForDatabase = {
-    //             state: 'offline',
-    //             last_changed: firebase.database.ServerValue.TIMESTAMP,
-    //         };
-    //         let isOnlineForDatabase = {
-    //             state: 'online',
-    //             last_changed: firebase.database.ServerValue.TIMESTAMP,
-    //         };
-    //         this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
-    //             if (snapshot.val() == false) {
-    //                 return;
-    //             };
-    //             userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-    //                 userStatusDatabaseRef.set(isOnlineForDatabase);
-    //             });
-    //         });
-
-
-    //         //////
-    //         if(uid !== null){
-    //             let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
-    //             let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
-    //             let isOfflineForFirestore = {
-    //                 state: 'offline',
-    //                 // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-    //             };
-                
-    //             let isOnlineForFirestore = {
-    //                 state: 'online',
-    //                 // last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-    //             };
-                
-    //             this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
-    //                 if (snapshot.val() == false) {
-    //                     userStatusFirestoreRef.set(isOfflineForFirestore);
-    //                     return;
-    //                 };
-                
-    //                 userStatusDatabaseRef.onDisconnect()
-    //                     .set(isOfflineForDatabase)
-    //                     .then(function() {
-    //                         docStatusDatabaseRef.once("value")
-    //                         .then(function(doc){
-    //                             console.log(doc.val())
-    //                             let data = doc.val();
-    //                             let arr = []
-    //                             for(let prop in data){
-    //                                 // let obj = {}
-    //                                 if(data[prop]["state"] === 'online'){
-    //                                     // obj[prop] = data[prop]["state"]
-    //                                     arr.push(prop)
-    //                                 }
-    //                             }
-    //                             // console.log(arr)
-    //                             docStatusFirestoreRef.set({
-    //                                 total: arr
-    //                             })
-    //                             userStatusDatabaseRef.set(isOnlineForDatabase);
-    //                         })
-                            
-                            
-    //                     });
-    //             });
-    //         }
-            
-    //     }
-        
-    // }
 }
 
 export {App} ;

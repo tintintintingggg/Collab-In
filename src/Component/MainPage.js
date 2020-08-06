@@ -23,6 +23,7 @@ class PrevStep extends React.Component{
 class MainPage extends React.Component{
     constructor(props){
         super(props);
+        this.documentLayout = React.createRef();
         this.state={
             saved: true,
             isOwner: false,
@@ -37,8 +38,8 @@ class MainPage extends React.Component{
         })
     }
     handleChatRoom(){
-        let chatAppBlock = document.getElementById('chat-app');
-        let mobileChatroomIcon = document.getElementById('mobile-chatroom-icon');
+        let chatAppBlock = this.documentLayout.current.childNodes[1];
+        let mobileChatroomIcon = this.documentLayout.current.childNodes[2];
         if(chatAppBlock.style.display === 'flex' && mobileChatroomIcon.style.display === 'none'){
             chatAppBlock.style.display = 'none';
             mobileChatroomIcon.style.display = 'block';
@@ -133,9 +134,6 @@ class MainPage extends React.Component{
             }
         }
     }
-    handleDocSize(){
-        
-    }
     render(){
         let doc;
         if(!this.props.currentUser){
@@ -155,7 +153,7 @@ class MainPage extends React.Component{
                             currentUser={this.props.currentUser}
                             saved={this.state.saved}
                          />
-                        <div className="document-layout">
+                        <div className="document-layout" ref={this.documentLayout} >
                             <DocApp
                                 db={this.props.db}
                                 realtimeDb={this.props.realtimeDb}

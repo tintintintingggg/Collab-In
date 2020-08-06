@@ -10,9 +10,9 @@ class UndoBtn extends React.Component{
         super(props);
     }
     undo(){
-        if(document.getElementById('selectable-area')){
+        if(this.props.selectableArea){
             if(this.props.step>1){
-                document.getElementById('selectable-area').innerHTML = this.props.record[this.props.step-2];
+                this.props.selectableArea.innerHTML = this.props.record[this.props.step-2];
                 this.props.updateRecord();
             }else{
                 alert('沒有上一步');
@@ -28,17 +28,9 @@ class UndoBtn extends React.Component{
 class BoldBtn extends React.Component{
     constructor(props){
         super(props);
-        this.myRef = React.createRef();
-    }
-    changeBold(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'bold', null)
-            }
-        }
     }
     render(){
-        return <button onClick={this.changeBold.bind(this)}>
+        return <button onClick={()=>{this.props.changeStyle('span', 'bold', null)}}>
             <img src="/images/bold-1.png" />
         </button>
     }
@@ -47,15 +39,8 @@ class UnBoldBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    changeUnBold(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'un-bold', null)
-            }
-        }
-    }
     render(){
-        return <button onClick={this.changeUnBold.bind(this)}>
+        return <button onClick={()=>{this.props.changeStyle('span', 'un-bold', null)}}>
             <img src="/images/bold-remove.png" />
         </button>
     }
@@ -64,15 +49,8 @@ class ItalicBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    changeItalic(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'italic', null)
-            }
-        }
-    }
     render(){
-        return <button onClick={this.changeItalic.bind(this)}>
+        return <button onClick={()=>{this.props.changeStyle('span', 'italic', null)}}>
             <img src="/images/italic-1.png" />
         </button>
     }
@@ -81,16 +59,8 @@ class UnItalicBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    changeUnItalic(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'un-italic', null)
-            }
-        }
-    }
-    
     render(){
-        return <button onClick={this.changeUnItalic.bind(this)}>
+        return <button onClick={()=>{this.props.changeStyle('span', 'un-italic', null)}}>
             <img src="/images/italic-remove.png" />
         </button>
     }
@@ -100,16 +70,12 @@ class ColorBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    changeColor(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'color', 'color: '+e.target.value)
-            }
-        }
+    getEventTargetValue(e){
+        this.props.changeStyle('span', 'color', 'color: '+e.target.value)
     }
     render(){
         return <div className="colorbtn"><input id="color-input" type="color" 
-            onChange={this.changeColor.bind(this)}
+            onChange={this.getEventTargetValue.bind(this)}
          /></div>
     }
 }
@@ -117,16 +83,12 @@ class BackgroundColorBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    changeColor(e){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'background-color', 'background-color: '+e.target.value)
-            }
-        }
+    getEventTargetValue(e){
+        this.props.changeStyle('span', 'background-color', 'background-color: '+e.target.value)
     }
     render(){
         return <div className="background-colorbtn"><input id="background-color-input" type="color" 
-            onChange={this.changeColor.bind(this)}
+            onChange={this.getEventTargetValue.bind(this)}
          /></div>
     }
 }
@@ -134,15 +96,8 @@ class ClearBackgroundColorBtn extends React.Component{
     constructor(props){
         super(props);
     }
-    clearColor(){
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'un-color', null)
-            }
-        }
-    }
     render(){
-        return <button onClick={this.clearColor.bind(this)}>
+        return <button onClick={()=>{this.props.changeStyle('span', 'un-color', null)}}>
             <img src="/images/remove-color.png" />
         </button>
     }
@@ -155,12 +110,6 @@ class FontSizeBtn extends React.Component{
             listDisplay: 'none'
         }
     }
-    changeFontSize(e){
-        if(e.keyCode ===13){
-            console.log(this.state.value)
-            // this.props.surroundSelection('span', 'font-size', this.state.value)
-        }
-    }
     getValue(e){
         this.setState({
             value: e.target.value
@@ -169,31 +118,29 @@ class FontSizeBtn extends React.Component{
 
     showList(){
         if(this.state.listDisplay === 'none'){
-            this.setState({
-                listDisplay: 'block'
-            })
+            this.setState({listDisplay: 'block'})
         }else{
-            this.setState({
-                listDisplay: 'none'
-            })
+            this.setState({listDisplay: 'none'})
         }
     }
 
-    changeFontSize(e){
+    getEventTargetValue(e){
         this.showList();
-        if(document.getElementById('selectable-area').innerHTML !== ''){
-            if(!window.getSelection().getRangeAt(0).collapsed){
-                this.props.surroundSelection('span', 'font-size', 'font-size: '+e.target.innerText+'px')
-            }
-        }
+        this.props.changeStyle('span', 'font-size', 'font-size: '+e.target.innerText+'px');
     }
     render(){
+        let btns = [];
+        let fontsizeList = [8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96];
+        fontsizeList.forEach(item=>{
+            let btn = <button key={'fontsize'+item}>{item}</button>
+            btns.push(btn)
+        })
         return <div className="font-size-btn">
             <div className="font-size-btn-arrow">
                 <button onClick={this.showList.bind(this)}><img src="/images/font-size.png" /></button>
             </div>
-            <div className="font-size-btn-list" style={{display: this.state.listDisplay}} onClick={this.changeFontSize.bind(this)}>
-            <button>8</button><button>10</button><button>12</button><button>14</button><button>16</button><button>18</button><button>20</button><button>24</button><button>30</button><button>36</button><button>48</button><button>60</button><button>72</button><button>96</button>
+            <div className="font-size-btn-list" style={{display: this.state.listDisplay}} onClick={this.getEventTargetValue.bind(this)}>
+                {btns}
             </div>
         </div>
     }
@@ -213,7 +160,6 @@ class ImgBtn extends React.Component{
         // upload file
         storageRef.put(file)
         .then(()=>{
-            console.log('image is upload');
             storageRef.getDownloadURL()
             .then((url)=>{
                 this.props.getImgurl(url)
@@ -241,26 +187,21 @@ class DownloadBtn extends React.Component{
         super(props);
     }
     getCanvas(){
-        if(document.getElementById('selectable-area')){
-            let div = document.getElementById('selectable-area');
-            window.scroll(0,0)
-            html2canvas(div)
-            .then((canvas)=>{
-                const imgData = canvas.toDataURL('image/png', 1);
-                const pdf = new jsPDF("p", "mm", "a4");
-                let width = pdf.internal.pageSize.getWidth();
-                let height = pdf.internal.pageSize.getHeight();
-                pdf.addImage(imgData, 'PNG', 10, 10, width-20, height-20);
-                let db = this.props.db;
-                console.log(db)
-                db.collection('documents').doc(this.props.docId)
-                .get().then((doc)=>{
-                    pdf.save(doc.data().name+".pdf");
-                }).catch((error)=>{alert(error.message)}) 
-            });
-        }else{
-            alert('No Content!')
-        }
+        let div = this.props.selectableArea;
+        window.scroll(0,0)
+        html2canvas(div)
+        .then((canvas)=>{
+            const imgData = canvas.toDataURL('image/png', 1);
+            const pdf = new jsPDF("p", "mm", "a4");
+            let width = pdf.internal.pageSize.getWidth();
+            let height = pdf.internal.pageSize.getHeight();
+            pdf.addImage(imgData, 'PNG', 10, 10, width-20, height-20);
+            let db = this.props.db;
+            db.collection('documents').doc(this.props.docId)
+            .get().then((doc)=>{
+                pdf.save(doc.data().name+".pdf");
+            }).catch((error)=>{alert(error.message)}) 
+        });
     }
     render(){
         return <button onClick={this.getCanvas.bind(this)}>
@@ -269,18 +210,16 @@ class DownloadBtn extends React.Component{
     }
 }
 
-
-
 class DocBtn extends React.Component{
     constructor(props){
         super(props);
         this.editArea = React.createRef();
         this.state = {
+            selectableArea: null,
             selection: null,
             fontSizeIsFocus: false,
             record: [],
             step: 0,
-            position: null,
             imgurl: null
         }
     }
@@ -289,17 +228,17 @@ class DocBtn extends React.Component{
         return <div className="doc-btn">
             <div className="btns-wrap">
                 <div className="btns">
-                    <UndoBtn step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)} />
-                    <FontSizeBtn surroundSelection={this.surroundSelection.bind(this)} remainSelection={this.remainSelection.bind(this)} changeFocus={this.changeFocus.bind(this)}/>
-                    <BoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                    <UnBoldBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                    <ItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                    <UnItalicBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                    <ColorBtn surroundSelection={this.surroundSelection.bind(this)}/>
-                    <BackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
-                    <ClearBackgroundColorBtn surroundSelection={this.surroundSelection.bind(this)} />
-                    <ImgBtn storage={this.props.storage} docId={this.props.docId} position={this.state.position} getImgurl={this.getImgurl.bind(this)} />
-                    <DownloadBtn docId={this.props.docId} db={this.props.db}  />
+                    <UndoBtn step={this.state.step} record={this.state.record} updateRecord={this.updateRecord.bind(this)} selectableArea={this.state.selectableArea} />
+                    <FontSizeBtn changeStyle={this.changeStyle.bind(this)} />
+                    <BoldBtn changeStyle={this.changeStyle.bind(this)} />
+                    <UnBoldBtn changeStyle={this.changeStyle.bind(this)} />
+                    <ItalicBtn changeStyle={this.changeStyle.bind(this)} />
+                    <UnItalicBtn changeStyle={this.changeStyle.bind(this)} />
+                    <ColorBtn changeStyle={this.changeStyle.bind(this)} />
+                    <BackgroundColorBtn changeStyle={this.changeStyle.bind(this)} />
+                    <ClearBackgroundColorBtn changeStyle={this.changeStyle.bind(this)} />
+                    <ImgBtn storage={this.props.storage} docId={this.props.docId} getImgurl={this.getImgurl.bind(this)} />
+                    <DownloadBtn docId={this.props.docId} db={this.props.db} selectableArea={this.state.selectableArea}  />
                 </div>
             </div>
             <DocText 
@@ -308,16 +247,13 @@ class DocBtn extends React.Component{
                 docId={this.props.docId}
                 recordText={this.recordText.bind(this)}
                 detectUpload={this.props.detectUpload}
-                recordPosition={this.recordPosition.bind(this)}
                 imgurl={this.state.imgurl}
             />
         </div>
     }
-
-    recordPosition(e){
-        console.log(e.pageX, e.pageY)
+    componentDidMount(){
         this.setState({
-            position: {x: e.pageX, y:e.pageY}
+            selectableArea: this.editArea.current.selectableArea.current
         })
     }
     getImgurl(url){
@@ -344,19 +280,11 @@ class DocBtn extends React.Component{
             record: preState.record.splice(0, preState.record.length-2)
         }))
     }
-
-    changeFocus(e){
-        this.setState({
-            fontSizeIsFocus: true
-        })
+    changeStyle(elementType, className, style){
+        if(!window.getSelection().getRangeAt(0).collapsed){
+            this.surroundSelection(elementType, className, style)
+        }
     }
-
-    remainSelection(e){
-        e.preventDefault();
-    }
-
-
-
     surroundSelection(elementType, className, style) {
         function getAllDescendants (node, callback) {
             for (let i = 0; i < node.childNodes.length; i++) {
@@ -446,9 +374,5 @@ class DocBtn extends React.Component{
         }
     };
 }
-
-
-
-
 
 export {DocBtn} ;
