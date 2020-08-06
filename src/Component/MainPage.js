@@ -32,25 +32,31 @@ class MainPage extends React.Component{
             isUser: null
         }
     }
-    detectUpload(issaved){
+    detectUpload(isSaved){
         this.setState({
-            saved: issaved
+            saved: isSaved
         })
     }
     handleChatRoom(){
         let chatAppBlock = this.documentLayout.current.childNodes[1];
         let mobileChatroomIcon = this.documentLayout.current.childNodes[2];
-        if(chatAppBlock.style.display === 'flex' && mobileChatroomIcon.style.display === 'none'){
+        let webMode = chatAppBlock.style.display === 'flex' && mobileChatroomIcon.style.display === 'none';
+        if(webMode){
             chatAppBlock.style.display = 'none';
             mobileChatroomIcon.style.display = 'block';
-        }else if(chatAppBlock.style.display === 'none' && mobileChatroomIcon.style.display === 'block'){
+        }else if(!webMode){
             chatAppBlock.style.display = 'flex';
             mobileChatroomIcon.style.display = 'none'
         }
     }
+    setIdentifyStateOnUser(identify){
+        this.setState({
+            [identify]: true
+        })
+    }
     handleEditor(currentUser){
-        alert('Hi, '+currentUser.displayName)
         let db = this.props.db;
+        alert('Hi, '+currentUser.displayName)
         db.collection('documents').doc(this.props.docId).get()
         .then((doc)=>{
             let editorsList = doc.data().editorsList;
@@ -58,25 +64,26 @@ class MainPage extends React.Component{
             db.collection('documents').doc(this.props.docId).update({
                 editorsList: editorsList
             })
+            .then(()=>{
+                db.collection('users').doc(currentUser.uid).collection('editordocs').doc(this.props.docId).set({
+                    id: this.props.docId,
+                    time: Date.now()
+                })
+                .then(()=>{
+                    db.collection('chatrooms').doc(this.props.docId).collection('members').doc(currentUser.uid).set({
+                        time: Date.now(),
+                        id: currentUser.uid
+                    })
+                    .then(()=>{
+                        this.setIdentifyStateOnUser('isEditor');
+                    })
+                    .catch((error)=>{error.message})   
+                })
+                .catch((error)=>{error.message})
+            })
+            .catch((error)=>{error.message})
         })
         .catch((error)=>{error.message})
-        db.collection('users').doc(currentUser.uid).collection('editordocs').doc(this.props.docId).set({
-            id: this.props.docId,
-            time: Date.now()
-        })
-        .then(console.log('editors set!'))
-        .catch((error)=>{error.message})
-        db.collection('chatrooms').doc(this.props.docId).collection('members').doc(currentUser.uid).set({
-            time: Date.now(),
-            id: currentUser.uid
-        })
-        .then(()=>{
-            console.log('chatroom members set!')
-            this.setState({
-                isEditor: true
-            }) 
-        })
-        .catch((error)=>{error.message})   
     }
     onlineCheck(uid){
         let url = location.href.toString();
@@ -161,11 +168,6 @@ class MainPage extends React.Component{
                                 docId={this.props.docId}
                                 currentUser={this.props.currentUser}
                                 detectUpload={this.detectUpload.bind(this)}
-
-                                signUp={this.props.signUp}
-                                signIn={this.props.signIn}
-                                googleSignIn={this.props.googleSignIn}
-                                facebookSignIn={this.props.facebookSignIn}
                              />
                             <ChatApp
                                 db={this.props.db}
@@ -197,30 +199,17 @@ class MainPage extends React.Component{
     }
     componentDidMount(){
         let db = this.props.db;
-        let noname = true;
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             if(this.props.currentUser){
                 if(doc.data().owner === this.props.currentUser.uid){
-                    this.setState({
-                        isOwner: true
-                    })
+                    this.setIdentifyStateOnUser.call(this, 'isOwner')
                 }
                 else{
-                    for(let i = 0; i<doc.data().editorsList.length; i++){
-                        if(doc.data().editorsList[i] === this.props.currentUser.uid){
-                            this.setState({
-                                isEditor: true
-                            })
-                            noname = false;
-                            break;
-                        }
-                    }
-                    if(noname){
-                        this.setState({
-                            isWaitingEditor: true
-                        })
-                    }
+                    let currentEditor = doc.data().editorsList.filter(editor=>(
+                        editor === this.props.currentUser.uid
+                    ))
+                    this.setIdentifyStateOnUser.call(this, currentEditor.length>0 ? 'isEditor' : 'isWaitingEditor')
                 }
             }
         })

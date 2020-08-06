@@ -5,10 +5,9 @@ import '../css/DocApp.css';
 class DocApp extends React.Component{
     constructor(props){
         super(props);
-        this.docContainer = React.createRef();
     }
     render(){
-        return <div className='container' ref={this.docContainer} >
+        return <div className='container'>
             <div className='doc'>
                 <DocBtn 
                     db={this.props.db} 

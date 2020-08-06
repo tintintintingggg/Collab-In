@@ -5,12 +5,11 @@ class WebHeader extends React.Component{
     constructor(props){
         super(props);
         this.urlInput = React.createRef();
-        this.shareList = React.createRef();
-        this.shareImg = React.createRef();
         this.state = {
             nameValue: '',
             onlineUser: null,
-            copyUrl: ''
+            copyUrl: '',
+            shareListIsOpen: false
         }
     }
     getName(e){
@@ -19,50 +18,36 @@ class WebHeader extends React.Component{
             db.collection('documents').doc(this.props.docId).update({
                 name: this.state.nameValue
             })
-            .then()
             .catch(() => {console.log(error.message)})
         })
     }
     copyUrl(){
         this.urlInput.current.select();
         document.execCommand('copy');
-        if(document.execCommand('copy')){
-            this.setState({copyUrl: 'Copied'},
-                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
-            )
-        }else{
-            this.setState({copyUrl: 'Fail to Copy!'},
-                ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
-            )
-        }
+        this.handleCopyUrlState(
+            document.execCommand('copy') ? 'Copied' : 'Fail to Copy!'
+        );
+    }
+    handleCopyUrlState(alertText){
+        this.setState({copyUrl: alertText},
+            ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
+        )
     }
     handleShareList(){
-        if(this.shareList.current.style.display === 'none'){
-            this.shareList.current.style.display = 'block';
-            this.shareImg.current.classList.add('img-on-hover');
-        }else{
-            this.shareList.current.style.display = 'none';
-            this.shareImg.current.classList.remove('img-on-hover');
-        }
+        this.setState(prevState=>({
+            shareListIsOpen: !prevState.shareListIsOpen
+        }))
     }
     render(){
-        let save; let icon;
-        if(!this.props.saved){
-            save = "Saving...";
-            icon = "/images/sync.png";
-        }else{
-            save = "Saved!";
-            icon = "/images/cloud-computing.png";
-        }
         let onlineUserName = [];
         let online = '';
         if(this.state.onlineUser){
-            for(let i =0; i<this.state.onlineUser.length; i++){
-                if(this.state.onlineUser[i] !== null){
-                    let item = <div key={i}><div></div>{this.state.onlineUser[i]}</div>
+            this.state.onlineUser.forEach(user=>{
+                if(user){
+                    let item = <div key={user}><div></div>{user}</div>
                     onlineUserName.push(item);
                 }
-            }
+            })
             online = <div className="online-state">
                 <div className="online-total" id="online-total-web">
                     <div><img src="/images/online.png" /></div>
@@ -77,7 +62,6 @@ class WebHeader extends React.Component{
                 </div>
             </div>
         }
-        let copied = this.state.copyUrl;
         return <div className='docHeader'>
             <div className="headerleft">
                 <div className="logo"><a href="/"><img src="/images/main-logo.png" /></a></div>
@@ -85,15 +69,16 @@ class WebHeader extends React.Component{
                     <input type="text" value={this.state.nameValue} onChange={this.getName.bind(this)} />
                 </div>
                 <div className="store-state">
-                    <div id="upload-icon" className="upload-icon"><img src={icon} /></div>
-                    <div id="upload-text">{save}</div>
+                    <div id="upload-icon" className="upload-icon">
+                        <img src={this.props.saved ? "/images/cloud-computing.png" : "/images/sync.png"} />
+                    </div>
+                    <div id="upload-text">{this.props.saved ? "Saved!" : "Saving..."}</div>
                 </div>
-                
             </div>
             <div className="headerright">
-                <div className="share-list" style={{display: 'none'}} ref={this.shareList}>
+                <div className="share-list" style={this.state.shareListIsOpen ? {display: 'block'} : {display: 'none'}}>
                     <section className="section1">
-                        <main>Share by URL<span>{copied}</span></main>
+                        <main>Share by URL<span>{this.state.copyUrl}</span></main>
                         <article>
                             <div className="href-url"><input id="input-url" value={window.location.href} ref={this.urlInput} readOnly></input></div>
                             <div className="href-btn" onClick={this.copyUrl.bind(this)}>Copy</div>
@@ -112,7 +97,7 @@ class WebHeader extends React.Component{
                     </section>
                 </div>
                 <div className="share" onClick={this.handleShareList.bind(this)}>
-                    <img ref={this.shareImg} src="/images/share.png" />
+                    <img className={this.state.shareListIsOpen ? 'img-on-hover' : ''} src="/images/share.png" />
                 </div>
                 <div id="header-nav-mobile-icon">
                     <img src="/images/share.png" />
@@ -140,19 +125,18 @@ class WebHeader extends React.Component{
         });
 
         db.collection('status').doc(this.props.docId).collection('online').doc("total")
-        .onSnapshot((doc)=>{
+        .onSnapshot((snapshot)=>{
             let userContainer = [];
-            for(let i =0; i<doc.data().total.length; i++){
-                db.collection('users').doc(doc.data().total[i]).get()
-                .then((data)=>{
-                    userContainer.push(data.data().name)
+            snapshot.data().total.forEach(userId=>{
+                db.collection('users').doc(userId).get()
+                .then((userData)=>{
+                    userContainer.push(userData.data().name)
                     this.setState({
                         onlineUser: userContainer
                     })
                 })
                 .catch((error)=>{console.log(error)})
-            }
-            
+            })
         })        
     }
 }

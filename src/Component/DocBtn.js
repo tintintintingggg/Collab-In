@@ -1,8 +1,8 @@
 import React from 'react';
 import {DocText} from './DocText';
-import '../css/DocBtn.css';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import '../css/DocBtn.css';
 
 
 class UndoBtn extends React.Component{
@@ -115,7 +115,6 @@ class FontSizeBtn extends React.Component{
             value: e.target.value
         })
     }
-
     showList(){
         if(this.state.listDisplay === 'none'){
             this.setState({listDisplay: 'block'})
@@ -123,7 +122,6 @@ class FontSizeBtn extends React.Component{
             this.setState({listDisplay: 'none'})
         }
     }
-
     getEventTargetValue(e){
         this.showList();
         this.props.changeStyle('span', 'font-size', 'font-size: '+e.target.innerText+'px');
@@ -188,6 +186,7 @@ class DownloadBtn extends React.Component{
     }
     getCanvas(){
         let div = this.props.selectableArea;
+        let db = this.props.db;
         window.scroll(0,0)
         html2canvas(div)
         .then((canvas)=>{
@@ -196,11 +195,12 @@ class DownloadBtn extends React.Component{
             let width = pdf.internal.pageSize.getWidth();
             let height = pdf.internal.pageSize.getHeight();
             pdf.addImage(imgData, 'PNG', 10, 10, width-20, height-20);
-            let db = this.props.db;
             db.collection('documents').doc(this.props.docId)
-            .get().then((doc)=>{
+            .get()
+            .then((doc)=>{
                 pdf.save(doc.data().name+".pdf");
-            }).catch((error)=>{alert(error.message)}) 
+            })
+            .catch((error)=>{alert(error.message)}) 
         });
     }
     render(){
@@ -216,8 +216,6 @@ class DocBtn extends React.Component{
         this.editArea = React.createRef();
         this.state = {
             selectableArea: null,
-            selection: null,
-            fontSizeIsFocus: false,
             record: [],
             step: 0,
             imgurl: null
@@ -256,6 +254,7 @@ class DocBtn extends React.Component{
             selectableArea: this.editArea.current.selectableArea.current
         })
     }
+
     getImgurl(url){
         this.setState({
             imgurl: url

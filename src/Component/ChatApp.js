@@ -23,9 +23,6 @@ class ChatContent extends React.Component{
                     dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
                     content.push(dateSeparator)
                 }
-                // if(dateSeparator){
-                //     content.push(dateSeparator)
-                // }
                 date = new Date(message.time).getDate();
                 let hour = new Date(message.time).getHours();
                 if(hour.toString().length<2){hour = '0'+hour}
@@ -257,7 +254,7 @@ class ChatHeader extends React.Component{
     }
     componentDidMount(){
         let db = this.props.db;
-        db.collection('chatrooms').doc(this.props.docId).collection('members')
+        let unsubscribe = db.collection('chatrooms').doc(this.props.docId).collection('members')
         .onSnapshot((snap)=>{
             let arr = [];
             snap.docChanges().forEach(doc=>{
@@ -272,12 +269,18 @@ class ChatHeader extends React.Component{
             }))
         })
     }
+    componentWillUnmount(){
+        unsubscribe();
+    }
 }
 
 class ChatApp extends React.Component{
     constructor(props){
         super(props);
         this.chatapp = React.createRef();
+        this.getBorder = this.getBorder.bind(this);
+        this.startDrag = this.startDrag.bind(this);
+        this.stopDrag = this.stopDrag.bind(this);
         this.state={
             startX: null
         }
@@ -351,14 +354,14 @@ class ChatApp extends React.Component{
         </div>
     }
     componentDidMount(){
-        window.addEventListener('mousemove', this.getBorder.bind(this))
-        window.addEventListener('mousedown', this.startDrag.bind(this))
-        window.addEventListener('mouseup', this.stopDrag.bind(this))
+        window.addEventListener('mousemove', this.getBorder)
+        window.addEventListener('mousedown', this.startDrag)
+        window.addEventListener('mouseup', this.stopDrag)
     }
     componentWillUnmount(){
-        window.removeEventListener('mousemove', this.getBorder.bind(this))
-        window.removeEventListener('mousedown', this.startDrag.bind(this))
-        window.removeEventListener('mouseup', this.stopDrag.bind(this))
+        window.removeEventListener('mousemove', this.getBorder)
+        window.removeEventListener('mousedown', this.startDrag)
+        window.removeEventListener('mouseup', this.stopDrag)
     }
 }
 
