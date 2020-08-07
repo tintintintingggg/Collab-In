@@ -1,5 +1,6 @@
 import React from 'react';
-import '../css/WebHeader.css';
+import {db} from '../../../utils/firebase';
+import '../../../css/WebHeader.css';
 
 class WebHeader extends React.Component{
     constructor(props){
@@ -13,13 +14,12 @@ class WebHeader extends React.Component{
         }
     }
     getName(e){
-        let db = this.props.db;
         this.setState({nameValue: e.target.value}, ()=>{
             db.collection('documents').doc(this.props.docId).update({
                 name: this.state.nameValue
             })
-            .catch(() => {console.log(error.message)})
-        })
+            .catch(() => {console.log(error.message)});
+        });
     }
     copyUrl(){
         this.urlInput.current.select();
@@ -31,12 +31,12 @@ class WebHeader extends React.Component{
     handleCopyUrlState(alertText){
         this.setState({copyUrl: alertText},
             ()=>{window.setTimeout(()=>{this.setState({copyUrl: ''})}, 1000)}
-        )
+        );
     }
     handleShareList(){
         this.setState(prevState=>({
             shareListIsOpen: !prevState.shareListIsOpen
-        }))
+        }));
     }
     render(){
         let onlineUserName = [];
@@ -46,8 +46,8 @@ class WebHeader extends React.Component{
                 if(user){
                     let item = <div key={user}><div></div>{user}</div>
                     onlineUserName.push(item);
-                }
-            })
+                };
+            });
             online = <div className="online-state">
                 <div className="online-total" id="online-total-web">
                     <div><img src="/images/online.png" /></div>
@@ -60,7 +60,7 @@ class WebHeader extends React.Component{
                 <div className="online-list">
                     {onlineUserName}
                 </div>
-            </div>
+            </div>;
         }
         return <div className='docHeader'>
             <div className="headerleft">
@@ -104,23 +104,22 @@ class WebHeader extends React.Component{
                 </div>
                 {online}
             </div>
-        </div>
+        </div>;
     }
     componentDidMount(){
-        let db = this.props.db;
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             this.setState({
                 nameValue: doc.data().name
             })
-        }).catch((error) => {console.log(error.message)})
+        }).catch((error) => {console.log(error.message)});
 
         db.collection('documents').doc(this.props.docId)
         .onSnapshot((doc) => {
             if(!doc.metadata.hasPendingWrites){
                 this.setState({
                     nameValue: doc.data().name
-                })
+                });
             }
         });
 
@@ -133,11 +132,14 @@ class WebHeader extends React.Component{
                     userContainer.push(userData.data().name)
                     this.setState({
                         onlineUser: userContainer
-                    })
+                    });
                 })
-                .catch((error)=>{console.log(error)})
+                .catch((error)=>{console.log(error)});
             })
         })        
+    }
+    componentWillUnmount(){
+        //?????
     }
 }
 

@@ -1,288 +1,19 @@
 import React from 'react';
-import '../css/ChatApp.css'
-
-class ChatContent extends React.Component{
-    constructor(props){
-        super(props);
-        this.chatContent=React.createRef();
-        this.state={
-            content: [],
-            isLoading: false
-        }
-    }
-    render(){
-        let content = [];
-        let date;
-        if(this.state.content.length>0){
-            this.state.content.forEach((message, index)=>{
-                let item;
-                let dateSeparator;
-                let year = new Date(message.time).getFullYear();
-                let month = new Date(message.time).toLocaleString('en-us', {month: 'long'});
-                if(!date || date !== new Date(message.time).getDate()){
-                    dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
-                    content.push(dateSeparator)
-                }
-                date = new Date(message.time).getDate();
-                let hour = new Date(message.time).getHours();
-                if(hour.toString().length<2){hour = '0'+hour}
-                let minute = new Date(message.time).getMinutes()
-                if(minute.toString().length<2){minute = '0'+minute}
-                if(this.props.currentUser.uid !== message.user){
-                    let photoSrc = '/images/user-1.png';
-                    if(message.photo){ photoSrc = message.photo; }
-                    
-                    item = <div key={index} className="message-item other-user">
-                        <div className="user-pic"><img src={photoSrc} /></div>
-                        <div className="message-content">
-                            <div className="content-name">{message.name}</div>
-                            <div className="text-wrap">
-                                <div className="content-text">{message.text}</div>
-                                <div className="content-time">
-                                    <div><img src="/images/clock.png" /></div>
-                                    {hour+':'+minute}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }else{
-                    item = <div key={index} className="message-item myself">
-                        <div className="message-content">
-                            <div className="text-wrap">
-                                <div className="content-text">{message.text}</div>
-                                <div className="content-time">
-                                    <div><img src="/images/clock.png" /></div>
-                                    {hour+':'+minute}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                content.push(item)
-            })
-        }
-        if(this.chatContent.current){
-            this.chatContent.current.scrollIntoView(false);
-            this.chatContent.current.scrollTop = 9999999999;
-        }
-        return <div className="chat-content" ref={this.chatContent}>
-           {content}
-        </div>
-    }
-    componentDidMount(){
-        let db = this.props.db;
-        db.collection('chatrooms').doc(this.props.docId).collection('messages')
-        .orderBy("time")
-        .onSnapshot((snap)=>{
-            let arr = [];
-            snap.docChanges().forEach(doc=>{
-                if(doc.type === 'added'){
-                    arr.push(doc.doc.data())
-                }
-            })
-            this.setState(prevState => ({
-                isLoading: true,
-                content: prevState.content.concat(arr)
-            }))
-        })
-        let div = this.chatContent.current
-        div.scrollTop = (div.scrollHeight)-(div.clientHeight);
-    }
-}
-
-class ChatInput extends React.Component{
-    constructor(props){
-        super(props);
-        this.input = React.createRef();
-        this.emojis = React.createRef();
-        this.state={
-            input: null
-        }
-    }
-    getInput(e){
-        this.setState({
-            input: e.target.value
-        })
-    }
-    sendInput(e){
-        e.preventDefault();
-        let db = this.props.db;
-        if(this.props.currentUser){
-            if(this.state.input){
-                this.input.current.value = null;
-                db.collection('chatrooms').doc(this.props.docId).collection('messages').doc().set({
-                    user: this.props.currentUser.uid,
-                    name: this.props.currentUser.displayName,
-                    photo: this.props.currentUser.photoURL,
-                    text: this.state.input,
-                    time: Date.now()
-                })
-                .then(()=>{
-                    this.setState({
-                        input: null
-                    })
-                }).catch((error)=>{alert(error)})
-            }else{
-                alert("You didn't type anything")
-            }
-        }else{
-            alert('not log in')
-        }
-    }
-    pickEmoji(e){
-        this.input.current.value = this.input.current.value+e.target.textContent;
-        this.setState({
-            input: this.input.current.value
-        })
-        let emojis = this.emojis.current;
-        emojis.style.display = 'none';
-        emojis.innerHTML = ''
-
-    }
-    getEmojis(){
-        let emojis = this.emojis.current;
-        if(emojis.style.display === 'none'){
-            emojis.style.display = 'block';
-            let emojiList = [
-                '&#128512;', '&#128513;', '&#128514;','&#129315;', '&#128515;', 
-                '&#128516;', '&#128517;', '&#128518;', '&#128521;', '&#128522;',	
-                '&#128523;', '&#128526;', '&#128525;', '&#128536;',	'&#128535;',	
-                '&#128537;', '&#128538;', '&#128578;', '&#129303;',	'&#129300;',	
-                '&#128528;', '&#128529;', '&#128566;', '&#128580;', '&#128527;',	
-                '&#128547;', '&#128549;', '&#128558;', '&#129296;', '&#128559;',
-                '&#128554;', '&#128555;', '&#128564;', '&#128524;', '&#129299;',	
-                '&#128539;', '&#128540;', '&#128541;', '&#129316;', '&#128530;',	
-                '&#128531;', '&#128532;', '&#128533;', '&#128579;',	'&#129297;',
-                '&#128562;', '&#128577;', '&#128534;', '&#128542;',	'&#128543;',	
-                '&#128548;', '&#128546;', '&#128557;', '&#128550;',	'&#128551;',	
-                '&#128552;', '&#128553;', '&#128556;', '&#128560;',	'&#128561;',	
-                '&#128563;', '&#128565;', '&#128545;', '&#128544;', '&#128519;',	
-                '&#129312;', '&#129313;', '&#129317;', '&#128567;',	'&#129298;',	
-                '&#129301;', '&#129314;', '&#129319;', '&#128520;',	'&#128127;',	
-                '&#128121;', '&#128122;', '&#128128;', '&#128123;',	'&#128125;',	
-                '&#128126;', '&#129302;', '&#128169;', '&#128570;',	'&#128568;',	
-                '&#128569;', '&#128571;', '&#128572;', '&#128573;',	'&#128576;',	
-                '&#128575;', '&#128574;', '&#128584;', '&#128585;', '&#128586;',
-                '&#128129;', '&#127995;', '&#127996;', '&#127997;', '&#127998;',	
-                '&#127999;', '&#128587;', '&#127995;', '&#127996;', '&#127997;',	
-                '&#127998;', '&#127999;',		
-            ];
-            for(let i = 0; i<emojiList.length; i++){
-                let item = document.createElement('span');
-                item.innerHTML = emojiList[i]+' ';
-                item.setAttribute('class', "my-emoji");
-                item.onclick = this.pickEmoji.bind(this);
-                emojis.appendChild(item);
-            }
-        }else{
-            emojis.style.display = 'none';
-            emojis.innerHTML = ''
-        }
-    }
-    render(){
-        return  <div className="chat-input">
-            <div className="emojis" style={{display: 'none'}} ref={this.emojis}>
-            </div>
-            <button onClick={this.getEmojis.bind(this)}><img src="/images/chat-input-add.png" /></button>
-            <form onSubmit={this.sendInput.bind(this)}>
-                <input
-                    id="chat-input-block"
-                    type="text" 
-                    placeholder="Say something..." 
-                    onChange={this.getInput.bind(this)}
-                    ref={this.input}
-                  />
-                <button id="chat-input-submit" type="submit"><img src="/images/chat-input-send.png" /></button>
-            </form>
-        </div>
-    }
-}
-
-class ChatHeader extends React.Component{
-    constructor(props){
-        super(props);
-        this.membersList = React.createRef();
-        this.state={
-            members: [],
-            isLoading: false,
-            membersList: []
-        }
-    }
-    showMembers(){
-        let db = this.props.db;
-        if(this.membersList.current.style.display === 'none'){
-            this.membersList.current.style.display = 'flex';
-            this.state.members.map(doc=>{
-                db.collection('users').doc(doc.id).get()
-                .then(data=>{
-                    this.setState((prevState)=>({
-                        membersList: prevState.membersList.concat([data.data().name])
-                    }))
-                })
-                .catch(error=>{console.log(error.message)})
-            })
-        }else{
-            this.membersList.current.style.display = 'none';
-            this.setState({
-                membersList: []
-            })
-        }
-    }
-    render(){
-        let members = ''
-        if(this.state.isLoading){
-            members = this.state.members.length
-        }
-        let list = ''
-        if(this.state.membersList.length>0){
-            let arr=[];
-            this.state.membersList.map(doc=>{
-                let item = <div key={doc}>{doc}</div>
-                arr.push(item);
-            })
-            list = arr
-        }
-        return <div className="chat-header">
-                <div>
-                    <div className="shrink-btn" onClick={this.props.handleChatRoom}><img src="/images/minimize.png" /></div>
-                    <div className="group-members" onClick={this.showMembers.bind(this)}>Members ({members})</div>
-                </div>
-                <div className="members-list" ref={this.membersList}
-                    style={{display: 'none'}}
-                >{list}</div>
-        </div>
-    }
-    componentDidMount(){
-        let db = this.props.db;
-        let unsubscribe = db.collection('chatrooms').doc(this.props.docId).collection('members')
-        .onSnapshot((snap)=>{
-            let arr = [];
-            snap.docChanges().forEach(doc=>{
-                if(doc.type === 'added'){
-                    arr.push(doc.doc.data())
-                }
-            })
-            console.log('members', arr)
-            this.setState((prevState)=>({
-                isLoading: true,
-                members: prevState.members.concat(arr)
-            }))
-        })
-    }
-    componentWillUnmount(){
-        unsubscribe();
-    }
-}
+import {ChatContent} from './ChatContent';
+import {ChatHeader} from './ChatHeader';
+import {ChatInput} from './ChatInput';
+import '../../../css/ChatApp.css';
 
 class ChatApp extends React.Component{
     constructor(props){
         super(props);
         this.chatapp = React.createRef();
-        this.getBorder = this.getBorder.bind(this);
+        this.handleDragChatRoom = this.handleDragChatRoom.bind(this);
         this.startDrag = this.startDrag.bind(this);
         this.stopDrag = this.stopDrag.bind(this);
         this.state={
-            startX: null
+            startX: null,
+            startWidth: null
         }
     }
     getBorder(e){
@@ -290,26 +21,25 @@ class ChatApp extends React.Component{
         let rect = div.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let thickness = 5;
-        if(x<thickness && x>(-thickness)){
-            div.style.cursor = 'col-resize';
-        }else{
-            div.style.cursor = 'default';
+        div.style.cursor = x<thickness && x>(-thickness) ? 'col-resize' : 'default';
+    }
+    dragging(e){
+        let startX = this.state.startX;
+        let startWidth = this.state.startWidth;
+        let div = this.chatapp.current;
+        let parentDivRect = div.parentNode.getBoundingClientRect();
+        let parentDivWidth = parentDivRect.right-parentDivRect.left;
+        let changingWidth = startX-e.clientX;
+        let resizedWidth = (startWidth+changingWidth)*100/parentDivWidth;
+        if(resizedWidth<70 && resizedWidth>20){
+            div.style.width = resizedWidth+'%';
+            div.previousSibling.style.width = (100-resizedWidth)+'%';
         }
-        // after clicking
+    }
+    handleDragChatRoom(e){
+        this.getBorder(e);
         if(this.state.startX){
-            let startX = this.state.startX;
-            let div = this.chatapp.current;
-            let parentDiv = div.parentNode;
-            let rect = div.getBoundingClientRect();
-            let parentDivRect = parentDiv.getBoundingClientRect();
-            let parentDivWidth = parentDivRect.right-parentDivRect.left;
-            let startWidth = rect.right-rect.left;
-            let changingWidth = (startX-e.clientX)/20;
-            let resizedWidth = (startWidth+changingWidth)/parentDivWidth*100
-            if(resizedWidth<60 && resizedWidth>20){
-                div.style.width = resizedWidth+'%';
-                div.previousSibling.style.width = (100-resizedWidth)+'%';
-            }
+            this.dragging(e);
         }
     }
     startDrag(e){
@@ -319,47 +49,45 @@ class ChatApp extends React.Component{
         let thickness = 5;
         if(x<thickness && x>(-thickness)){
             this.setState({
-                startX: e.clientX
+                startX: e.clientX,
+                startWidth: rect.right-rect.left
             })
         }
     }
     stopDrag(){
         this.setState({
-            startX: null,  
+            startX: null
         })
     }
     render(){
         return <div 
             className='chat-app' 
             id="chat-app" 
-            style={{display: 'flex'}} 
+            style={this.props.chatAppBlockIsOpen ? {display: 'flex'} : {display: 'none'}}
             ref={this.chatapp}
         >
             <ChatHeader
-                db={this.props.db}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
                 handleChatRoom={this.props.handleChatRoom}
              />
              <ChatContent
-                db={this.props.db}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
              />
             <ChatInput 
-                db={this.props.db}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
              />
         </div>
     }
     componentDidMount(){
-        window.addEventListener('mousemove', this.getBorder)
+        window.addEventListener('mousemove', this.handleDragChatRoom)
         window.addEventListener('mousedown', this.startDrag)
         window.addEventListener('mouseup', this.stopDrag)
     }
     componentWillUnmount(){
-        window.removeEventListener('mousemove', this.getBorder)
+        window.removeEventListener('mousemove', this.handleDragChatRoom)
         window.removeEventListener('mousedown', this.startDrag)
         window.removeEventListener('mouseup', this.stopDrag)
     }

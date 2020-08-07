@@ -2,8 +2,9 @@ import React from 'react';
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import {Homepage} from './Homepage';
+import {Homepage} from './Homepage/Homepage';
 import {LoadingPage} from './LoadingPage';
+import {db} from '../utils/firebase';
 
 class App extends React.Component{
     constructor(props){
@@ -19,9 +20,6 @@ class App extends React.Component{
         if(this.state.currentUser !== undefined){
             return <div className="app">
                 <Homepage 
-                    db={this.props.db}
-                    realtimeDb={this.props.realtimeDb}
-                    storage={this.props.storage}
                     signUp={this.signUp.bind(this)}
                     signIn={this.signIn.bind(this)}
                     googleSignIn={this.googleSignIn.bind(this)}
@@ -35,7 +33,6 @@ class App extends React.Component{
         }
     }
     componentDidMount(){
-        let db = this.props.db;
         firebase.auth().onAuthStateChanged(user => {
             if(user){
                 this.setUserDataInState(user);
@@ -142,7 +139,8 @@ class App extends React.Component{
         .then(function(result) {
             let token = result.credential.accessToken;
             alert('You are logged in!');
-        }).catch(function(error) {
+        })
+        .catch(function(error) {
             alert(error.message);
         });
     }

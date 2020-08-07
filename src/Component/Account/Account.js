@@ -1,6 +1,7 @@
 import React from 'react';
-import '../css/Account.css';
-import {LoadingPage} from './LoadingPage';
+import '../../css/Account.css';
+import {LoadingPage} from '../LoadingPage';
+import {db, storage} from '../../utils/firebase';
 
 class MyDocuments extends React.Component{
     constructor(props){
@@ -49,24 +50,20 @@ class AccountSetting extends React.Component{
     chancgProfile(e){
         let file = e.target.files[0];
         let currentUser = this.props.currentUser;
-        let storageRef = this.props.storage.ref(currentUser.uid+'/'+file.name);
+        let storageRef = storage.ref(currentUser.uid+'/'+file.name);
         storageRef.put(file)
         .then(()=>{
-            storageRef.getDownloadURL()
-            .then((url)=>{
-                currentUser.updateProfile({photoURL: url})
-                .then(()=>{
-                    this.props.updateUserData({
-                        username: this.props.userData.username,
-                        photoURL: url
-                    })
-                })
-                .catch(error=>{console.log(error.message)})
-            })
-            .catch((error)=>{alert(error.message)})
-        })
-        .catch((error)=>{alert(error.message)})
+            return storageRef.getDownloadURL();
+        }).then((url)=>{
+            return currentUser.updateProfile({photoURL: url});
+        }).then(()=>{
+            this.props.updateUserData({
+                username: currentUser.displayName,
+                photoURL: currentUser.photoURL
+            });
+        }).catch(()=>{console.log(error.message);});
     }
+    
     render(){
         if(!this.props.userData){
             return <LoadingPage />
@@ -112,7 +109,6 @@ class Account extends React.Component{
         this.setState({
             docDataFromDb: null
         }, ()=>{
-            let db = this.props.db;
             let currentUser = this.props.currentUser;
             let docArr = [];
             let empty = 'No Documents!';
@@ -168,9 +164,7 @@ class Account extends React.Component{
              />
         }else if(this.state.currentPage === 'accountSetting'){
             main = <AccountSetting
-                db={this.props.db}
                 currentUser={this.props.currentUser}
-                storage={this.props.storage}
                 userData={this.state.userData}
                 updateUserData={this.updateUserData.bind(this)}
              />

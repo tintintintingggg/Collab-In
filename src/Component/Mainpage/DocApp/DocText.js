@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/DocText.css';
-
+import '../../../css/DocText.css';
+import {db} from '../../../utils/firebase';
 
 class DocText extends React.Component{
     constructor(props){
@@ -11,13 +11,6 @@ class DocText extends React.Component{
             docText: null
         }
     }
-    // updateDocInfoInState(text, name){
-    //     console.log('update currentText');
-    //     this.setState({
-    //         docText: text,
-    //         docName: name
-    //     })
-    // }
     render(){
         if(this.props.imgurl){
             let img = document.createElement('img');
@@ -33,7 +26,6 @@ class DocText extends React.Component{
                     contentEditable="true" 
                     suppressContentEditableWarning='true'
                     id="selectable-area"  
-                    db={this.props.db}
                     ref={this.selectableArea}
                 >
                 </div>
@@ -142,13 +134,12 @@ class DocText extends React.Component{
     
     componentDidMount(){
         let docId = this.props.docId;
-        let db = this.props.db
         let text;
         let textContainer = this.selectableArea.current;
         let currentVersion=0;
         let starttime = null;
 
-        let unsubscribe = db.collection("documents").doc(docId)
+        this.unsubscribe = db.collection("documents").doc(docId)
         .onSnapshot((doc) => {
             // console.log("is local?",doc.metadata.hasPendingWrites);
             if(!doc.metadata.hasPendingWrites){
@@ -208,7 +199,7 @@ class DocText extends React.Component{
         });
     }
     componentWillUnmount(){
-        unsubscribe();
+        this.unsubscribe();
     }
 }
 

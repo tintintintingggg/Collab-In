@@ -1,12 +1,13 @@
 import React from 'react';
-import {Auth} from './Auth';
-import {MainPage} from './MainPage';
-import {Account} from './Account';
-import {HomepageMainContent} from './HomepageMainContent';
+import {Auth} from '../Auth/Auth';
+import {MainPage} from '../Mainpage/MainPage';
+import {Account} from '../Account/Account';
+import {HomepageContent} from './HomepageContent/HomepageContent';
 import { BrowserRouter, Route, Redirect} from "react-router-dom";
+import {db} from '../../utils/firebase';
 import "firebase/auth";
 import "firebase/firestore";
-import '../css/Homepage.css';
+import '../../css/Homepage.css';
 
 class DocCreate extends React.Component{
     constructor(props){
@@ -14,9 +15,6 @@ class DocCreate extends React.Component{
     }
     render(){
         return <MainPage
-                db={this.props.db}
-                realtimeDb={this.props.realtimeDb}
-                storage={this.props.storage}
                 docId={this.props.docId}
                 currentUser={this.props.currentUser}
              />
@@ -33,53 +31,37 @@ class Homepage extends React.Component{
     }
     handleDocCreate(){
         if(this.props.currentUser){
-            let db = this.props.db;
-            // 建立文件基本資料
+            let uid = this.props.currentUser.uid
             let newDoc = db.collection("documents").doc();
             newDoc.set({
                 name: 'Untitled document',
-                owner: this.props.currentUser.uid,
+                owner: uid,
                 time: Date.now(),
                 text: ' ',
                 version: 0,
                 editorsList: []
-            })
-            .then(()=>{
-                // 建立user擁有的文件
-                let userDoc = db.collection('users').doc(this.props.currentUser.uid)
-                userDoc.collection("userdocs").doc(newDoc.id).set({
+            }).then(()=>{
+                return db.collection('users').doc(uid).collection("userdocs").doc(newDoc.id).set({
                     time: Date.now()
                 })
-                .then(()=>{
-                    console.log('userdoc is set')
-                    // 建立chatroom成員（擁有者本人）
-                    let chatroomMembers = db.collection('chatrooms').doc(newDoc.id)
-                    .collection('members').doc(this.props.currentUser.uid)
-                    chatroomMembers.set({
-                        time: Date.now(),
-                        id: this.props.currentUser.uid
-                    })
-                    .then(()=>{
-                        console.log('chatroom member is set')
-                        // 建立status空array
-                        db.collection('status').doc(newDoc.id).collection('online').doc("total").set({
-                            total: []
-                        })
-                        .then(()=>{
-                            console.log('status total is set')
-                            this.setState({docId: newDoc.id})
-                        })
-                        .catch((error)=>{error.message})
-                    })
-                    .catch((error)=>{error.message})
+            }).then(()=>{
+                console.log('userdoc is set')
+                return db.collection('chatrooms').doc(newDoc.id).collection('members').doc(uid).set({
+                    time: Date.now(),
+                    id: uid
                 })
-                .catch(console.log('userdoc is fail'))
-            })
-            .catch(console.log('data set fail!'))
+            }).then(()=>{
+                console.log('chatroom member is set');
+                return db.collection('status').doc(newDoc.id).collection('online').doc("total").set({
+                    total: []
+                })
+            }).then(()=>{
+                console.log('status total is set')
+                this.setState({docId: newDoc.id})
+            }).catch((error)=>{console.log(error.message)})
         }else{
             alert("Sign In First!");
         }
-        
     }
     render(){
         let path = '/document/';
@@ -98,7 +80,8 @@ class Homepage extends React.Component{
         }
         return <BrowserRouter>
                 <Route exact path='/' >
-                    {docId ? <Redirect to={path} /> : <HomepageMainContent
+                    {docId ? <Redirect to={path} /> : 
+                    <HomepageContent
                         currentUser={this.props.currentUser}
                         signOut={this.props.signOut}
                         handleDocCreate={this.handleDocCreate.bind(this)}
@@ -117,23 +100,19 @@ class Homepage extends React.Component{
                 }} />
                 <Route exact path={path} >
                     <DocCreate 
-                        db={this.props.db}
-                        realtimeDb={this.props.realtimeDb}
-                        storage={this.props.storage}
                         docId={docId}
                         currentUser={this.props.currentUser}
                      />
                 </Route>
                 <Route exact path={accountPath} >
                     <Account
-                        db={this.props.db}
                         docId={docId}
                         currentUser={this.props.currentUser}
-                        storage={this.props.storage}
                         handleDocCreate={this.handleDocCreate.bind(this)}
                      />
                 </Route>
             </BrowserRouter>     
     }
 }
+
 export {Homepage};

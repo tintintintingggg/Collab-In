@@ -1,10 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import {DocApp} from './DocApp';
-import {ChatApp} from './ChatApp';
-import {WebHeader} from './WebHeader';
-import {LoadingPage} from './LoadingPage';
-import '../css/WebHeader.css';
+import {DocApp} from './DocApp/DocApp';
+import {ChatApp} from './ChatApp/ChatApp';
+import {WebHeader} from './WebHeader/WebHeader';
+import {LoadingPage} from '../LoadingPage';
+import {db, realtimeDb} from '../../utils/firebase';
+import '../../css/WebHeader.css';
 
 class PrevStep extends React.Component{
     constructor(props){
@@ -17,15 +18,15 @@ class PrevStep extends React.Component{
                     onClick={()=>{this.props.handleEditor(this.props.currentUser)}}
                 >Add To Group</button>
             </div>
-        </div>
+        </div>;
     }
 }
 class MainPage extends React.Component{
     constructor(props){
         super(props);
-        this.documentLayout = React.createRef();
         this.state={
             saved: true,
+            chatAppBlockIsOpen: true,
             isOwner: false,
             isWaitingEditor: false,
             isEditor: false,
@@ -37,67 +38,51 @@ class MainPage extends React.Component{
             saved: isSaved
         })
     }
-    handleChatRoom(){
-        let chatAppBlock = this.documentLayout.current.childNodes[1];
-        let mobileChatroomIcon = this.documentLayout.current.childNodes[2];
-        let webMode = chatAppBlock.style.display === 'flex' && mobileChatroomIcon.style.display === 'none';
-        if(webMode){
-            chatAppBlock.style.display = 'none';
-            mobileChatroomIcon.style.display = 'block';
-        }else if(!webMode){
-            chatAppBlock.style.display = 'flex';
-            mobileChatroomIcon.style.display = 'none'
-        }
-    }
     setIdentifyStateOnUser(identify){
         this.setState({
             [identify]: true
         })
     }
+    handleChatRoom(){
+        this.setState(prevState=>({
+            chatAppBlockIsOpen: !prevState.chatAppBlockIsOpen
+        }));
+    }
     handleEditor(currentUser){
-        let db = this.props.db;
         alert('Hi, '+currentUser.displayName)
-        db.collection('documents').doc(this.props.docId).get()
-        .then((doc)=>{
+        db.collection('documents').doc(this.props.docId).get().then(doc=>{
             let editorsList = doc.data().editorsList;
             editorsList.push(currentUser.uid);
-            db.collection('documents').doc(this.props.docId).update({
+            return db.collection('documents').doc(this.props.docId).update({
                 editorsList: editorsList
             })
-            .then(()=>{
-                db.collection('users').doc(currentUser.uid).collection('editordocs').doc(this.props.docId).set({
-                    id: this.props.docId,
-                    time: Date.now()
-                })
-                .then(()=>{
-                    db.collection('chatrooms').doc(this.props.docId).collection('members').doc(currentUser.uid).set({
-                        time: Date.now(),
-                        id: currentUser.uid
-                    })
-                    .then(()=>{
-                        this.setIdentifyStateOnUser('isEditor');
-                    })
-                    .catch((error)=>{error.message})   
-                })
-                .catch((error)=>{error.message})
+        }).then(()=>{
+            return db.collection('users').doc(currentUser.uid).collection('editordocs').doc(this.props.docId).set({
+                id: this.props.docId,
+                time: Date.now()
             })
-            .catch((error)=>{error.message})
-        })
-        .catch((error)=>{error.message})
+        }).then(()=>{
+            return db.collection('chatrooms').doc(this.props.docId).collection('members').doc(currentUser.uid).set({
+                time: Date.now(),
+                id: currentUser.uid
+            })
+        }).then(()=>{
+            this.setIdentifyStateOnUser('isEditor');
+        }).catch((error)=>{console.log(error.message)});
     }
     onlineCheck(uid){
         let url = location.href.toString();
         let docId = url.split('document/')[1];
         if(docId !== undefined){
-            let userStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/' + uid);
-            let docStatusDatabaseRef = this.props.realtimeDb.ref(docId+ '/status/')
+            let userStatusDatabaseRef = realtimeDb.ref(docId+ '/status/' + uid);
+            let docStatusDatabaseRef = realtimeDb.ref(docId+ '/status/')
             let isOfflineForDatabase = {
                 state: 'offline',
             };
             let isOnlineForDatabase = {
                 state: 'online',
             };
-            this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+            realtimeDb.ref('.info/connected').on('value', function(snapshot) {
                 if (snapshot.val() == false) {
                     return;
                 };
@@ -109,12 +94,12 @@ class MainPage extends React.Component{
 
             //////
             if(uid !== null){
-                let userStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc(uid);
-                let docStatusFirestoreRef = this.props.db.collection("status").doc(docId).collection('online').doc("total");
+                let userStatusFirestoreRef = db.collection("status").doc(docId).collection('online').doc(uid);
+                let docStatusFirestoreRef = db.collection("status").doc(docId).collection('online').doc("total");
                 let isOfflineForFirestore = {
                     state: 'offline',
                 };
-                this.props.realtimeDb.ref('.info/connected').on('value', function(snapshot) {
+                realtimeDb.ref('.info/connected').on('value', function(snapshot) {
                     if (snapshot.val() == false) {
                         userStatusFirestoreRef.set(isOfflineForFirestore);
                         return;
@@ -154,32 +139,25 @@ class MainPage extends React.Component{
             }else if(this.state.isOwner || this.state.isEditor){
                 doc = <div className="web-header">
                         <WebHeader
-                            db={this.props.db}
-                            realtimeDb={this.props.realtimeDb}
                             docId={this.props.docId}
                             currentUser={this.props.currentUser}
                             saved={this.state.saved}
                          />
-                        <div className="document-layout" ref={this.documentLayout} >
+                        <div className="document-layout">
                             <DocApp
-                                db={this.props.db}
-                                realtimeDb={this.props.realtimeDb}
-                                storage={this.props.storage}
                                 docId={this.props.docId}
                                 currentUser={this.props.currentUser}
                                 detectUpload={this.detectUpload.bind(this)}
                              />
                             <ChatApp
-                                db={this.props.db}
-                                realtimeDb={this.props.realtimeDb}
-                                storage={this.props.storage}
+                                chatAppBlockIsOpen={this.state.chatAppBlockIsOpen}
                                 docId={this.props.docId}
                                 currentUser={this.props.currentUser}
                                 handleChatRoom={this.handleChatRoom.bind(this)}
                              />
                             <div 
                                 id="mobile-chatroom-icon" 
-                                style={{display: 'none'}} 
+                                style={this.state.chatAppBlockIsOpen ? {display: 'none'} : {display: 'block'}}
                                 onClick={this.handleChatRoom.bind(this)}
                              ><img src="/images/mobile-chat.png" /></div>
                         </div>
@@ -189,7 +167,6 @@ class MainPage extends React.Component{
                     <PrevStep
                         handleEditor={this.handleEditor.bind(this)}
                         currentUser={this.props.currentUser}
-                        db={this.props.db} 
                         docId={this.props.docId}
                      />
                 </div>
@@ -198,7 +175,6 @@ class MainPage extends React.Component{
         }
     }
     componentDidMount(){
-        let db = this.props.db;
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             if(this.props.currentUser){
@@ -219,4 +195,5 @@ class MainPage extends React.Component{
         })
     }
 }
+
 export {MainPage};

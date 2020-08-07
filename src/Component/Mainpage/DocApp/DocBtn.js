@@ -2,7 +2,8 @@ import React from 'react';
 import {DocText} from './DocText';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import '../css/DocBtn.css';
+import {db, storage} from '../../../utils/firebase';
+import '../../../css/DocBtn.css';
 
 
 class UndoBtn extends React.Component{
@@ -107,7 +108,7 @@ class FontSizeBtn extends React.Component{
         super(props);
         this.state = {
             value: 16,
-            listDisplay: 'none'
+            showList: false
         }
     }
     getValue(e){
@@ -116,11 +117,9 @@ class FontSizeBtn extends React.Component{
         })
     }
     showList(){
-        if(this.state.listDisplay === 'none'){
-            this.setState({listDisplay: 'block'})
-        }else{
-            this.setState({listDisplay: 'none'})
-        }
+        this.setState(prevState=>({
+            showList: !prevState.showList
+        }))
     }
     getEventTargetValue(e){
         this.showList();
@@ -137,7 +136,7 @@ class FontSizeBtn extends React.Component{
             <div className="font-size-btn-arrow">
                 <button onClick={this.showList.bind(this)}><img src="/images/font-size.png" /></button>
             </div>
-            <div className="font-size-btn-list" style={{display: this.state.listDisplay}} onClick={this.getEventTargetValue.bind(this)}>
+            <div className="font-size-btn-list" style={{display: this.state.showList ? 'block' : 'none'}} onClick={this.getEventTargetValue.bind(this)}>
                 {btns}
             </div>
         </div>
@@ -154,7 +153,7 @@ class ImgBtn extends React.Component{
     handleChange(e){
         let docId = this.props.docId;
         let file = e.target.files[0];
-        let storageRef = this.props.storage.ref(docId+'/'+file.name); 
+        let storageRef = storage.ref(docId+'/'+file.name); 
         // upload file
         storageRef.put(file)
         .then(()=>{
@@ -186,7 +185,6 @@ class DownloadBtn extends React.Component{
     }
     getCanvas(){
         let div = this.props.selectableArea;
-        let db = this.props.db;
         window.scroll(0,0)
         html2canvas(div)
         .then((canvas)=>{
@@ -235,13 +233,12 @@ class DocBtn extends React.Component{
                     <ColorBtn changeStyle={this.changeStyle.bind(this)} />
                     <BackgroundColorBtn changeStyle={this.changeStyle.bind(this)} />
                     <ClearBackgroundColorBtn changeStyle={this.changeStyle.bind(this)} />
-                    <ImgBtn storage={this.props.storage} docId={this.props.docId} getImgurl={this.getImgurl.bind(this)} />
-                    <DownloadBtn docId={this.props.docId} db={this.props.db} selectableArea={this.state.selectableArea}  />
+                    <ImgBtn docId={this.props.docId} getImgurl={this.getImgurl.bind(this)} />
+                    <DownloadBtn docId={this.props.docId} selectableArea={this.state.selectableArea}  />
                 </div>
             </div>
             <DocText 
                 ref={this.editArea}
-                db={this.props.db}
                 docId={this.props.docId}
                 recordText={this.recordText.bind(this)}
                 detectUpload={this.props.detectUpload}
