@@ -49,7 +49,7 @@ class MainPage extends React.Component{
         }));
     }
     handleEditor(currentUser){
-        alert('Hi, '+currentUser.displayName)
+        alert('Hi, '+currentUser.displayName);
         db.collection('documents').doc(this.props.docId).get().then(doc=>{
             let editorsList = doc.data().editorsList;
             editorsList.push(currentUser.uid);
@@ -104,11 +104,8 @@ class MainPage extends React.Component{
                         userStatusFirestoreRef.set(isOfflineForFirestore);
                         return;
                     };                
-                    userStatusDatabaseRef.onDisconnect()
-                        .set(isOfflineForDatabase)
-                        .then(function() {
-                            docStatusDatabaseRef.once("value")
-                            .then(function(doc){
+                    userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(()=>{
+                            docStatusDatabaseRef.once("value").then(doc=>{
                                 let data = doc.val();
                                 let arr = []
                                 for(let prop in data){
@@ -171,7 +168,7 @@ class MainPage extends React.Component{
                      />
                 </div>
             }
-            return <div>{doc}</div>
+            return <div>{doc}</div>;
         }
     }
     componentDidMount(){

@@ -3,6 +3,7 @@ import {Auth} from '../Auth/Auth';
 import {MainPage} from '../Mainpage/MainPage';
 import {Account} from '../Account/Account';
 import {HomepageContent} from './HomepageContent/HomepageContent';
+// import {setDocId} from './lib';
 import { BrowserRouter, Route, Redirect} from "react-router-dom";
 import {db} from '../../utils/firebase';
 import "firebase/auth";
@@ -15,15 +16,17 @@ class DocCreate extends React.Component{
     }
     render(){
         return <MainPage
-                docId={this.props.docId}
-                currentUser={this.props.currentUser}
-             />
+            docId={this.props.docId}
+            currentUser={this.props.currentUser}
+         />
     }
 }
 
 class Homepage extends React.Component{
     constructor(props){
         super(props);
+        this.setDocId = this.setDocId.bind(this);
+        this.setAccountUid = this.setAccountUid.bind(this);
         this.state = {
             docName: null,
             docId: null
@@ -63,21 +66,24 @@ class Homepage extends React.Component{
             alert("Sign In First!");
         }
     }
+    setDocId(currentId, newId){
+        if(currentId){
+            return currentId;
+        }else if(newId){
+            return newId;
+        }else{
+            return null;
+        }
+    }
+    setAccountUid(currentUser){
+        let uid = currentUser ? currentUser.uid : '';
+        return uid;
+    }
     render(){
-        let path = '/document/';
-        let docId;
         let id = location.href.toString().split('document/')[1];
-        if(id){
-            docId = id
-            path = path+docId
-        }else if(this.state.docId){
-            docId = this.state.docId;
-            path = path+docId
-        }
-        let accountPath = '/account/'
-        if(this.props.currentUser){
-            accountPath = '/account/'+this.props.currentUser.uid
-        }
+        let docId = this.setDocId(id, this.state.docId);
+        let path = '/document/'+this.setDocId(id, this.state.docId);
+        let accountPath = '/account/'+this.setAccountUid(this.props.currentUser);
         return <BrowserRouter>
                 <Route exact path='/' >
                     {docId ? <Redirect to={path} /> : 

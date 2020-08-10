@@ -155,15 +155,11 @@ class ImgBtn extends React.Component{
         let file = e.target.files[0];
         let storageRef = storage.ref(docId+'/'+file.name); 
         // upload file
-        storageRef.put(file)
-        .then(()=>{
-            storageRef.getDownloadURL()
-            .then((url)=>{
-                this.props.getImgurl(url)
-            })
-            .catch((error)=>{alert(error.message)})
-        })
-        .catch((error)=>{alert(error.message)})
+        storageRef.put(file).then(()=>{
+            return storageRef.getDownloadURL();
+        }).then(url=>{
+            return this.props.getImgurl(url);
+        }).catch((error)=>{alert(error.message)})
     }
     render(){
         return <div className="img-btn">
@@ -176,7 +172,7 @@ class ImgBtn extends React.Component{
                     onChange={this.handleChange.bind(this)}
                  />
             </div>
-        </div>
+        </div>;
     }
 }
 class DownloadBtn extends React.Component{
@@ -244,14 +240,13 @@ class DocBtn extends React.Component{
                 detectUpload={this.props.detectUpload}
                 imgurl={this.state.imgurl}
             />
-        </div>
+        </div>;
     }
     componentDidMount(){
         this.setState({
             selectableArea: this.editArea.current.selectableArea.current
         })
     }
-
     getImgurl(url){
         this.setState({
             imgurl: url
@@ -371,4 +366,4 @@ class DocBtn extends React.Component{
     };
 }
 
-export {DocBtn} ;
+export {DocBtn};

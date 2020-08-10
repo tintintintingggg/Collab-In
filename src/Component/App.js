@@ -36,54 +36,43 @@ class App extends React.Component{
         firebase.auth().onAuthStateChanged(user => {
             if(user){
                 this.setUserDataInState(user);
-                console.log(user)
+                // console.log(user)
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
-                        user.updateProfile({displayName: this.state.currentUserName})
-                            .then(() => {
-                                db.collection('users').doc(user.uid).set({
-                                    email: user.email,
-                                    uid: user.uid,
-                                    name: user.displayName
-                                })
-                                .then(
-                                    console.log('data is set')
-                                )
-                                .catch((error) => {
-                                    alert(error.message);
-                                });
+                        user.updateProfile({
+                            displayName: this.state.currentUserName
+                        }).then(()=>{
+                            this.setUserDataInDB.call(this, user);
+                        }).then(()=>{
+                            console.log('User created successfully');
+                            this.setState({
+                                currentUserName: undefined
                             })
-                            .catch((error) => {
-                                alert(error.message);
-                            });
+                        }).catch((error)=>{alert(error.message)});
                     }
                 }else if(user.photoURL !== null){
                     db.collection('users').doc(user.uid).get()
                     .then((doc)=>{
                         if(!doc.exists){
-                            db.collection('users').doc(user.uid).set({
-                                email: user.email,
-                                name: user.displayName,
-                                photoURL: user.photoURL,
-                                uid: user.uid
-                            })
-                            .then(()=>{
-                                console.log('User created successfully');
-                            })
-                            .catch((error)=>{
-                                alert(error.message);
-                            });
+                            this.setUserDataInDB.call(this, user);
                         }
-                    }).catch((error)=>{
-                        alert(error.message);
-                    });
+                    }).then(()=>{
+                        console.log('User created successfully');
+                    }).catch((error)=>{alert(error.message)});
                 }
             }else{
-                this.setUserDataInState(null)
+                this.setUserDataInState(null);
             }
-        });  
-        
+        });     
+    }
+    setUserDataInDB(data){
+        db.collection('users').doc(data.uid).set({
+            email: data.email,
+            uid: data.uid,
+            name: data.displayName,
+            photoURL: data.photoURL ? data.photoURL : null
+        })
     }
     setUserDataInState(data){
         this.setState({
@@ -106,10 +95,10 @@ class App extends React.Component{
                 });
                 alert('You are logged in!');
             })
-            // .catch(error => {
-            //     alert('sign up wrong')
-            //     alert(error.message);
-            //   });
+            .catch(error => {
+                alert('sign up wrong')
+                alert(error.message);
+              });
         }   
     }
     signIn(email, password){
@@ -122,8 +111,7 @@ class App extends React.Component{
             .then((cred) => {
                 this.setState({
                     userCredential: cred
-                })
-                alert('You are logged in!');
+                }, ()=>{alert('You are logged in!');});
             })
             .catch((error) => {
                 alert(error.message);
@@ -136,11 +124,11 @@ class App extends React.Component{
             'login_hint': 'user@example.com'
         });
         firebase.auth().signInWithPopup(googleProvider)
-        .then(function(result) {
-            let token = result.credential.accessToken;
+        .then((result)=>{
+            // let token = result.credential.accessToken;
             alert('You are logged in!');
         })
-        .catch(function(error) {
+        .catch((error)=>{
             alert(error.message);
         });
     }
@@ -148,20 +136,20 @@ class App extends React.Component{
     facebookSignIn(){
         let fbProvider = new firebase.auth.FacebookAuthProvider();
         firebase.auth().signInWithPopup(fbProvider)
-        .then(function(result) {
-            let token = result.credential.accessToken;
+        .then((result)=>{
+            // let token = result.credential.accessToken;
             alert('You are logged in!');
         })
-        .catch(function(error) {
+        .catch((error)=>{
             alert(error.message);
         });
     }
     signOut(){
         firebase.auth().signOut()
-        .then(function() {
+        .then(()=>{
             alert("Sign Out!");
         })
-        .catch(function(error) {
+        .catch((error)=>{
             alert(error.message);
         });
     }

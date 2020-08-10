@@ -2,6 +2,8 @@ import React from 'react';
 import '../../css/Account.css';
 import {LoadingPage} from '../LoadingPage';
 import {db, storage} from '../../utils/firebase';
+import {formatTime} from './lib';
+// import {formatTime} from './__test.'
 
 class MyDocuments extends React.Component{
     constructor(props){
@@ -105,6 +107,20 @@ class Account extends React.Component{
             userData: newData
         })
     }
+    // formatTime(time){
+    //     let year = new Date(time).getFullYear();
+    //     let month = new Date(time).getMonth()+1;
+    //     let date = new Date(time).getDate();
+    //     let hour = new Date(time).getHours();
+    //     if(hour.toString().length<2){
+    //         hour = '0'+hour
+    //     };
+    //     let minute = new Date(time).getMinutes();
+    //     if(minute.toString().length<2){
+    //         minute = '0'+minute
+    //     };
+    //     return year+' / '+month+' / '+date+' '+hour+': '+minute;
+    // }
     getAllDocumensFromDb(docType){
         this.setState({
             docDataFromDb: null
@@ -120,19 +136,10 @@ class Account extends React.Component{
                     docs.forEach(doc=>{
                         db.collection('documents').doc(doc.id).get()
                         .then((data)=>{
-                            let name = data.data().name;
-                            let time = data.data().time;
-                            let year = new Date(time).getFullYear();
-                            let month = new Date(time).getMonth()+1;
-                            let date = new Date(time).getDate();
-                            let hour = new Date(time).getHours();
-                            if(hour.toString().length<2){hour = '0'+hour}
-                            let minute = new Date(time).getMinutes();
-                            if(minute.toString().length<2){minute = '0'+minute}
                             docArr.push(<a href={`/document/${doc.id}`} key={doc.id} className="document-item">
                                     <section>
-                                        <div className="doc-item-name">{name}</div>
-                                        <div className="doc-item-time">{`${year} / ${month} / ${date} ${hour}: ${minute}`}</div>
+                                        <div className="doc-item-name">{data.data().name}</div>
+                                        <div className="doc-item-time">{formatTime(data.data().time)}</div>
                                     </section>
                                 </a>);
                             this.setState({

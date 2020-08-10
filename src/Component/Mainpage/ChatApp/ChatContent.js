@@ -1,4 +1,5 @@
 import React from 'react';
+import {justifyNumberToTwoDigits} from '../lib';
 import {db} from '../../../utils/firebase';
 
 class ChatContent extends React.Component{
@@ -10,28 +11,38 @@ class ChatContent extends React.Component{
             isLoading: false
         }
     }
+    formatDate(time){
+        let date = new Date(time).getDate();
+        let month = new Date(time).toLocaleString('en-us', {month: 'long'});
+        let year = new Date(time).getFullYear();
+        return {date: date, month: month, year: year};
+    }
+    showDate(showDataarea, time){
+        let data = this.formatDate(time);
+        showDataarea = <div className="date-separator" key={time}>{`${data.date}  ${data.month}  ${data.year}`}</div>;
+        return showDataarea;
+    }
+    formatTime(time){
+        let hour = new Date(time).getHours();
+        hour = justifyNumberToTwoDigits(hour);
+        let minute = new Date(time).getMinutes();
+        minute = justifyNumberToTwoDigits(minute);
+        // return {hour: hour, minute: minute};
+        return hour+':'+minute;
+    }
     render(){
         let content = [];
-        let date;
         if(this.state.content.length>0){
+            let date;
             this.state.content.forEach((message, index)=>{
                 let item;
                 let dateSeparator;
-                let year = new Date(message.time).getFullYear();
-                let month = new Date(message.time).toLocaleString('en-us', {month: 'long'});
                 if(!date || date !== new Date(message.time).getDate()){
-                    dateSeparator = <div className="date-separator" key={message.time}>{`${new Date(message.time).getDate()}  ${month}  ${year}`}</div>
-                    content.push(dateSeparator)
+                    content.push(this.showDate.call(this, dateSeparator, message.time))
                 }
                 date = new Date(message.time).getDate();
-                let hour = new Date(message.time).getHours();
-                if(hour.toString().length<2){hour = '0'+hour}
-                let minute = new Date(message.time).getMinutes()
-                if(minute.toString().length<2){minute = '0'+minute}
                 if(this.props.currentUser.uid !== message.user){
-                    let photoSrc = '/images/user-1.png';
-                    if(message.photo){ photoSrc = message.photo; }
-                    
+                   let photoSrc = message.photo ? message.photo : '/images/user-1.png';
                     item = <div key={index} className="message-item other-user">
                         <div className="user-pic"><img src={photoSrc} /></div>
                         <div className="message-content">
@@ -40,11 +51,11 @@ class ChatContent extends React.Component{
                                 <div className="content-text">{message.text}</div>
                                 <div className="content-time">
                                     <div><img src="/images/clock.png" /></div>
-                                    {hour+':'+minute}
+                                    {this.formatTime.call(this, message.time)}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>;
                 }else{
                     item = <div key={index} className="message-item myself">
                         <div className="message-content">
@@ -52,13 +63,13 @@ class ChatContent extends React.Component{
                                 <div className="content-text">{message.text}</div>
                                 <div className="content-time">
                                     <div><img src="/images/clock.png" /></div>
-                                    {hour+':'+minute}
+                                    {this.formatTime.call(this, message.time)}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>;
                 }
-                content.push(item)
+                content.push(item);
             })
         }
         if(this.chatContent.current){

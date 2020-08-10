@@ -63,7 +63,7 @@ class ChatApp extends React.Component{
         return <div 
             className='chat-app' 
             id="chat-app" 
-            style={this.props.chatAppBlockIsOpen ? {display: 'flex'} : {display: 'none'}}
+            style={{display: this.props.chatAppBlockIsOpen ? 'flex' : 'none'}}
             ref={this.chatapp}
         >
             <ChatHeader

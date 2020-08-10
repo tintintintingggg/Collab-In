@@ -7,6 +7,9 @@ class HomepageAbout extends React.Component{
         super(props);
         this.aboutContainer = React.createRef();
         this.handleScroll = this.handleScroll.bind(this);
+        // this.state={
+        //     textIsShow: false
+        // }
     }
     addClassOnscroll(el){
         el.childNodes.forEach((item)=>{

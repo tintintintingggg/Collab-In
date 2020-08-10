@@ -1,0 +1,989 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChatInput Emoji UI Test 1`] = `
+<div
+  className="emojis"
+  style={
+    Object {
+      "display": "none",
+    }
+  }
+>
+  
+</div>
+`;
+
+exports[`ChatInput Emoji UI Test 2`] = `
+<div
+  className="emojis"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
+>
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128512; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128513; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128514; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129315; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128515; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128516; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128517; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128518; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128521; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128522; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128523; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128526; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128525; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128536; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128535; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128537; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128538; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128578; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129303; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129300; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128528; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128529; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128566; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128580; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128527; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128547; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128549; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128558; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129296; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128559; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128554; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128555; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128564; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128524; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129299; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128539; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128540; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128541; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129316; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128530; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128531; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128532; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128533; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128579; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129297; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128562; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128577; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128534; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128542; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128543; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128548; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128546; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128557; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128550; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128551; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128552; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128553; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128556; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128560; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128561; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128563; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128565; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128545; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128544; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128519; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129312; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129313; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129317; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128567; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129298; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129301; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129314; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129319; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128520; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128127; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128121; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128122; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128128; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128123; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128125; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128126; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#129302; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128169; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128570; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128568; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128569; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128571; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128572; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128573; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128576; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128575; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128574; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128584; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128585; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128586; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128129; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127995; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127996; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127997; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127998; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127999; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#128587; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127995; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127996; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127997; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127998; ",
+      }
+    }
+    onClick={[Function]}
+  />
+  <span
+    className="my-emoji"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "&#127999; ",
+      }
+    }
+    onClick={[Function]}
+  />
+</div>
+`;

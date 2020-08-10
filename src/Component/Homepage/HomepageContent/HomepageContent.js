@@ -9,8 +9,6 @@ import {HomepageAbout} from './HomepageAbout';
 class HomepageContent extends React.Component{
     constructor(props){
         super(props);
-        this.navAbout = React.createRef();
-        this.mainpic = React.createRef();
         this.handleScroll = this.handleScroll.bind(this)
         this.state={
             isHeaderFixed: false

@@ -1,13 +1,20 @@
 import React from 'react';
 import {db} from '../../../utils/firebase';
 
-class ChatInput extends React.Component{
+class EmojiBtn extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    render(){
+        return <button onClick={this.props.handleEmojisToShow}>
+            <img src="/images/chat-input-add.png" />
+        </button>
+    }
+}
+class EmojiList extends React.Component{
     constructor(props){
         super(props);
-        this.input = React.createRef();
         this.state={
-            input: null,
-            showEmojis: false,
             emojiList: [
                 '&#128512;', '&#128513;', '&#128514;','&#129315;', '&#128515;', 
                 '&#128516;', '&#128517;', '&#128518;', '&#128521;', '&#128522;',	
@@ -32,6 +39,40 @@ class ChatInput extends React.Component{
                 '&#127999;', '&#128587;', '&#127995;', '&#127996;', '&#127997;',	
                 '&#127998;', '&#127999;',		
             ]
+        }
+    }
+    pickEmoji(e){
+        console.log(e.target.textContent);
+        this.props.handleInputPlusEmoji(e.target.textContent);
+        this.props.handleEmojisToShow();
+    }
+    render(){
+        let emojiList = '';
+        if(this.props.showEmojis){
+            emojiList = [];
+            for(let i = 0; i<this.state.emojiList.length; i++){
+                let item = <span 
+                    dangerouslySetInnerHTML={{__html: this.state.emojiList[i]+' '}} 
+                    key={i}
+                    className="my-emoji"
+                    onClick={this.pickEmoji.bind(this)}
+                    ></span>;
+                emojiList.push(item);
+            }
+        }
+        return <div className="emojis" style={{display: this.props.showEmojis ? 'block' : 'none'}}>
+            {emojiList}
+        </div>
+    }
+}
+
+class ChatInput extends React.Component{
+    constructor(props){
+        super(props);
+        this.input = React.createRef();
+        this.state={
+            input: null,
+            showEmojis: false
         }
     }
     getInput(e){
@@ -68,32 +109,45 @@ class ChatInput extends React.Component{
             input: this.input.current.value
         });
         this.handleEmojisToShow();
-
     }
     handleEmojisToShow(){
         this.setState(prevState=>({
             showEmojis: !prevState.showEmojis
         }));
     }
+    handleInputPlusEmoji(emoji){
+        this.input.current.value += emoji;
+        this.setState({
+            input: this.input.current.value
+        });
+    }
     render(){
-        let emojiList = '';
-        if(this.state.showEmojis){
-            emojiList = [];
-            for(let i = 0; i<this.state.emojiList.length; i++){
-                let item = <span 
-                    dangerouslySetInnerHTML={{__html: this.state.emojiList[i]+' '}} 
-                    key={i}
-                    className="my-emoji"
-                    onClick={this.pickEmoji.bind(this)}
-                    ></span>;
-                emojiList.push(item);
-            }
-        }
+        // let emojiList = '';
+        // if(this.state.showEmojis){
+        //     emojiList = [];
+        //     for(let i = 0; i<this.state.emojiList.length; i++){
+        //         let item = <span 
+        //             dangerouslySetInnerHTML={{__html: this.state.emojiList[i]+' '}} 
+        //             key={i}
+        //             className="my-emoji"
+        //             onClick={this.pickEmoji.bind(this)}
+        //             ></span>;
+        //         emojiList.push(item);
+        //     }
+        // }
         return  <div className="chat-input">
-            <div className="emojis" style={{display: this.state.showEmojis ? 'block' : 'none'}}>
+            <EmojiList
+                showEmojis={this.state.showEmojis}
+                handleEmojisToShow={this.handleEmojisToShow.bind(this)}
+                handleInputPlusEmoji={this.handleInputPlusEmoji.bind(this)}
+             />
+            {/* <div className="emojis" style={{display: this.state.showEmojis ? 'block' : 'none'}}>
                 {emojiList}
-            </div>
-            <button onClick={this.handleEmojisToShow.bind(this)}><img src="/images/chat-input-add.png" /></button>
+            </div> */}
+            {/* <button onClick={this.handleEmojisToShow.bind(this)}><img src="/images/chat-input-add.png" /></button> */}
+            <EmojiBtn
+                handleEmojisToShow={this.handleEmojisToShow.bind(this)}
+             />
             <form onSubmit={this.sendInput.bind(this)}>
                 <input
                     id="chat-input-block"
@@ -108,4 +162,4 @@ class ChatInput extends React.Component{
     }
 }
 
-export {ChatInput};
+export {ChatInput, EmojiList};

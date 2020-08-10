@@ -129,7 +129,7 @@ class WebHeader extends React.Component{
             snapshot.data().total.forEach(userId=>{
                 db.collection('users').doc(userId).get()
                 .then((userData)=>{
-                    userContainer.push(userData.data().name)
+                    userContainer.push(userData.data().name);
                     this.setState({
                         onlineUser: userContainer
                     });

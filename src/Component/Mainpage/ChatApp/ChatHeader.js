@@ -31,7 +31,7 @@ class ChatHeader extends React.Component{
                 </div>
                 <div className="members-list" style={{display: this.state.showMembers ? 'flex' : 'none'}}
                 >{list}</div>
-        </div>
+        </div>;
     }
     componentDidMount(){
         this.unsubscribe = db.collection('chatrooms').doc(this.props.docId).collection('members')

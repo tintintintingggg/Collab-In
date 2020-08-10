@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --open",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest",
+    "test-update-snapshot": "jest --updateSnapshot"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,8 @@
     "@babel/preset-react": "^7.10.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
+    "jest": "^26.2.2",
+    "react-test-renderer": "^16.13.1",
     "redux-devtools": "^3.6.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
@@ -24,6 +27,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "@react-pdf/renderer": "^1.6.10",
     "firebase": "^7.15.5",
     "firebase-admin": "^8.13.0",
