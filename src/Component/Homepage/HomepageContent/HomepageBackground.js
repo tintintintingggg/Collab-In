@@ -10,6 +10,16 @@ class HomepageBackground extends React.Component{
         this.introText = React.createRef();
         this.handleScroll = this.handleScroll.bind(this);
         this.handleOnload = this.handleOnload.bind(this);
+        this.state={
+            orginalStyle:{
+                marginTop: '200px',
+                opacity: '0'
+            },
+            animationStyle:{
+                marginTop: '0px',
+                opacity: '1'
+            }
+        }
     }
     handleOnload(){
         this.handleTextAnimation();
@@ -27,8 +37,7 @@ class HomepageBackground extends React.Component{
         }, 500)
     }
     setAnimationStyleAttribute(el){
-        el.setAttribute('style', 'margin-top: 0px');
-        el.setAttribute('style', 'opacity: 1');
+        el.style = this.state.animationStyle;
     }
     addClassOnscroll(el){
         let rect = el.getBoundingClientRect();
@@ -56,11 +65,11 @@ class HomepageBackground extends React.Component{
             <div className="homepage section1">
                 <main className="introduction">
                     <div className="intro-text" ref={this.introText}>
-                        <div className="title" style={{marginTop: '200px', opacity: '0'}}>Welcome to Collab-In!</div>
-                        <div className="intro-lines" style={{marginTop: '200px', opacity: '0'}}>
+                        <div className="title" style={this.state.orginalStyle}>Welcome to Collab-In!</div>
+                        <div className="intro-lines" style={this.state.orginalStyle}>
                             Resource-sharing, immediate messaging, Downloadable files. <br />All-in-one platform for real-time task solving and completing.
                         </div>
-                        <div className="btns" style={{marginTop: '200px', opacity: '0'}}>
+                        <div className="btns" style={this.state.orginalStyle}>
                             <button id="create-doc-btn" onClick={this.props.handleDocCreate}>Create a New Doc</button>
                             {memberBtn}
                         </div>

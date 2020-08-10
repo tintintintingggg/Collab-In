@@ -6,4 +6,12 @@ function justifyNumberToTwoDigits(number){
     }
 };
 
-export {justifyNumberToTwoDigits};
+function formatDate(time){
+    let date = new Date(time).getDate();
+    date = justifyNumberToTwoDigits(date);
+    let month = new Date(time).toLocaleString('en-us', {month: 'long'});
+    let year = new Date(time).getFullYear();
+    return {date: date, month: month, year: year};
+}
+
+export {justifyNumberToTwoDigits, formatDate};

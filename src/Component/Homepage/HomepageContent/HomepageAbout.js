@@ -7,9 +7,6 @@ class HomepageAbout extends React.Component{
         super(props);
         this.aboutContainer = React.createRef();
         this.handleScroll = this.handleScroll.bind(this);
-        // this.state={
-        //     textIsShow: false
-        // }
     }
     addClassOnscroll(el){
         el.childNodes.forEach((item)=>{
@@ -34,7 +31,7 @@ class HomepageAbout extends React.Component{
                     <img src="/images/co-working.png" />
                 </div>
             </main>
-            <main className="section3-main  section3-main-middle">
+            <main className="section3-main  section3-main-middle ">
                 <div>
                     <img src="/images/edit-text.jpg" />
                 </div>

@@ -42,7 +42,6 @@ class EmojiList extends React.Component{
         }
     }
     pickEmoji(e){
-        console.log(e.target.textContent);
         this.props.handleInputPlusEmoji(e.target.textContent);
         this.props.handleEmojisToShow();
     }
@@ -122,29 +121,12 @@ class ChatInput extends React.Component{
         });
     }
     render(){
-        // let emojiList = '';
-        // if(this.state.showEmojis){
-        //     emojiList = [];
-        //     for(let i = 0; i<this.state.emojiList.length; i++){
-        //         let item = <span 
-        //             dangerouslySetInnerHTML={{__html: this.state.emojiList[i]+' '}} 
-        //             key={i}
-        //             className="my-emoji"
-        //             onClick={this.pickEmoji.bind(this)}
-        //             ></span>;
-        //         emojiList.push(item);
-        //     }
-        // }
         return  <div className="chat-input">
             <EmojiList
                 showEmojis={this.state.showEmojis}
                 handleEmojisToShow={this.handleEmojisToShow.bind(this)}
                 handleInputPlusEmoji={this.handleInputPlusEmoji.bind(this)}
              />
-            {/* <div className="emojis" style={{display: this.state.showEmojis ? 'block' : 'none'}}>
-                {emojiList}
-            </div> */}
-            {/* <button onClick={this.handleEmojisToShow.bind(this)}><img src="/images/chat-input-add.png" /></button> */}
             <EmojiBtn
                 handleEmojisToShow={this.handleEmojisToShow.bind(this)}
              />

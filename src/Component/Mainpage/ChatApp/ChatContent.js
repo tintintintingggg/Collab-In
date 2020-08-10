@@ -13,6 +13,7 @@ class ChatContent extends React.Component{
     }
     formatDate(time){
         let date = new Date(time).getDate();
+        date = justifyNumberToTwoDigits(date);
         let month = new Date(time).toLocaleString('en-us', {month: 'long'});
         let year = new Date(time).getFullYear();
         return {date: date, month: month, year: year};
@@ -27,7 +28,6 @@ class ChatContent extends React.Component{
         hour = justifyNumberToTwoDigits(hour);
         let minute = new Date(time).getMinutes();
         minute = justifyNumberToTwoDigits(minute);
-        // return {hour: hour, minute: minute};
         return hour+':'+minute;
     }
     render(){
