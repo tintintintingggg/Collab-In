@@ -23,9 +23,7 @@
     align-items: center;
     justify-content: center;
 }
-.img-before{
-    display: flex;
-}
+/* nav hover animation */
 .my-account>nav>div:hover{
     background-color: #f4604921;
     border-left: 5px solid #f46149;
@@ -33,6 +31,9 @@
 }
 .img-hover{
     display: none;
+}
+.img-before{
+    display: flex;
 }
 .my-account>nav>div:hover > .img-before{
     display: none;
@@ -146,9 +147,10 @@
     margin: 10px;
     height: 150px;
     border-radius: 10px;
+    position: relative;
+    transition-delay: 1s;
 }
 .handle-docs-wrap>main>a:hover{
-    /* background-color: #eeeeee; */
     background-color: #f4604921;
     color: #f46149;
 }
@@ -160,6 +162,28 @@
     font-style: italic;
     color: #979797;
     font-size: 14px;
+}
+.handle-docs-wrap>main>a button{
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 27px;
+    height: 27px;
+    padding: 0;
+    background-color: transparent;
+    opacity: .5;
+    border: none;
+}
+.handle-docs-wrap>main>a button:hover{
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
+@keyframes shake {
+    10%, 90%{transform: translateX(-1px);}
+    20%, 80%{transform: translateX(2px);}
+    30%, 50%, 70%{transform: translateX(-2px);}
+    40%, 60%{transform: translateX(2px);}
 }
 /* account setting */
 .account-setting{

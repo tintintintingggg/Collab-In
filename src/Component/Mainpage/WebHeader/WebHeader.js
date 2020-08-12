@@ -114,7 +114,7 @@ class WebHeader extends React.Component{
             })
         }).catch((error) => {console.log(error.message)});
 
-        db.collection('documents').doc(this.props.docId)
+        this.unsubcribeDocument = db.collection('documents').doc(this.props.docId)
         .onSnapshot((doc) => {
             if(!doc.metadata.hasPendingWrites){
                 this.setState({
@@ -123,7 +123,7 @@ class WebHeader extends React.Component{
             }
         });
 
-        db.collection('status').doc(this.props.docId).collection('online').doc("total")
+        this.unsubcribeStatus = db.collection('status').doc(this.props.docId).collection('online').doc("total")
         .onSnapshot((snapshot)=>{
             let userContainer = [];
             snapshot.data().total.forEach(userId=>{
@@ -139,7 +139,8 @@ class WebHeader extends React.Component{
         })        
     }
     componentWillUnmount(){
-        //?????
+        this.unsubcribeDocument();
+        this.unsubcribeStatus();
     }
 }
 

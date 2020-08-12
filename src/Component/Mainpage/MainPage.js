@@ -154,7 +154,7 @@ class MainPage extends React.Component{
                              />
                             <div 
                                 id="mobile-chatroom-icon" 
-                                style={this.state.chatAppBlockIsOpen ? {display: 'none'} : {display: 'block'}}
+                                style={{display: this.state.chatAppBlockIsOpen ? 'none' : 'block'}}
                                 onClick={this.handleChatRoom.bind(this)}
                              ><img src="/images/mobile-chat.png" /></div>
                         </div>
@@ -172,6 +172,8 @@ class MainPage extends React.Component{
         }
     }
     componentDidMount(){
+        // if(this.props.)
+        // this.onlineCheck.bind(this, this.props.currentUser.uid)();
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
             if(this.props.currentUser){

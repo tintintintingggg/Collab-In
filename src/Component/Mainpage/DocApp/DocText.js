@@ -13,18 +13,8 @@ class DocText extends React.Component{
         }
     }
     render(){
-        // let imgs = '';
         if(this.props.imgurl){
             let img = document.createElement('img');
-            // let img = <img
-            //     draggable={true}
-            //     src={this.props.imgurl}
-            //     className="draggable-img"
-            //     contentEditable={true}
-            //  />
-            // this.setState(prevState=>({
-            //     currentImg: prevState.currentImg+img
-            // }))
             img.setAttribute('draggable', true);
             img.setAttribute('src', this.props.imgurl);
             img.setAttribute('class', "draggable-img");
@@ -39,7 +29,6 @@ class DocText extends React.Component{
                     id="selectable-area"  
                     ref={this.selectableArea}
                 >
-                {/* {this.state.currentImg} */}
                 </div>
             </div>
         </div>;

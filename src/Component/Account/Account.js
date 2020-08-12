@@ -3,7 +3,6 @@ import '../../css/Account.css';
 import {LoadingPage} from '../LoadingPage';
 import {db, storage} from '../../utils/firebase';
 import {formatTime} from './lib';
-// import {formatTime} from './__test.'
 
 class MyDocuments extends React.Component{
     constructor(props){
@@ -94,7 +93,16 @@ class Account extends React.Component{
         this.state = {
             currentPage: 'myDocuments',
             docDataFromDb: null,
-            userData: null
+            userData: null,
+            currentPageNavStyle: {
+                backgroundColor: '#f4604921',
+                borderLeft: '5px solid #f46149',
+                color: '#f46149'
+            },
+            currentPageNavImgStyle: {
+                before: {display: 'none'},
+                hover: {display: 'flex'}
+            }
         }
     }
     handleCurrentPage(state){
@@ -106,6 +114,32 @@ class Account extends React.Component{
         this.setState({
             userData: newData
         })
+    }
+    deleteDocFromState(targetId, callback){
+        let newDocDataFromDb = this.state.docDataFromDb.filter(
+            doc=>doc.key !== targetId
+        );
+        this.setState({
+            docDataFromDb: newDocDataFromDb
+        }, callback);
+    }
+    deleteDocFromDb(targetId, docType){
+        let currentUser = this.props.currentUser;
+        db.collection('users').doc(currentUser.uid).collection(docType).doc(targetId).delete().then(()=>{
+            console.log('delete!');
+        }).catch((error)=>{console.log(error.message)});
+    }
+    confirmDeletionMessage(){
+
+    }
+    deleteDoc(e, docType){
+        e.preventDefault();
+        let targetId = e.target.parentNode.id;
+
+        this.deleteDocFromState(targetId, ()=>{this.deleteDocFromDb(targetId, docType)});
+    }
+    handleImgShake(){
+
     }
     // formatTime(time){
     //     let year = new Date(time).getFullYear();
@@ -138,6 +172,7 @@ class Account extends React.Component{
                         .then((data)=>{
                             docArr.push(<a href={`/document/${doc.id}`} key={doc.id} className="document-item">
                                     <section>
+                                        <button onMouseOver={this.handleImgShake.bind(this)} onClick={(e)=>{this.deleteDoc.call(this, e, docType)}} id={doc.id}><img src="/images/trash.png" /></button>
                                         <div className="doc-item-name">{data.data().name}</div>
                                         <div className="doc-item-time">{formatTime(data.data().time)}</div>
                                     </section>
@@ -156,6 +191,14 @@ class Account extends React.Component{
             })
             .catch(error=>{console.log(error.message)})
         })
+    }
+    setCurrentPageNavStyle(state){
+        let currentPage = this.state.currentPage;
+        return currentPage === state ? this.state.currentPageNavStyle : null;
+    }
+    setCurrentPageNavImgStyle(state, imgState){
+        let currentPage = this.state.currentPage;
+        return currentPage === state ? this.state.currentPageNavImgStyle[imgState] : null;
     }
     render(){
         let main;
@@ -195,24 +238,34 @@ class Account extends React.Component{
                     <p onClick={this.props.handleDocCreate}>Create Docs</p>
                     <div><img src="/images/plus.png" /></div>
                 </article>
-                <div onClick={this.handleCurrentPage.bind(this, 'myDocuments')}>
-                    <div className='img-before'><img  src="/images/icon1.png" /></div>
-                    <div className="img-hover"><img  src="/images/icon1-hover.png" /></div>
+                <div onClick={this.handleCurrentPage.bind(this, 'myDocuments')} 
+                    style={this.setCurrentPageNavStyle.call(this, 'myDocuments')}>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'myDocuments', 'before')} className='img-before' ><img  src="/images/icon1.png" /></div>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'myDocuments', 'hover')} className="img-hover" ><img  src="/images/icon1-hover.png" /></div>
                     <p>My Documents</p>
                 </div>
-                <div onClick={this.handleCurrentPage.bind(this, 'collabDocuments')}>
-                    <div className='img-before'><img  src="/images/icon2.png" /></div>
-                    <div className="img-hover"><img src="/images/icon2-hover.png" /></div>
+                <div onClick={this.handleCurrentPage.bind(this, 'collabDocuments')}
+                    style={this.setCurrentPageNavStyle.call(this, 'collabDocuments')}>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'collabDocuments', 'before')} className='img-before'><img  src="/images/icon2.png" /></div>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'collabDocuments', 'hover')} className="img-hover"><img src="/images/icon2-hover.png" /></div>
                     <p>Collaborate with Me</p>
                 </div>
-                <div onClick={this.handleCurrentPage.bind(this, 'accountSetting')}>
-                    <div className='img-before'><img src="/images/icon3.png" /></div>
-                    <div className="img-hover"><img src="/images/icon3-hover.png" /></div>
+                <div onClick={this.handleCurrentPage.bind(this, 'accountSetting')}
+                    style={this.setCurrentPageNavStyle.call(this, 'accountSetting')}>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'accountSetting', 'before')} className='img-before'><img src="/images/icon3.png" /></div>
+                    <div style={this.setCurrentPageNavImgStyle.call(this, 'accountSetting', 'hover')} className="img-hover"><img src="/images/icon3-hover.png" /></div>
                     <p>Account Setting</p>
                 </div>
                 {userInfo}
             </nav>
             <main>
+                <div className='alert-message'>
+                    <div>
+                        <header><div>Are yoyu sure?</div><div>X</div></header>
+                        <div>Do you really want to delete this document?</div>
+                        <button>Cancel</button><button>Yes, do it!</button>
+                    </div>
+                </div>
                 {main}
             </main>
         </div>

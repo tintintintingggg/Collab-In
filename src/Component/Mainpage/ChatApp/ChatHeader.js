@@ -15,7 +15,8 @@ class ChatHeader extends React.Component{
         }));
     }
     render(){
-        let list = ''
+        let list = '';
+        let membersCount = ' ... ';
         if(this.state.members.length>0){
             let arr=[];
             this.state.members.map(doc=>{
@@ -23,11 +24,12 @@ class ChatHeader extends React.Component{
                 arr.push(item);
             })
             list = arr;
+            membersCount = this.state.members.length;
         }
         return <div className="chat-header">
                 <div>
                     <div className="shrink-btn" onClick={this.props.handleChatRoom}><img src="/images/minimize.png" /></div>
-                    <div className="group-members" onClick={this.showMembers.bind(this)}>Members ({this.state.members.length})</div>
+                    <div className="group-members" onClick={this.showMembers.bind(this)}>Members ({membersCount})</div>
                 </div>
                 <div className="members-list" style={{display: this.state.showMembers ? 'flex' : 'none'}}
                 >{list}</div>
