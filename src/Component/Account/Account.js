@@ -71,7 +71,7 @@ class AccountSetting extends React.Component{
         }else{
             return <div className="account-setting">
                 <div className="user-photo">
-                    <div><img src={this.props.userData.photoURL} /></div>
+                    <div style={{backgroundImage: `url(${this.props.userData.photoURL})`}}></div>
                     <div id="photo-edit">
                         <label htmlFor="img-uploader">
                             <img src="/images/change-profile.png" />
@@ -82,7 +82,10 @@ class AccountSetting extends React.Component{
                          />
                     </div>
                 </div>
-                <div>Dear, <span id="username">{this.props.userData.username}</span></div>
+                <div className="user-name">
+                    <div>Dear, <span id="username">{this.props.userData.username}</span></div>
+                    {/* <div className="user-name-edit-btn"><img src="/images/edit-name.png" /></div> */}
+                </div>
             </div>
         }
     }
@@ -102,7 +105,9 @@ class Account extends React.Component{
             currentPageNavImgStyle: {
                 before: {display: 'none'},
                 hover: {display: 'flex'}
-            }
+            },
+            deleteMessageIsShow: false,
+            deleteDocId: null
         }
     }
     handleCurrentPage(state){
@@ -129,17 +134,26 @@ class Account extends React.Component{
             console.log('delete!');
         }).catch((error)=>{console.log(error.message)});
     }
-    confirmDeletionMessage(){
-
+    handleDeletionMessage(e, id){
+        e.preventDefault();
+        this.setState(prevState=>({
+            deleteMessageIsShow: !prevState.deleteMessageIsShow
+        }), setId);
+        let setId = ()=>{
+            if(id){
+                this.setState({
+                    deleteDocId: id
+                })
+            }
+        };
     }
     deleteDoc(e, docType){
         e.preventDefault();
+        // this.setState(prevState=>({
+        //     deleteMessageIsShow: !prevState.deleteMessageIsShow
+        // }), setId);
         let targetId = e.target.parentNode.id;
-
         this.deleteDocFromState(targetId, ()=>{this.deleteDocFromDb(targetId, docType)});
-    }
-    handleImgShake(){
-
     }
     // formatTime(time){
     //     let year = new Date(time).getFullYear();
@@ -172,7 +186,12 @@ class Account extends React.Component{
                         .then((data)=>{
                             docArr.push(<a href={`/document/${doc.id}`} key={doc.id} className="document-item">
                                     <section>
-                                        <button onMouseOver={this.handleImgShake.bind(this)} onClick={(e)=>{this.deleteDoc.call(this, e, docType)}} id={doc.id}><img src="/images/trash.png" /></button>
+                                        <button 
+                                            onClick={(e)=>{this.deleteDoc.call(this, e, docType)}} 
+                                            // onClick={()=>{this.handleDeletionMessage.bind(this)}}
+                                            id={doc.id}>
+                                            <img src="/images/trash.png" />
+                                        </button>
                                         <div className="doc-item-name">{data.data().name}</div>
                                         <div className="doc-item-time">{formatTime(data.data().time)}</div>
                                     </section>
@@ -222,7 +241,7 @@ class Account extends React.Component{
         let userInfo = '';
         if(this.state.userData){
             userInfo = <section id="profile-info">
-                <div><img src={this.state.userData.photoURL} /></div>
+                <div style={{backgroundImage: `url(${this.state.userData.photoURL})`}}></div>
                 <p>{this.state.userData.username}</p>
             </section>
         }
@@ -234,8 +253,8 @@ class Account extends React.Component{
                         <p>CollabIn</p>
                     </a>
                 </article>
-                <article className="create-new-doc">
-                    <p onClick={this.props.handleDocCreate}>Create Docs</p>
+                <article className="create-new-doc" onClick={this.props.handleDocCreate}>
+                    <p>Create Docs</p>
                     <div><img src="/images/plus.png" /></div>
                 </article>
                 <div onClick={this.handleCurrentPage.bind(this, 'myDocuments')} 
@@ -257,13 +276,15 @@ class Account extends React.Component{
                     <p>Account Setting</p>
                 </div>
                 {userInfo}
+                <footer className="back-to-homepage-mobile"><a href="/"><img src="/images/back-to-homepage-mobile.png" /></a></footer>
             </nav>
             <main>
-                <div className='alert-message'>
+                <div className='alert-message' style={{display: this.state.deleteMessageIsShow ? 'flex' : 'none'}}>
                     <div>
-                        <header><div>Are yoyu sure?</div><div>X</div></header>
-                        <div>Do you really want to delete this document?</div>
-                        <button>Cancel</button><button>Yes, do it!</button>
+                        <div className="delete-btn">X</div>
+                        <header>Are you sure?</header>
+                        <div className="alert-message-text">Do you really want to delete this document?</div>
+                        <button className="cancel">Cancel</button><button className="delete">Yes, do it!</button>
                     </div>
                 </div>
                 {main}

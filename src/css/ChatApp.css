@@ -163,9 +163,10 @@ img{width: 100%;}
     text-align: center;
     background-color: transparent;
     margin-right: 10px;
-}
-.chat-content .message-item .user-pic>img{
     border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .chat-content .message-item .message-content{
     width: 60%;

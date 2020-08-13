@@ -5,6 +5,10 @@ import "firebase/firestore";
 import {Homepage} from './Homepage/Homepage';
 import {LoadingPage} from './LoadingPage';
 import {db} from '../utils/firebase';
+// redux
+import {createStore} from 'redux';
+import {Provider, connect} from 'react-redux';
+import store from '../Redux/store';
 
 class App extends React.Component{
     constructor(props){
@@ -18,16 +22,18 @@ class App extends React.Component{
     }
     render(){
         if(this.state.currentUser !== undefined){
-            return <div className="app">
-                <Homepage 
-                    signUp={this.signUp.bind(this)}
-                    signIn={this.signIn.bind(this)}
-                    googleSignIn={this.googleSignIn.bind(this)}
-                    facebookSignIn={this.facebookSignIn.bind(this)}
-                    currentUser={this.state.currentUser}
-                    signOut={this.signOut.bind(this)}
-                 />
-            </div>
+            return <Provider store={store}>
+                <div className="app">
+                    <Homepage 
+                        signUp={this.signUp.bind(this)}
+                        signIn={this.signIn.bind(this)}
+                        googleSignIn={this.googleSignIn.bind(this)}
+                        facebookSignIn={this.facebookSignIn.bind(this)}
+                        currentUser={this.state.currentUser}
+                        signOut={this.signOut.bind(this)}
+                     />
+                </div>
+            </Provider>
         }else{
             return <LoadingPage />
         }
@@ -36,7 +42,6 @@ class App extends React.Component{
         firebase.auth().onAuthStateChanged(user => {
             if(user){
                 this.setUserDataInState(user);
-                // console.log(user)
                 let userCredential = this.state.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){

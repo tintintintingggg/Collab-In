@@ -44,7 +44,7 @@ class ChatContent extends React.Component{
                 if(this.props.currentUser.uid !== message.user){
                    let photoSrc = message.photo ? message.photo : '/images/user-1.png';
                     item = <div key={index} className="message-item other-user">
-                        <div className="user-pic"><img src={photoSrc} /></div>
+                        <div className="user-pic" style={{backgroundImage: `url(${photoSrc})`}}></div>
                         <div className="message-content">
                             <div className="content-name">{message.name}</div>
                             <div className="text-wrap">

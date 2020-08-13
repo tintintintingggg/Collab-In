@@ -57,10 +57,16 @@
     bottom: 0;
 }
 #profile-info>div{
-    width: 60px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     margin-right: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    border-radius: 50%;
 }
 #profile-info>p{
     letter-spacing: 1px;
@@ -109,6 +115,10 @@
     display: flex;
     align-items: center;
     margin-left: 10px;
+}
+/* footer */
+.my-account>nav footer{
+    display: none;
 }
 /* my documents / collab documents */
 .handle-docs-wrap{
@@ -185,10 +195,65 @@
     30%, 50%, 70%{transform: translateX(-2px);}
     40%, 60%{transform: translateX(2px);}
 }
+/* alert message */
+.alert-message{
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .2);
+    display: flex;
+    justify-content: center;
+}
+.alert-message>div{
+    background-color: #ffffff;
+    margin-top: 50px;
+    width: 450px;
+    height: 250px;
+    border-radius: 10px;
+    box-shadow: 0 -3px 7px rgba(0,0,0,0.3);
+    position: relative;
+    text-align: center;
+}
+.alert-message .delete-btn{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #979799;
+}
+.alert-message header{
+    padding: 10px 0;
+    background-color: #eeeeee;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    color: #979799;
+}
+.alert-message .alert-message-text{
+    margin: 50px;
+    color: #979799;
+}
+.alert-message button{
+    border: 1px solid rgba(0, 0, 0, .1);
+    padding: 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.alert-message .cancel{
+    background-color: #ffffff;
+    color: #979797;
+}
+.alert-message .delete{
+    background-color: #f54e29d5;
+    color: #ffffff;
+}
 /* account setting */
+/* photo edit */
 .account-setting{
     text-align: center;
     margin: 0 auto;
+    margin-top: 30px;
 }
 .account-setting .user-photo{
     margin: 0 auto;
@@ -202,14 +267,11 @@
     overflow: hidden;
     position: relative;
     border-radius: 50%;
-    object-fit: cover;
-}
-.account-setting .user-photo>div>img{
-    min-width: 100%;
-    min-height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .account-setting .user-photo #photo-edit{
-    cursor: pointer;
     position: absolute;
     width: 200px;
     height: 200px;
@@ -224,10 +286,67 @@
     display: flex;
 }
 #photo-edit>label{
+    cursor: pointer;
     width: 50px;
 }
 #photo-edit>input{
     visibility:hidden;
     width:0;
     height:0
+}
+/* name edit */
+.user-name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin: 20px 0;
+}
+.user-name .user-name-edit-btn{
+    width: 22px;
+    height: 22px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+@media(max-width: 800px){
+    .my-account nav{
+        width: 88px;
+        box-shadow: 2px 0 4px rgba(0, 0, 0, .1);
+    }
+    .account-logo,
+    .create-new-doc p,
+    .my-account nav>div p,
+    #profile-info{
+        display: none;
+    }
+    /* .my-account .account-logo>a{
+        padding-left: 0;
+        justify-content: center;
+    }
+    .my-account .account-logo>a>div{
+        margin: 0;
+    } */
+    .my-account .create-new-doc{
+        margin: 25px auto; 
+        width: 40px;
+        height: 40px;
+        padding: 0;
+    }
+    .my-account .create-new-doc>div{
+        margin: 0;
+    }
+    .handle-docs-wrap>div{
+        width: 80%;
+    }
+    .my-account>nav footer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        width: 100%;
+        padding: 15px;
+        position: absolute;
+        bottom: 0;
+    }
 }
