@@ -56,4 +56,4 @@ class ChatHeader extends React.Component{
     }
 }
 
-export {ChatHeader};
+export default ChatHeader;

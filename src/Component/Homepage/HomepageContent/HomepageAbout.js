@@ -1,6 +1,4 @@
 import React from 'react';
-import "firebase/auth";
-import "firebase/firestore";
 
 class HomepageAbout extends React.Component{
     constructor(props){
@@ -61,4 +59,4 @@ class HomepageAbout extends React.Component{
     }
 }
 
-export {HomepageAbout};
+export default HomepageAbout;

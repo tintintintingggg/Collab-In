@@ -1,26 +1,14 @@
 import React from 'react';
-import {Auth} from '../Auth/Auth';
-import {MainPage} from '../Mainpage/MainPage';
-import {Account} from '../Account/Account';
-import {HomepageContent} from './HomepageContent/HomepageContent';
-// import {setDocId} from './lib';
-import { BrowserRouter, Route, Redirect} from "react-router-dom";
+import {Auth} from '../Auth';
+import MainPage from '../Mainpage';
+import Account from '../Account';
+import HomepageContent from './HomepageContent/HomepageContent';
+import {BrowserRouter, Route, Redirect} from "react-router-dom";
 import {db} from '../../utils/firebase';
-import "firebase/auth";
-import "firebase/firestore";
 import '../../css/Homepage.css';
-
-class DocCreate extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        return <MainPage
-            docId={this.props.docId}
-            currentUser={this.props.currentUser}
-         />
-    }
-}
+// redux
+import {connect} from 'react-redux';
+import store from '../../Redux/userData/store';
 
 class Homepage extends React.Component{
     constructor(props){
@@ -28,13 +16,12 @@ class Homepage extends React.Component{
         this.setDocId = this.setDocId.bind(this);
         this.setAccountUid = this.setAccountUid.bind(this);
         this.state = {
-            docName: null,
             docId: null
         }
     }
     handleDocCreate(){
-        if(this.props.currentUser){
-            let uid = this.props.currentUser.uid
+        if(this.props.user){
+            let uid = this.props.user.uid;
             let newDoc = db.collection("documents").doc();
             newDoc.set({
                 name: 'Untitled document',
@@ -60,7 +47,7 @@ class Homepage extends React.Component{
                 })
             }).then(()=>{
                 console.log('status total is set')
-                this.setState({docId: newDoc.id})
+                this.setState({docId: newDoc.id});
             }).catch((error)=>{console.log(error.message)})
         }else{
             alert("Sign In First!");
@@ -83,12 +70,11 @@ class Homepage extends React.Component{
         let id = location.href.toString().split('document/')[1];
         let docId = this.setDocId(id, this.state.docId);
         let path = '/document/'+this.setDocId(id, this.state.docId);
-        let accountPath = '/account/'+this.setAccountUid(this.props.currentUser);
+        let accountPath = '/account/'+this.setAccountUid(this.props.user);
         return <BrowserRouter>
                 <Route exact path='/' >
                     {docId ? <Redirect to={path} /> : 
                     <HomepageContent
-                        currentUser={this.props.currentUser}
                         signOut={this.props.signOut}
                         handleDocCreate={this.handleDocCreate.bind(this)}
                      />}
@@ -96,7 +82,6 @@ class Homepage extends React.Component{
                 <Route path="/authentication" render={(props)=>{
                     let routeProps = props.history;
                     return <Auth 
-                        currentUser={this.props.currentUser}
                         signUp={this.props.signUp}
                         signIn={this.props.signIn}
                         googleSignIn={this.props.googleSignIn}
@@ -105,15 +90,13 @@ class Homepage extends React.Component{
                     />;
                 }} />
                 <Route exact path={path} >
-                    <DocCreate 
+                    <MainPage
                         docId={docId}
-                        currentUser={this.props.currentUser}
                      />
                 </Route>
                 <Route exact path={accountPath} >
                     <Account
                         docId={docId}
-                        currentUser={this.props.currentUser}
                         handleDocCreate={this.handleDocCreate.bind(this)}
                      />
                 </Route>
@@ -121,4 +104,7 @@ class Homepage extends React.Component{
     }
 }
 
-export {Homepage};
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+export default connect(mapStateToProps)(Homepage)

@@ -11,11 +11,10 @@ class DocApp extends React.Component{
             <div className='doc'>
                 <DocBtn 
                     docId={this.props.docId}
-                    currentUser={this.props.currentUser}
                     detectUpload={this.props.detectUpload}
                   />
             </div>
         </div>
     }
 }
-export {DocApp} ;
+export default DocApp ;

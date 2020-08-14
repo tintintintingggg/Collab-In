@@ -1,6 +1,8 @@
 import React from 'react';
 import {justifyNumberToTwoDigits} from '../lib';
 import {db} from '../../../utils/firebase';
+// redux
+import {connect} from 'react-redux';
 
 class ChatContent extends React.Component{
     constructor(props){
@@ -41,7 +43,7 @@ class ChatContent extends React.Component{
                     content.push(this.showDate.call(this, dateSeparator, message.time))
                 }
                 date = new Date(message.time).getDate();
-                if(this.props.currentUser.uid !== message.user){
+                if(this.props.user.uid !== message.user){
                    let photoSrc = message.photo ? message.photo : '/images/user-1.png';
                     item = <div key={index} className="message-item other-user">
                         <div className="user-pic" style={{backgroundImage: `url(${photoSrc})`}}></div>
@@ -103,4 +105,7 @@ class ChatContent extends React.Component{
     }
 }
 
-export {ChatContent};
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+export default connect(mapStateToProps)(ChatContent);

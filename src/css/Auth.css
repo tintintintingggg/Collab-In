@@ -92,6 +92,11 @@
     line-height: 2;
     font-size: 14px;
 }
+.memberBlock .signInBlock .email-signin>label{
+    width: 300px;
+    margin: 10px auto;
+    color: rgba(0, 0, 0, 0.5);
+}
 .memberBlock .signInBlock .email-signin>button,
 .memberBlock .signUpBlock .email-signup>button{
     background-color: #FFD393;

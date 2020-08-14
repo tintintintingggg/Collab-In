@@ -1,5 +1,7 @@
 import React from 'react';
 import {db} from '../../../utils/firebase';
+// redux
+import {connect} from 'react-redux';
 
 class EmojiBtn extends React.Component{
     constructor(props){
@@ -81,13 +83,13 @@ class ChatInput extends React.Component{
     }
     sendInput(e){
         e.preventDefault();
-        if(this.props.currentUser){
+        if(this.props.user){
             if(this.state.input){
                 this.input.current.value = null;
                 db.collection('chatrooms').doc(this.props.docId).collection('messages').doc().set({
-                    user: this.props.currentUser.uid,
-                    name: this.props.currentUser.displayName,
-                    photo: this.props.currentUser.photoURL,
+                    user: this.props.user.uid,
+                    name: this.props.user.displayName,
+                    photo: this.props.user.photoURL,
                     text: this.state.input,
                     time: Date.now()
                 })
@@ -144,4 +146,8 @@ class ChatInput extends React.Component{
     }
 }
 
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+ChatInput = connect(mapStateToProps)(ChatInput);
 export {ChatInput, EmojiList};

@@ -2,13 +2,14 @@ import React from 'react';
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import {Homepage} from './Homepage/Homepage';
+import Homepage from './Homepage';
 import {LoadingPage} from './LoadingPage';
 import {db} from '../utils/firebase';
 // redux
 import {createStore} from 'redux';
 import {Provider, connect} from 'react-redux';
-import store from '../Redux/store';
+import store from '../Redux/userData/store';
+import * as actionCreators from '../Redux/userData/action';
 
 class App extends React.Component{
     constructor(props){
@@ -16,24 +17,20 @@ class App extends React.Component{
         this.setUserDataInState = this.setUserDataInState.bind(this);
         this.state = {
             userCredential: null,
-            currentUser: undefined,
             currentUserName: undefined
         }
     }
     render(){
-        if(this.state.currentUser !== undefined){
-            return <Provider store={store}>
-                <div className="app">
-                    <Homepage 
-                        signUp={this.signUp.bind(this)}
-                        signIn={this.signIn.bind(this)}
-                        googleSignIn={this.googleSignIn.bind(this)}
-                        facebookSignIn={this.facebookSignIn.bind(this)}
-                        currentUser={this.state.currentUser}
-                        signOut={this.signOut.bind(this)}
-                     />
-                </div>
-            </Provider>
+        if(this.props.user !== undefined){
+            return <div className="app">
+                <Homepage 
+                    signUp={this.signUp.bind(this)}
+                    signIn={this.signIn.bind(this)}
+                    googleSignIn={this.googleSignIn.bind(this)}
+                    facebookSignIn={this.facebookSignIn.bind(this)}
+                    signOut={this.signOut.bind(this)}
+                 />
+            </div>
         }else{
             return <LoadingPage />
         }
@@ -50,7 +47,6 @@ class App extends React.Component{
                         }).then(()=>{
                             this.setUserDataInDB.call(this, user);
                         }).then(()=>{
-                            console.log('User created successfully');
                             this.setState({
                                 currentUserName: undefined
                             })
@@ -62,8 +58,6 @@ class App extends React.Component{
                         if(!doc.exists){
                             this.setUserDataInDB.call(this, user);
                         }
-                    }).then(()=>{
-                        console.log('User created successfully');
                     }).catch((error)=>{alert(error.message)});
                 }
             }else{
@@ -80,9 +74,7 @@ class App extends React.Component{
         })
     }
     setUserDataInState(data){
-        this.setState({
-            currentUser: data
-        })
+        this.props.changeUser(data);
     }
     signUp(email, password, name){
         if(!email){
@@ -130,7 +122,6 @@ class App extends React.Component{
         });
         firebase.auth().signInWithPopup(googleProvider)
         .then((result)=>{
-            // let token = result.credential.accessToken;
             alert('You are logged in!');
         })
         .catch((error)=>{
@@ -142,7 +133,6 @@ class App extends React.Component{
         let fbProvider = new firebase.auth.FacebookAuthProvider();
         firebase.auth().signInWithPopup(fbProvider)
         .then((result)=>{
-            // let token = result.credential.accessToken;
             alert('You are logged in!');
         })
         .catch((error)=>{
@@ -160,7 +150,10 @@ class App extends React.Component{
     }
 }
 
-export {App} ;
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
 
+export default connect(mapStateToProps, actionCreators)(App);
 
    

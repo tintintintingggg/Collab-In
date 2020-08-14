@@ -1,6 +1,6 @@
 import React from 'react';
-import {ChatContent} from './ChatContent';
-import {ChatHeader} from './ChatHeader';
+import ChatContent from './ChatContent';
+import ChatHeader from './ChatHeader';
 import {ChatInput} from './ChatInput';
 import '../../../css/ChatApp.css';
 
@@ -68,16 +68,13 @@ class ChatApp extends React.Component{
         >
             <ChatHeader
                 docId={this.props.docId}
-                currentUser={this.props.currentUser}
                 handleChatRoom={this.props.handleChatRoom}
              />
              <ChatContent
                 docId={this.props.docId}
-                currentUser={this.props.currentUser}
              />
             <ChatInput 
                 docId={this.props.docId}
-                currentUser={this.props.currentUser}
              />
         </div>
     }
@@ -93,17 +90,10 @@ class ChatApp extends React.Component{
     }
 }
 
-export {ChatApp};
+export default ChatApp;
 
 
 
-
-
-	
-	
-	
-	
-	
 
 // 👦	BOY	&#x1F466;	&#128102;	
 // 👦🏻	boy, type-1-2	&#x1F466; &#x1F3FB;	&#128102; &#127995;	

@@ -1,6 +1,4 @@
 import React from 'react';
-import "firebase/auth";
-import "firebase/firestore";
 
 class HomepageFeature extends React.Component{
     constructor(props){
@@ -19,9 +17,7 @@ class HomepageFeature extends React.Component{
             singleSlideSize: size
         }, callback);
     }
-    // initSlide(){}
     handleSlide(){
-        // this.handleSingleSlideSize(initSlide);
         let counter = 0;
         let slideContainer = this.slideContainer.current;
         let slider = slideContainer.childNodes[0];
@@ -53,37 +49,6 @@ class HomepageFeature extends React.Component{
             }
         }
         setInterval(()=>{plusSlides(counter)}, 3000);
-        // let counter = 0;
-        // let slideContainer = this.slideContainer.current;
-        // let slider = slideContainer.childNodes[0];
-        // let slideDots = slideContainer.childNodes[1].childNodes;
-        // let size = slider.childNodes[0].clientWidth;
-        // let initSize = size/2;
-        // slideDots[0].style.backgroundColor = this.state.dotMotivatedStyle;
-        // slideContainer.style.maxWidth = size*3+'px';
-        // slider.style.transform = 'translateX('+(-initSize)+'px)';
-        // let plusSlides = (n)=>{
-        //     slideDots.forEach(item=>{
-        //         item.style.backgroundColor = this.state.dotOriginalStyle;
-        //     })
-        //     let dotnumber = n+1;
-        //     if(n===3){dotnumber=0}
-        //     if(n===4){dotnumber=1}
-        //     slideDots[dotnumber].style.backgroundColor = this.state.dotMotivatedStyle;
-        //     if(n!==4){
-        //         slider.style.transition = 'transform 1s ease-in-out'
-        //         slider.style.transform = 'translateX('+(-(size*(counter+1)+initSize))+'px)';
-        //         counter+=1;
-        //     }else if(n===4){
-        //         slider.style.transition = 'none'
-        //         slider.style.transform = 'translateX('+(-initSize)+'px)';
-        //         window.setTimeout(function(){
-        //             counter = 0;
-        //             plusSlides(counter);
-        //         }, 0);
-        //     }
-        // }
-        // setInterval(()=>{plusSlides(counter)}, 3000)
     }
     render(){
         return  <div className="section2" id="nav-features">
@@ -119,4 +84,4 @@ class HomepageFeature extends React.Component{
     }
 }
 
-export {HomepageFeature};
+export default HomepageFeature;

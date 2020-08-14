@@ -1,26 +1,15 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import {DocApp} from './DocApp/DocApp';
-import {ChatApp} from './ChatApp/ChatApp';
-import {WebHeader} from './WebHeader/WebHeader';
+import {Redirect} from 'react-router-dom';
+import DocApp from './DocApp';
+import ChatApp from './ChatApp';
+import PrevStep from './PrevStep';
+import WebHeader from './WebHeader';
 import {LoadingPage} from '../LoadingPage';
 import {db, realtimeDb} from '../../utils/firebase';
 import '../../css/WebHeader.css';
+// redux
+import {connect} from 'react-redux';
 
-class PrevStep extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        return <div className='docPrevStep'>
-            <div className="container">
-                <button 
-                    onClick={()=>{this.props.handleEditor(this.props.currentUser)}}
-                >Add To Group</button>
-            </div>
-        </div>;
-    }
-}
 class MainPage extends React.Component{
     constructor(props){
         super(props);
@@ -125,31 +114,28 @@ class MainPage extends React.Component{
     }
     render(){
         let doc;
-        if(!this.props.currentUser){
+        if(!this.props.user){
             return <Redirect 
                 push to={{pathname:"/authentication"}}
                  />
         }else{
-            this.onlineCheck.bind(this, this.props.currentUser.uid)();
+            this.onlineCheck.bind(this, this.props.user.uid)();
             if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
                 doc = <LoadingPage />
             }else if(this.state.isOwner || this.state.isEditor){
                 doc = <div className="web-header">
                         <WebHeader
                             docId={this.props.docId}
-                            currentUser={this.props.currentUser}
                             saved={this.state.saved}
                          />
                         <div className="document-layout">
                             <DocApp
                                 docId={this.props.docId}
-                                currentUser={this.props.currentUser}
                                 detectUpload={this.detectUpload.bind(this)}
                              />
                             <ChatApp
                                 chatAppBlockIsOpen={this.state.chatAppBlockIsOpen}
                                 docId={this.props.docId}
-                                currentUser={this.props.currentUser}
                                 handleChatRoom={this.handleChatRoom.bind(this)}
                              />
                             <div 
@@ -163,7 +149,6 @@ class MainPage extends React.Component{
                 doc = <div className='doc'>
                     <PrevStep
                         handleEditor={this.handleEditor.bind(this)}
-                        currentUser={this.props.currentUser}
                         docId={this.props.docId}
                      />
                 </div>
@@ -172,17 +157,15 @@ class MainPage extends React.Component{
         }
     }
     componentDidMount(){
-        // if(this.props.)
-        // this.onlineCheck.bind(this, this.props.currentUser.uid)();
         db.collection('documents').doc(this.props.docId).get()
         .then((doc) => {
-            if(this.props.currentUser){
-                if(doc.data().owner === this.props.currentUser.uid){
+            if(this.props.user){
+                if(doc.data().owner === this.props.user.uid){
                     this.setIdentifyStateOnUser.call(this, 'isOwner')
                 }
                 else{
                     let currentEditor = doc.data().editorsList.filter(editor=>(
-                        editor === this.props.currentUser.uid
+                        editor === this.props.user.uid
                     ))
                     this.setIdentifyStateOnUser.call(this, currentEditor.length>0 ? 'isEditor' : 'isWaitingEditor')
                 }
@@ -195,4 +178,7 @@ class MainPage extends React.Component{
     }
 }
 
-export {MainPage};
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+export default connect(mapStateToProps)(MainPage);

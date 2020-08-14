@@ -1,10 +1,8 @@
 import React from 'react';
-import "firebase/auth";
-import "firebase/firestore";
-import {HomepageHeader} from './HomepageHeader';
-import {HomepageBackground} from './HomepageBackground';
-import {HomepageFeature} from './HomepageFeature';
-import {HomepageAbout} from './HomepageAbout';
+import HomepageHeader from './HomepageHeader';
+import HomepageBackground from './HomepageBackground';
+import HomepageFeature from './HomepageFeature';
+import HomepageAbout from './HomepageAbout';
 
 class HomepageContent extends React.Component{
     constructor(props){
@@ -24,13 +22,11 @@ class HomepageContent extends React.Component{
     }
     render(){
         return <div className="homepage-wrap">
-            <HomepageHeader 
-                currentUser={this.props.currentUser}
+            <HomepageHeader
                 signOut={this.props.signOut}
                 isHeaderFixed={this.state.isHeaderFixed}
              />
             <HomepageBackground
-                currentUser={this.props.currentUser}
                 handleDocCreate={this.props.handleDocCreate}
              />
             <HomepageFeature />
@@ -45,4 +41,4 @@ class HomepageContent extends React.Component{
     };
 }
 
-export {HomepageContent};
+export default HomepageContent;

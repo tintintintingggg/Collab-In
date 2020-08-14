@@ -144,4 +144,4 @@ class WebHeader extends React.Component{
     }
 }
 
-export {WebHeader};
+export default WebHeader;

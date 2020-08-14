@@ -1,95 +1,13 @@
 import React from 'react';
 import '../../css/Account.css';
-import {LoadingPage} from '../LoadingPage';
-import {db, storage} from '../../utils/firebase';
+import MyDocuments from './MyDocuments';
+import CollabDocuments from './CollabDocuments';
+import AccountSetting from './AccountSetting';
+import {db} from '../../utils/firebase';
 import {formatTime} from './lib';
+// redux
+import {connect} from 'react-redux';
 
-class MyDocuments extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        if(!this.props.docDataFromDb){
-            return <LoadingPage />
-        }else{
-            return <div className="handle-docs-wrap my-documents">
-                <header>My Documents</header>
-                <div className="separator-line"></div>
-                <main>{this.props.docDataFromDb}</main>
-            </div>
-        }
-    }
-    componentDidMount(){
-        this.props.getAllDocumensFromDb('userdocs');
-    }
-}
-
-class CollabDocuments extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
-        if(!this.props.docDataFromDb){
-            return <LoadingPage />
-        }else{
-            return <div className="handle-docs-wrap collab-documents">
-                <header>Collab Documents</header>
-                <div className="separator-line"></div>
-                <main>{this.props.docDataFromDb}</main>
-            </div>
-        }
-    }
-    componentDidMount(){
-        this.props.getAllDocumensFromDb('editordocs');
-    }
-}
-
-class AccountSetting extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    chancgProfile(e){
-        let file = e.target.files[0];
-        let currentUser = this.props.currentUser;
-        let storageRef = storage.ref(currentUser.uid+'/'+file.name);
-        storageRef.put(file)
-        .then(()=>{
-            return storageRef.getDownloadURL();
-        }).then((url)=>{
-            return currentUser.updateProfile({photoURL: url});
-        }).then(()=>{
-            this.props.updateUserData({
-                username: currentUser.displayName,
-                photoURL: currentUser.photoURL
-            });
-        }).catch(()=>{console.log(error.message);});
-    }
-    
-    render(){
-        if(!this.props.userData){
-            return <LoadingPage />
-        }else{
-            return <div className="account-setting">
-                <div className="user-photo">
-                    <div style={{backgroundImage: `url(${this.props.userData.photoURL})`}}></div>
-                    <div id="photo-edit">
-                        <label htmlFor="img-uploader">
-                            <img src="/images/change-profile.png" />
-                        </label>
-                        <input 
-                            type="file" id="img-uploader" name="img" accept="image/*"
-                            onChange={this.chancgProfile.bind(this)} 
-                         />
-                    </div>
-                </div>
-                <div className="user-name">
-                    <div>Dear, <span id="username">{this.props.userData.username}</span></div>
-                    {/* <div className="user-name-edit-btn"><img src="/images/edit-name.png" /></div> */}
-                </div>
-            </div>
-        }
-    }
-}
 class Account extends React.Component{
     constructor(props){
         super(props);
@@ -129,29 +47,26 @@ class Account extends React.Component{
         }, callback);
     }
     deleteDocFromDb(targetId, docType){
-        let currentUser = this.props.currentUser;
+        let currentUser = this.props.user;
         db.collection('users').doc(currentUser.uid).collection(docType).doc(targetId).delete().then(()=>{
             console.log('delete!');
         }).catch((error)=>{console.log(error.message)});
     }
-    handleDeletionMessage(e, id){
-        e.preventDefault();
-        this.setState(prevState=>({
-            deleteMessageIsShow: !prevState.deleteMessageIsShow
-        }), setId);
-        let setId = ()=>{
-            if(id){
-                this.setState({
-                    deleteDocId: id
-                })
-            }
-        };
-    }
+    // handleDeletionMessage(e, id){
+    //     e.preventDefault();
+    //     this.setState(prevState=>({
+    //         deleteMessageIsShow: !prevState.deleteMessageIsShow
+    //     }), setId);
+    //     let setId = ()=>{
+    //         if(id){
+    //             this.setState({
+    //                 deleteDocId: id
+    //             })
+    //         }
+    //     };
+    // }
     deleteDoc(e, docType){
         e.preventDefault();
-        // this.setState(prevState=>({
-        //     deleteMessageIsShow: !prevState.deleteMessageIsShow
-        // }), setId);
         let targetId = e.target.parentNode.id;
         this.deleteDocFromState(targetId, ()=>{this.deleteDocFromDb(targetId, docType)});
     }
@@ -173,7 +88,7 @@ class Account extends React.Component{
         this.setState({
             docDataFromDb: null
         }, ()=>{
-            let currentUser = this.props.currentUser;
+            let currentUser = this.props.user;
             let docArr = [];
             let empty = 'No Documents!';
             db.collection('users').doc(currentUser.uid).collection(docType)
@@ -188,7 +103,6 @@ class Account extends React.Component{
                                     <section>
                                         <button 
                                             onClick={(e)=>{this.deleteDoc.call(this, e, docType)}} 
-                                            // onClick={()=>{this.handleDeletionMessage.bind(this)}}
                                             id={doc.id}>
                                             <img src="/images/trash.png" />
                                         </button>
@@ -233,7 +147,6 @@ class Account extends React.Component{
              />
         }else if(this.state.currentPage === 'accountSetting'){
             main = <AccountSetting
-                currentUser={this.props.currentUser}
                 userData={this.state.userData}
                 updateUserData={this.updateUserData.bind(this)}
              />
@@ -279,20 +192,20 @@ class Account extends React.Component{
                 <footer className="back-to-homepage-mobile"><a href="/"><img src="/images/back-to-homepage-mobile.png" /></a></footer>
             </nav>
             <main>
-                <div className='alert-message' style={{display: this.state.deleteMessageIsShow ? 'flex' : 'none'}}>
+                {/* <div className='alert-message' style={{display: this.state.deleteMessageIsShow ? 'flex' : 'none'}}>
                     <div>
                         <div className="delete-btn">X</div>
                         <header>Are you sure?</header>
                         <div className="alert-message-text">Do you really want to delete this document?</div>
                         <button className="cancel">Cancel</button><button className="delete">Yes, do it!</button>
                     </div>
-                </div>
+                </div> */}
                 {main}
             </main>
         </div>
     }
     componentDidMount(){
-        let currentUser = this.props.currentUser;
+        let currentUser = this.props.user;
         let photoURL = currentUser.photoURL ? currentUser.photoURL : '/images/user-1.png';
         let username = currentUser.displayName;
         this.setState({
@@ -300,4 +213,8 @@ class Account extends React.Component{
         })
     }
 }
-export {Account};
+
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+export default connect(mapStateToProps)(Account);

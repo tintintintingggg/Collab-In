@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import "firebase/auth";
-import "firebase/firestore";
+import {Link} from "react-router-dom";
+// redux
+import {connect} from 'react-redux';
 
 class HomepageBackground extends React.Component{
     constructor(props){
@@ -52,9 +52,9 @@ class HomepageBackground extends React.Component{
     }
     render(){
         let memberBtn;
-        if(this.props.currentUser){
+        if(this.props.user){
             memberBtn = <button id="member-btn">
-                <Link to={`/account/${this.props.currentUser.uid}`}>See My Documents</Link>
+                <Link to={`/account/${this.props.user.uid}`}>See My Documents</Link>
             </button>
         }else{
             memberBtn = <Link to="/authentication">
@@ -93,4 +93,7 @@ class HomepageBackground extends React.Component{
     }
 }
 
-export {HomepageBackground};
+const mapStateToProps = (store)=>{
+    return{user: store.user}
+}
+export default connect(mapStateToProps)(HomepageBackground);

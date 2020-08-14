@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import "firebase/auth";
-import "firebase/firestore";
+// redux
+import {connect} from 'react-redux';
 
 class HomepageHeader extends React.Component{
     constructor(props){
@@ -17,10 +17,10 @@ class HomepageHeader extends React.Component{
     }
     render(){
         let memberNav,memberImg;
-        if(this.props.currentUser){
+        if(this.props.user){
             memberImg = <img src="/images/member-hover.png" />
             memberNav = <div className="memberNav" >
-                <div><Link to={`/account/${this.props.currentUser.uid}`}>My Account</Link></div>
+                <div><Link to={`/account/${this.props.user.uid}`}>My Account</Link></div>
                 <div onClick={this.props.signOut}>Sign Out</div>
             </div>
         }else{
@@ -54,4 +54,7 @@ class HomepageHeader extends React.Component{
     }
 }
 
-export {HomepageHeader};
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+export default connect(mapStateToProps)(HomepageHeader);

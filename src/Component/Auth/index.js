@@ -3,17 +3,37 @@ import "firebase/auth";
 import "firebase/firestore";
 import '../../css/Homepage.css';
 import '../../css/Auth.css';
+// redux
+import {connect} from 'react-redux';
 
 class EmailSignInAndUp extends React.Component{
     constructor(props){
         super(props);
+        this.state={
+            testAccount: {
+                email: 'test@test.com',
+                password: '111111'
+            }
+        }
+    }
+    changeState(emailValue, passwordValue){
+        this.props.getInputValue(emailValue, 'email');
+        this.props.getInputValue(passwordValue, 'password');  
+    }
+    setTestAccount(e){
+        let testAccount = this.state.testAccount;
+        if(e.target.checked){
+            this.changeState(testAccount.email, testAccount.password);
+        }else{
+            this.changeState('', '');
+        }
     }
     render(){
         let signState = this.props.signState;
         let nameInput, btn;
         if(signState === 'signup'){
             nameInput = <div>
-                <input onChange={(e)=>{this.props.getInputValue(e, 'name')}} placeholder="Your Name" value={this.props.name} />
+                <input onChange={(e)=>{this.props.getInputValue(e.target.value, 'name')}} placeholder="Your Name" value={this.props.name} />
             </div>;
             btn = <button onClick={()=>{this.props.submit(this.props.email, this.props.password, this.props.name)}}>
                 Register
@@ -28,11 +48,12 @@ class EmailSignInAndUp extends React.Component{
         return <div className={`email-${signState}`}>
             {nameInput}
             <div>
-                <input onChange={(e)=>{this.props.getInputValue(e, 'email')}} placeholder="Email" value={this.props.email} />
+                <input onChange={(e)=>{this.props.getInputValue(e.target.value, 'email')}} placeholder="Email" value={this.props.email} />
             </div>
             <div>
-                <input type="password" onChange={(e)=>{this.props.getInputValue(e, 'password')}} placeholder="Password" value={this.props.password} />
+                <input type="password" onChange={(e)=>{this.props.getInputValue(e.target.value, 'password')}} placeholder="Password" value={this.props.password} />
             </div>
+            {signState==='signin' ? <label><input type="checkbox" onChange={this.setTestAccount.bind(this)} /><label>&nbsp;Sign in with test account</label></label> : null}
             {btn}
         </div>
     }
@@ -48,9 +69,9 @@ class Auth extends React.Component{
             password: ''
         }
     }
-    getInputValue(e, inputName){
+    getInputValue(value, inputName){
         this.setState({
-            [inputName]: e.target.value
+            [inputName]: value
         });
     }
     handleSigninOrup(){
@@ -67,7 +88,7 @@ class Auth extends React.Component{
     }
 
     render(){
-        if(this.props.currentUser){
+        if(this.props.user){
             this.props.routeProps.goBack();
             return true
         }else{
@@ -94,7 +115,7 @@ class Auth extends React.Component{
                         password={this.state.password}
                      />
                     <div className="reminder">No account? 
-                        <span onClick={this.handleSigninOrup.bind(this)}>Create one!</span>
+                        <span onClick={this.handleSigninOrup.bind(this)}>&nbsp;&nbsp;Create one!</span>
                     </div>
                 </div>
                 <div className="signUpBlock" style={{display: this.state.memberBlockisSignIn ? 'none' : 'block'}}>
@@ -107,7 +128,7 @@ class Auth extends React.Component{
                         name={this.state.name}
                      />
                     <div className="reminder">Already have an account? 
-                        <span onClick={this.handleSigninOrup.bind(this)}>Sign in!</span>
+                        <span onClick={this.handleSigninOrup.bind(this)}>&nbsp;&nbsp;Sign in!</span>
                     </div>
                 </div>
             </div>;
@@ -116,4 +137,8 @@ class Auth extends React.Component{
 
 }
 
+const mapStateToProps = (store)=>{
+    return{user: store.user};
+};
+Auth = connect(mapStateToProps)(Auth);
 export {Auth};
