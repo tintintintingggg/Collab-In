@@ -1,24 +1,17 @@
 import React from 'react';
-import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/firestore";
 import Homepage from './Homepage';
 import {LoadingPage} from './LoadingPage';
-import {db} from '../utils/firebase';
+import {db, firebase} from '../utils/firebase';
 // redux
 import {createStore} from 'redux';
 import {Provider, connect} from 'react-redux';
-import store from '../Redux/userData/store';
-import * as actionCreators from '../Redux/userData/action';
+import * as actionCreators from '../Redux/actions/action';
 
 class App extends React.Component{
     constructor(props){
         super(props);
         this.setUserDataInState = this.setUserDataInState.bind(this);
-        this.state = {
-            userCredential: null,
-            currentUserName: undefined
-        }
     }
     render(){
         if(this.props.user !== undefined){
@@ -39,17 +32,15 @@ class App extends React.Component{
         firebase.auth().onAuthStateChanged(user => {
             if(user){
                 this.setUserDataInState(user);
-                let userCredential = this.state.userCredential;
+                let userCredential = this.props.userCredential;
                 if(userCredential !== null){
                     if(userCredential.additionalUserInfo.isNewUser){
                         user.updateProfile({
-                            displayName: this.state.currentUserName
+                            displayName: this.props.newUserName
                         }).then(()=>{
                             this.setUserDataInDB.call(this, user);
                         }).then(()=>{
-                            this.setState({
-                                currentUserName: undefined
-                            })
+                            this.props.setUserName(undefined);
                         }).catch((error)=>{alert(error.message)});
                     }
                 }else if(user.photoURL !== null){
@@ -86,10 +77,8 @@ class App extends React.Component{
         }else{
             firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((cred) => {
-                this.setState({
-                    userCredential: cred,
-                    currentUserName: name
-                });
+                this.props.setUserName(name);
+                this.props.setUserCredential(cred);
                 alert('You are logged in!');
             })
             .catch(error => {
@@ -106,9 +95,8 @@ class App extends React.Component{
         }else{
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then((cred) => {
-                this.setState({
-                    userCredential: cred
-                }, ()=>{alert('You are logged in!');});
+                this.props.setUserCredential(cred);
+                alert('You are logged in!');
             })
             .catch((error) => {
                 alert(error.message);
@@ -151,7 +139,11 @@ class App extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{
+        user: store.userReducer.user,
+        newUserName: store.setNewUserNameReducer.newUserName,
+        userCredential: store.setUserCredentialReducer.userCredential
+    };
 };
 
 export default connect(mapStateToProps, actionCreators)(App);

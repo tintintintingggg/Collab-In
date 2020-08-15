@@ -3,19 +3,18 @@ import HomepageHeader from './HomepageHeader';
 import HomepageBackground from './HomepageBackground';
 import HomepageFeature from './HomepageFeature';
 import HomepageAbout from './HomepageAbout';
+// redux
+import {connect} from 'react-redux';
+import * as actionCreators from '../../../Redux/actions/action';
 
 class HomepageContent extends React.Component{
     constructor(props){
         super(props);
-        this.handleScroll = this.handleScroll.bind(this)
-        this.state={
-            isHeaderFixed: false
-        }
+        this.handleScroll = this.handleScroll.bind(this);
     }
     handleHeaderScroll(){
-        this.setState({
-            isHeaderFixed: (window.scrollY>0 ? true : false)
-        })
+        let isHeaderFixed = (window.scrollY>0 ? true : false);
+        this.props.handleHeaderFixed(isHeaderFixed);
     }
     handleScroll(){
         this.handleHeaderScroll.bind(this)();
@@ -24,7 +23,7 @@ class HomepageContent extends React.Component{
         return <div className="homepage-wrap">
             <HomepageHeader
                 signOut={this.props.signOut}
-                isHeaderFixed={this.state.isHeaderFixed}
+                isHeaderFixed={this.props.isHeaderFixed}
              />
             <HomepageBackground
                 handleDocCreate={this.props.handleDocCreate}
@@ -41,4 +40,9 @@ class HomepageContent extends React.Component{
     };
 }
 
-export default HomepageContent;
+const mapStateToProps = (store)=>{
+    return{
+        isHeaderFixed: store.isHeaderFixedReducer.isHeaderFixed
+    };
+};
+export default connect(mapStateToProps, actionCreators)(HomepageContent);

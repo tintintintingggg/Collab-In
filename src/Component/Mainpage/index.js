@@ -9,12 +9,12 @@ import {db, realtimeDb} from '../../utils/firebase';
 import '../../css/WebHeader.css';
 // redux
 import {connect} from 'react-redux';
+import * as actionCreators from '../../Redux/actions/action';
 
 class MainPage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            saved: true,
             chatAppBlockIsOpen: true,
             isOwner: false,
             isWaitingEditor: false,
@@ -23,9 +23,7 @@ class MainPage extends React.Component{
         }
     }
     detectUpload(isSaved){
-        this.setState({
-            saved: isSaved
-        })
+        this.props.setDocumentTextSaveSign(isSaved);
     }
     setIdentifyStateOnUser(identify){
         this.setState({
@@ -92,7 +90,7 @@ class MainPage extends React.Component{
                     if (snapshot.val() == false) {
                         userStatusFirestoreRef.set(isOfflineForFirestore);
                         return;
-                    };                
+                    };           
                     userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(()=>{
                             docStatusDatabaseRef.once("value").then(doc=>{
                                 let data = doc.val();
@@ -117,7 +115,7 @@ class MainPage extends React.Component{
         if(!this.props.user){
             return <Redirect 
                 push to={{pathname:"/authentication"}}
-                 />
+             />
         }else{
             this.onlineCheck.bind(this, this.props.user.uid)();
             if(!this.state.isOwner && !this.state.isEditor && !this.state.isWaitingEditor){
@@ -126,7 +124,6 @@ class MainPage extends React.Component{
                 doc = <div className="web-header">
                         <WebHeader
                             docId={this.props.docId}
-                            saved={this.state.saved}
                          />
                         <div className="document-layout">
                             <DocApp
@@ -179,6 +176,9 @@ class MainPage extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{
+        user: store.userReducer.user,
+        saved: store.saveSignReducer.saved
+    };
 };
-export default connect(mapStateToProps)(MainPage);
+export default connect(mapStateToProps, actionCreators)(MainPage);

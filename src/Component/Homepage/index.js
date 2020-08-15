@@ -8,16 +8,11 @@ import {db} from '../../utils/firebase';
 import '../../css/Homepage.css';
 // redux
 import {connect} from 'react-redux';
-import store from '../../Redux/userData/store';
+import * as actionCreators from '../../Redux/actions/action';
 
 class Homepage extends React.Component{
     constructor(props){
         super(props);
-        this.setDocId = this.setDocId.bind(this);
-        this.setAccountUid = this.setAccountUid.bind(this);
-        this.state = {
-            docId: null
-        }
     }
     handleDocCreate(){
         if(this.props.user){
@@ -35,45 +30,25 @@ class Homepage extends React.Component{
                     time: Date.now()
                 })
             }).then(()=>{
-                console.log('userdoc is set')
                 return db.collection('chatrooms').doc(newDoc.id).collection('members').doc(uid).set({
                     time: Date.now(),
                     id: uid
                 })
             }).then(()=>{
-                console.log('chatroom member is set');
                 return db.collection('status').doc(newDoc.id).collection('online').doc("total").set({
                     total: []
                 })
             }).then(()=>{
-                console.log('status total is set')
-                this.setState({docId: newDoc.id});
+                this.props.setNewDocId(newDoc.id);
             }).catch((error)=>{console.log(error.message)})
         }else{
             alert("Sign In First!");
         }
     }
-    setDocId(currentId, newId){
-        if(currentId){
-            return currentId;
-        }else if(newId){
-            return newId;
-        }else{
-            return null;
-        }
-    }
-    setAccountUid(currentUser){
-        let uid = currentUser ? currentUser.uid : '';
-        return uid;
-    }
     render(){
-        let id = location.href.toString().split('document/')[1];
-        let docId = this.setDocId(id, this.state.docId);
-        let path = '/document/'+this.setDocId(id, this.state.docId);
-        let accountPath = '/account/'+this.setAccountUid(this.props.user);
         return <BrowserRouter>
                 <Route exact path='/' >
-                    {docId ? <Redirect to={path} /> : 
+                    {this.props.docId ? <Redirect to={'/document/'+this.props.docId} /> : 
                     <HomepageContent
                         signOut={this.props.signOut}
                         handleDocCreate={this.handleDocCreate.bind(this)}
@@ -89,22 +64,25 @@ class Homepage extends React.Component{
                         routeProps={routeProps}
                     />;
                 }} />
-                <Route exact path={path} >
-                    <MainPage
-                        docId={docId}
-                     />
-                </Route>
-                <Route exact path={accountPath} >
-                    <Account
-                        docId={docId}
-                        handleDocCreate={this.handleDocCreate.bind(this)}
-                     />
-                </Route>
+                <Route path={"/document/:docId"} render={(props)=>{
+                    return <MainPage
+                        docId={props.match.params.docId}
+                     />;
+                }} />
+                <Route exact path={"/account/:uid"}  render={(props)=>{
+                    let page = (
+                        this.props.docId ? <Redirect to={'/document/'+this.props.docId} /> 
+                        : <Account handleDocCreate={this.handleDocCreate.bind(this)} />);
+                    return page;
+                }} />
             </BrowserRouter>     
     }
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{
+        user: store.userReducer.user,
+        docId: store.docIdReducer.docId
+    };
 };
-export default connect(mapStateToProps)(Homepage)
+export default connect(mapStateToProps, actionCreators)(Homepage)

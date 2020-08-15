@@ -43,7 +43,6 @@ class DocText extends React.Component{
 
         this.unsubscribe = db.collection("documents").doc(docId)
         .onSnapshot((doc) => {
-            // console.log("is local?",doc.metadata.hasPendingWrites);
             if(!doc.metadata.hasPendingWrites){
                 if(doc.data().text !== textContainer.innerHTML){
                     textContainer.innerHTML = doc.data().text;

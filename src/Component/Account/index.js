@@ -24,8 +24,11 @@ class Account extends React.Component{
                 before: {display: 'none'},
                 hover: {display: 'flex'}
             },
-            deleteMessageIsShow: false,
-            deleteDocId: null
+            navTags: [
+                {tagName: 'myDocuments', text: 'My Documents'}, 
+                {tagName: 'collabDocuments', text: 'Collaborate with Me'}, 
+                {tagName: 'accountSetting', text: 'Account Setting'}
+            ]
         }
     }
     handleCurrentPage(state){
@@ -52,38 +55,11 @@ class Account extends React.Component{
             console.log('delete!');
         }).catch((error)=>{console.log(error.message)});
     }
-    // handleDeletionMessage(e, id){
-    //     e.preventDefault();
-    //     this.setState(prevState=>({
-    //         deleteMessageIsShow: !prevState.deleteMessageIsShow
-    //     }), setId);
-    //     let setId = ()=>{
-    //         if(id){
-    //             this.setState({
-    //                 deleteDocId: id
-    //             })
-    //         }
-    //     };
-    // }
     deleteDoc(e, docType){
         e.preventDefault();
         let targetId = e.target.parentNode.id;
         this.deleteDocFromState(targetId, ()=>{this.deleteDocFromDb(targetId, docType)});
     }
-    // formatTime(time){
-    //     let year = new Date(time).getFullYear();
-    //     let month = new Date(time).getMonth()+1;
-    //     let date = new Date(time).getDate();
-    //     let hour = new Date(time).getHours();
-    //     if(hour.toString().length<2){
-    //         hour = '0'+hour
-    //     };
-    //     let minute = new Date(time).getMinutes();
-    //     if(minute.toString().length<2){
-    //         minute = '0'+minute
-    //     };
-    //     return year+' / '+month+' / '+date+' '+hour+': '+minute;
-    // }
     getAllDocumensFromDb(docType){
         this.setState({
             docDataFromDb: null
@@ -135,21 +111,22 @@ class Account extends React.Component{
     }
     render(){
         let main;
-        if(this.state.currentPage === 'myDocuments'){
-            main = <MyDocuments
-                getAllDocumensFromDb={this.getAllDocumensFromDb.bind(this)}
-                docDataFromDb={this.state.docDataFromDb}
-             />
-        }else if(this.state.currentPage === 'collabDocuments'){
-            main = <CollabDocuments
-                getAllDocumensFromDb={this.getAllDocumensFromDb.bind(this)}
-                docDataFromDb={this.state.docDataFromDb}
-             />
-        }else if(this.state.currentPage === 'accountSetting'){
-            main = <AccountSetting
-                userData={this.state.userData}
-                updateUserData={this.updateUserData.bind(this)}
-             />
+        switch(this.state.currentPage){
+            case 'myDocuments': main = <MyDocuments
+                    getAllDocumensFromDb={this.getAllDocumensFromDb.bind(this)}
+                    docDataFromDb={this.state.docDataFromDb}
+                 />;
+                break;
+            case 'collabDocuments': main = <CollabDocuments
+                    getAllDocumensFromDb={this.getAllDocumensFromDb.bind(this)}
+                    docDataFromDb={this.state.docDataFromDb}
+                 />;
+                break;
+            case 'accountSetting': main = <AccountSetting
+                    userData={this.state.userData}
+                    updateUserData={this.updateUserData.bind(this)}
+                 />
+                break;
         }
         let userInfo = '';
         if(this.state.userData){
@@ -158,6 +135,16 @@ class Account extends React.Component{
                 <p>{this.state.userData.username}</p>
             </section>
         }
+        let nav = [];
+        this.state.navTags.forEach(tag=>{
+            let item = <div key={tag.tagName} onClick={this.handleCurrentPage.bind(this, tag.tagName)} 
+                style={this.setCurrentPageNavStyle.call(this, tag.tagName)}>
+                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'before')} className='img-before' ><img  src="/images/icon1.png" /></div>
+                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'hover')} className="img-hover" ><img  src="/images/icon1-hover.png" /></div>
+                <p>{tag.text}</p>
+            </div>;
+            nav.push(item);
+        });
         return <div className="my-account">
             <nav>
                 <article className="account-logo"> 
@@ -170,36 +157,11 @@ class Account extends React.Component{
                     <p>Create Docs</p>
                     <div><img src="/images/plus.png" /></div>
                 </article>
-                <div onClick={this.handleCurrentPage.bind(this, 'myDocuments')} 
-                    style={this.setCurrentPageNavStyle.call(this, 'myDocuments')}>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'myDocuments', 'before')} className='img-before' ><img  src="/images/icon1.png" /></div>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'myDocuments', 'hover')} className="img-hover" ><img  src="/images/icon1-hover.png" /></div>
-                    <p>My Documents</p>
-                </div>
-                <div onClick={this.handleCurrentPage.bind(this, 'collabDocuments')}
-                    style={this.setCurrentPageNavStyle.call(this, 'collabDocuments')}>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'collabDocuments', 'before')} className='img-before'><img  src="/images/icon2.png" /></div>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'collabDocuments', 'hover')} className="img-hover"><img src="/images/icon2-hover.png" /></div>
-                    <p>Collaborate with Me</p>
-                </div>
-                <div onClick={this.handleCurrentPage.bind(this, 'accountSetting')}
-                    style={this.setCurrentPageNavStyle.call(this, 'accountSetting')}>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'accountSetting', 'before')} className='img-before'><img src="/images/icon3.png" /></div>
-                    <div style={this.setCurrentPageNavImgStyle.call(this, 'accountSetting', 'hover')} className="img-hover"><img src="/images/icon3-hover.png" /></div>
-                    <p>Account Setting</p>
-                </div>
+                {nav}
                 {userInfo}
                 <footer className="back-to-homepage-mobile"><a href="/"><img src="/images/back-to-homepage-mobile.png" /></a></footer>
             </nav>
             <main>
-                {/* <div className='alert-message' style={{display: this.state.deleteMessageIsShow ? 'flex' : 'none'}}>
-                    <div>
-                        <div className="delete-btn">X</div>
-                        <header>Are you sure?</header>
-                        <div className="alert-message-text">Do you really want to delete this document?</div>
-                        <button className="cancel">Cancel</button><button className="delete">Yes, do it!</button>
-                    </div>
-                </div> */}
                 {main}
             </main>
         </div>
@@ -215,6 +177,6 @@ class Account extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{user: store.userReducer.user};
 };
 export default connect(mapStateToProps)(Account);

@@ -55,6 +55,6 @@ class HomepageHeader extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{user: store.userReducer.user};
 };
 export default connect(mapStateToProps)(HomepageHeader);

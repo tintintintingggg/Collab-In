@@ -21,4 +21,4 @@ let db = firebase.firestore();
 let realtimeDb = firebase.database();
 let storage = firebase.storage();
 
-export {db, realtimeDb, storage};
+export {db, realtimeDb, storage, firebase};

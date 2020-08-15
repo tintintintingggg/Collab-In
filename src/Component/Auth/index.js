@@ -33,14 +33,22 @@ class EmailSignInAndUp extends React.Component{
         let nameInput, btn;
         if(signState === 'signup'){
             nameInput = <div>
-                <input onChange={(e)=>{this.props.getInputValue(e.target.value, 'name')}} placeholder="Your Name" value={this.props.name} />
+                <input 
+                    onChange={(e)=>{this.props.getInputValue(e.target.value, 'name')}} 
+                    placeholder="Your Name" 
+                    value={this.props.name}
+                 />
             </div>;
-            btn = <button onClick={()=>{this.props.submit(this.props.email, this.props.password, this.props.name)}}>
+            btn = <button 
+                onClick={()=>{this.props.submit(this.props.email, this.props.password, this.props.name)}}
+            >
                 Register
             </button>
         }else{
             nameInput = '';
-            btn = <button onClick={()=>{this.props.submit(this.props.email, this.props.password)}}>
+            btn = <button 
+                onClick={()=>{this.props.submit(this.props.email, this.props.password)}}
+            >
                 Sign In
             </button>
         }
@@ -48,12 +56,28 @@ class EmailSignInAndUp extends React.Component{
         return <div className={`email-${signState}`}>
             {nameInput}
             <div>
-                <input onChange={(e)=>{this.props.getInputValue(e.target.value, 'email')}} placeholder="Email" value={this.props.email} />
+                <input 
+                    onChange={(e)=>{this.props.getInputValue(e.target.value, 'email')}} 
+                    placeholder="Email" value={this.props.email}
+                 />
             </div>
             <div>
-                <input type="password" onChange={(e)=>{this.props.getInputValue(e.target.value, 'password')}} placeholder="Password" value={this.props.password} />
+                <input 
+                    type="password" 
+                    onChange={(e)=>{this.props.getInputValue(e.target.value, 'password')}} 
+                    placeholder="Password" 
+                    value={this.props.password}
+                 />
             </div>
-            {signState==='signin' ? <label><input type="checkbox" onChange={this.setTestAccount.bind(this)} /><label>&nbsp;Sign in with test account</label></label> : null}
+            {signState==='signin' ? <label>
+                <input 
+                    type="checkbox" 
+                    onChange={this.setTestAccount.bind(this)}
+                 />
+                <label>
+                    &nbsp;Sign in with test account
+                </label>
+            </label> : null}
             {btn}
         </div>
     }
@@ -138,7 +162,7 @@ class Auth extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{user: store.userReducer.user};
 };
 Auth = connect(mapStateToProps)(Auth);
 export {Auth};

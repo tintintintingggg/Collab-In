@@ -160,7 +160,3 @@ img{width: 100%;}
 .gragging{
     opacity: .25;
 }
-#selectable-area img:hover{
-    outline: 2px dashed #979797;
-    border: 4px solid #ffffff;
-}

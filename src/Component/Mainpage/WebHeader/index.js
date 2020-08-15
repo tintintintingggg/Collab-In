@@ -1,6 +1,8 @@
 import React from 'react';
 import {db} from '../../../utils/firebase';
 import '../../../css/WebHeader.css';
+// redux
+import {connect} from 'react-redux';
 
 class WebHeader extends React.Component{
     constructor(props){
@@ -144,4 +146,9 @@ class WebHeader extends React.Component{
     }
 }
 
-export default WebHeader;
+const mapStateToProps = (store)=>{
+    return{
+        saved: store.saveSignReducer.saved
+    };
+};
+export default connect(mapStateToProps)(WebHeader);

@@ -147,7 +147,7 @@ class ChatInput extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{user: store.userReducer.user};
 };
 ChatInput = connect(mapStateToProps)(ChatInput);
 export {ChatInput, EmojiList};

@@ -1,6 +1,6 @@
 import {createStore} from 'redux';
 import {Provider, connect} from 'react-redux';
-import userReducer from './reducer';
+import appReducer from './reducers';
 
-const store = createStore(userReducer);
+const store = createStore(appReducer);
 export default store;
