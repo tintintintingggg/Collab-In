@@ -26,6 +26,7 @@ class AccountSetting extends React.Component{
     }
     
     render(){
+        console.log(this.props.user);
         if(!this.props.userData){
             return <LoadingPage />
         }else{
@@ -51,6 +52,6 @@ class AccountSetting extends React.Component{
 }
 
 const mapStateToProps = (store)=>{
-    return{user: store.user};
+    return{user: store.userReducer.user};
 };
 export default connect(mapStateToProps)(AccountSetting);
