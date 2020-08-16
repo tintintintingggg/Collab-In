@@ -139,8 +139,8 @@ class Account extends React.Component{
         this.state.navTags.forEach(tag=>{
             let item = <div key={tag.tagName} onClick={this.handleCurrentPage.bind(this, tag.tagName)} 
                 style={this.setCurrentPageNavStyle.call(this, tag.tagName)}>
-                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'before')} className='img-before' ><img  src="/images/icon1.png" /></div>
-                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'hover')} className="img-hover" ><img  src="/images/icon1-hover.png" /></div>
+                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'before')} className='img-before' ><img  src={`/images/${tag.tagName}.png`} /></div>
+                <div style={this.setCurrentPageNavImgStyle.call(this, tag.tagName, 'hover')} className="img-hover" ><img  src={`/images/${tag.tagName}-hover.png`} /></div>
                 <p>{tag.text}</p>
             </div>;
             nav.push(item);
