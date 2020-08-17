@@ -74,7 +74,7 @@ class DocText extends React.Component{
                                 version: currentVersion+1
                             })
                         }).then(()=>{
-                            console.log("text is update to DB");   
+                            // console.log("text is update to DB");   
                         }).catch(error=>{console.log(error.message)});
                     }
                     this.props.recordText(currentHTML);

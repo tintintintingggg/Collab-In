@@ -52,7 +52,7 @@ class Account extends React.Component{
     deleteDocFromDb(targetId, docType){
         let currentUser = this.props.user;
         db.collection('users').doc(currentUser.uid).collection(docType).doc(targetId).delete().then(()=>{
-            console.log('delete!');
+            // console.log('delete!');
         }).catch((error)=>{console.log(error.message)});
     }
     deleteDoc(e, docType){

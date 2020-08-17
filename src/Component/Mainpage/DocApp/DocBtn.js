@@ -216,7 +216,7 @@ class DocBtn extends React.Component{
         }
     }
     render(){
-        console.log(this.state.record ,this.state.step)
+        // console.log(this.state.record ,this.state.step)
         return <div className="doc-btn">
             <div className="btns-wrap">
                 <div className="btns">
