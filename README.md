@@ -79,3 +79,8 @@ It provides RWD for all sizes of popular device.
 |![](https://i.imgur.com/iyc3xZC.jpg)|![](https://i.imgur.com/bUFLFwJ.jpg)|
 | -------- | -------- |
 |![](https://i.imgur.com/wHMGWjS.jpg)|![](https://i.imgur.com/NP7lN2A.jpg)|
+
+### To-Do
+
+* Improve compatibility for IOS system (font-size list)
+* Resolve limitation of reading data on real-time editing
