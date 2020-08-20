@@ -54,6 +54,14 @@ Multiple Users can editing on same documents and save changes of content automat
 
 ![](https://i.imgur.com/ZvZkgWg.gif)
 
+* How to share docs?
+   1. Copy URL then send others
+   2. Send Email to others
+   
+then you can edit on the same document.
+
+![](https://i.imgur.com/4eNHKTw.png)
+
 ### Customization of layout
 
 Users can resize the chatroom.
