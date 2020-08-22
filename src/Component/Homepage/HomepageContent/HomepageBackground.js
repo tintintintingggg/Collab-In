@@ -77,7 +77,7 @@ class HomepageBackground extends React.Component{
                 </main>
                 <section className="main-pic" id="main-pic" ref={this.mainpic} >
                     <video width="100%" autoPlay='autoplay' muted loop>
-                        <source src="/images/main-video.MOV" type="video/mp4" />
+                        <source src="/images/main-video.mov" type="video/mp4" />
                     </video>
                 </section>
             </div>

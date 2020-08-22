@@ -12,7 +12,8 @@ class WebHeader extends React.Component{
             nameValue: '',
             onlineUser: null,
             copyUrl: '',
-            shareListIsOpen: false
+            shareListIsOpen: false,
+            shareHintIsShow: true
         }
     }
     getName(e){
@@ -39,6 +40,11 @@ class WebHeader extends React.Component{
         this.setState(prevState=>({
             shareListIsOpen: !prevState.shareListIsOpen
         }));
+    }
+    handleShareHint(){
+        this.setState({
+            shareHintIsShow: false
+        });
     }
     render(){
         let onlineUserName = [];
@@ -78,7 +84,8 @@ class WebHeader extends React.Component{
                 </div>
             </div>
             <div className="headerright">
-                <div className="share-list" style={this.state.shareListIsOpen ? {display: 'block'} : {display: 'none'}}>
+                <div className="share-hint" style={{opacity: this.state.shareHintIsShow ? '0.8' : '0'}}><div className="hint-text">Share Doc</div><div className="hint-arrow"></div></div>
+                <div className="share-list" style={{display: this.state.shareListIsOpen ? 'block' : 'none'}}>
                     <section className="section1">
                         <main>Share by URL<span>{this.state.copyUrl}</span></main>
                         <article>
@@ -138,11 +145,14 @@ class WebHeader extends React.Component{
                 })
                 .catch((error)=>{console.log(error)});
             })
-        })        
+        })  
+        this.timerHandle = window.setTimeout(this.handleShareHint.bind(this), 3500);
     }
+
     componentWillUnmount(){
         this.unsubcribeDocument();
         this.unsubcribeStatus();
+        clearTimeout(this.timerHandle); 
     }
 }
 
