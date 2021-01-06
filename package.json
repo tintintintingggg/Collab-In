@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^1.6.10",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "firebase": "^7.15.5",
     "firebase-admin": "^8.13.0",
     "html2canvas": "^1.0.0-rc.5",
